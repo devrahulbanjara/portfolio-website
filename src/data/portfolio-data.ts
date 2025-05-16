@@ -83,7 +83,8 @@ export const projects: Project[] = [
     tags: ["ML", "Finance", "API"],
     techStack: ["FastAPI", "ML", "Receipt Scanner", "Chatbot"],
     featured: true,
-    category: "fullstack"
+    category: "fullstack",
+    github: "https://github.com/devrahulbanjara/AarthikNiti-Expense-Tracker"
   },
   {
     id: "medical-chatbot",
@@ -93,7 +94,8 @@ export const projects: Project[] = [
     tags: ["RAG", "LLM", "Healthcare"],
     techStack: ["Pinecone", "Langchain", "Flask"],
     featured: true,
-    category: "ai"
+    category: "ai",
+    github: "https://github.com/devrahulbanjara/Medical-Chatbot"
   },
   {
     id: "resume-sense",
@@ -113,7 +115,8 @@ export const projects: Project[] = [
     tags: ["CNN", "Agriculture", "Classification"],
     techStack: ["CNN", "Computer Vision", "TensorFlow"],
     featured: false,
-    category: "ai"
+    category: "ai",
+    github: "https://github.com/devrahulbanjara/Potato-Disease-Classification"
   }
 ];
 
@@ -187,8 +190,8 @@ export const personalInfo = {
   location: "Nepal",
   about: "Innovative ML Engineer skilled in computer vision and NLP using PyTorch and TensorFlow. I build end-to-end AI solutions across healthcare, finance, and document processing, leveraging CNNs, Transformers, LLMs, and RAG. Passionate about scalable, efficient systems and applying cutting-edge research to real-world problems.",
   social: {
-    github: "https://github.com",
-    linkedin: "https://linkedin.com"
+    github: "https://github.com/devrahulbanjara",
+    linkedin: "https://www.linkedin.com/in/devrahulbanjara/"
   },
   extras: "Community leader at AI Learners Community — organized workshops, demos, and mentorships."
 };

@@ -84,8 +84,8 @@ dev-folio-alchemy/
 ## 📱 Contact
 
 - Email: rdbanjara07@gmail.com
-- LinkedIn: [LinkedIn Profile](https://linkedin.com)
-- GitHub: [GitHub Profile](https://github.com)
+- LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/devrahulbanjara/)
+- GitHub: [GitHub Profile](https://github.com/devrahulbanjara)
 
 ## 📜 License
 
