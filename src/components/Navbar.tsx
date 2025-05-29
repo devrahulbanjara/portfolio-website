@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -45,12 +44,14 @@ export function Navbar() {
   return (
     <header 
       className={cn(
-        "fixed top-0 w-full z-50 transition-all duration-300 ease-in-out py-4",
-        isScrolled ? "glassmorphism shadow-sm backdrop-blur-lg py-3" : "bg-transparent"
+        "fixed top-0 w-full z-50 transition-all duration-300 ease-in-out",
+        isScrolled 
+          ? "glassmorphism shadow-sm backdrop-blur-lg py-2 md:py-3" 
+          : "bg-transparent py-3 md:py-4"
       )}
     >
       <div className="container flex items-center justify-between">
-        <Link to="/" className="text-xl font-bold focus-ring">
+        <Link to="/" className="text-lg md:text-xl font-bold focus-ring">
           <span className="gradient-text">Rahul.dev</span>
         </Link>
 
@@ -75,14 +76,14 @@ export function Navbar() {
 
         {/* Mobile Navigation */}
         <div className="flex items-center md:hidden">
-          <ThemeToggle />
+          <ThemeToggle className="scale-90" />
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="ml-2 p-2 focus-ring"
+            className="ml-1 p-1.5 focus-ring"
             aria-label="Toggle navigation menu"
             aria-expanded={isMobileMenuOpen}
           >
-            <div className="w-6 flex flex-col gap-1">
+            <div className="w-5 flex flex-col gap-0.5">
               <span className={cn(
                 "block h-0.5 w-full bg-foreground transition-all duration-300 ease-in-out",
                 isMobileMenuOpen ? "translate-y-1.5 rotate-45" : ""
@@ -102,13 +103,13 @@ export function Navbar() {
       
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 right-0 p-4 md:hidden flex flex-col gap-1 bg-background/95 backdrop-blur-lg border-t border-border shadow-sm">
+        <div className="absolute top-full left-0 right-0 p-2 md:hidden flex flex-col gap-0.5 bg-background/95 backdrop-blur-lg border-t border-border shadow-sm">
           {sections.map((section) => (
             <a
               key={section.id}
               href={`#${section.id}`}
               className={cn(
-                "px-4 py-3 text-sm font-medium rounded-md transition-colors",
+                "px-3 py-2 text-sm font-medium rounded-md transition-colors",
                 activeSection === section.id 
                   ? "text-primary bg-primary/10" 
                   : "text-muted-foreground hover:bg-secondary"

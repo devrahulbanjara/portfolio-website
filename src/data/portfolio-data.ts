@@ -15,7 +15,8 @@ export interface Project {
   link?: string;
   github?: string;
   featured: boolean;
-  category: "ai" | "fullstack" | "other";
+  categories: ("ai" | "fullstack" | "other" | "college")[];
+  category?: "ai" | "fullstack" | "other" | "college";
 }
 
 export interface Experience {
@@ -47,24 +48,47 @@ export interface BlogPost {
 }
 
 export const skills: Skill[] = [
-  { name: "Python", category: "languages", level: 95 },
-  { name: "Java", category: "languages", level: 80 },
-  { name: "C", category: "languages", level: 75 },
-  { name: "PyTorch", category: "ml", level: 90 },
-  { name: "TensorFlow", category: "ml", level: 85 },
-  { name: "FastAPI", category: "frameworks", level: 85 },
-  { name: "Flask", category: "frameworks", level: 80 },
-  { name: "Docker", category: "tools", level: 75 },
-  { name: "Git", category: "tools", level: 85 },
-  { name: "MLflow", category: "tools", level: 70 },
-  { name: "MySQL", category: "tools", level: 80 },
-  { name: "NumPy", category: "ml", level: 90 },
-  { name: "Pandas", category: "ml", level: 90 },
-  { name: "Computer Vision", category: "ml", level: 85 },
-  { name: "NLP", category: "ml", level: 80 },
+  { name: "Python", category: "languages", level: 65 },
+  { name: "Java", category: "languages", level: 50 },
+  { name: "C", category: "languages", level: 40 },
+  { name: "PyTorch", category: "ml", level: 60 },
+  { name: "TensorFlow", category: "ml", level: 50 },
+  { name: "LLM Fine-tuning", category: "ml", level: 60 },
+  { name: "LoRA", category: "ml", level: 60 },
+  { name: "FastAPI", category: "frameworks", level: 70 },
+  { name: "Flask", category: "frameworks", level: 65 },
+  { name: "Docker", category: "tools", level: 70 },
+  { name: "Git", category: "tools", level: 80 },
+  { name: "Weights and Biases", category: "tools", level: 70 },
+  { name: "MySQL", category: "tools", level: 70 },
+  { name: "NumPy", category: "ml", level: 70 },
+  { name: "Pandas", category: "ml", level: 70 },
+  { name: "Computer Vision", category: "ml", level: 65 },
+  { name: "NLP", category: "ml", level: 65 },
 ];
 
 export const projects: Project[] = [
+  {
+    id: "nepali-paraphraser",
+    title: "Nepali Language Paraphraser",
+    description: "A Nepali paraphrasing system using NLP, built with Transformer-based models to generate contextually accurate paraphrases from input text in Devanagari script.",
+    image: "/images/projects/nepali-paraphraser.jpg",
+    tags: ["NLP", "Transformers", "Devanagari"],
+    techStack: ["PyTorch", "Transformers", "NLTK", "FastAPI"],
+    featured: true,
+    categories: ["ai"]
+  },
+  {
+    id: "deepseek-medical",
+    title: "DeepSeek Medical LLM",
+    description: "Fine-tuned the DeepSeek-R1-Distill-Llama-8B model using LoRA adapters on a medical consultation dataset.",
+    image: "/images/projects/deepseek-medical.jpg",
+    tags: ["LLM", "LoRA", "Healthcare"],
+    techStack: ["PyTorch", "Unsloth", "PEFT", "Hugging Face"],
+    featured: true,
+    categories: ["ai"],
+    github: "https://github.com/devrahulbanjara/DeepSeek-Finetuned-with-LoRA-on-Medical-Dataset"
+  },
   {
     id: "document-verification",
     title: "Document Verification System",
@@ -73,7 +97,8 @@ export const projects: Project[] = [
     tags: ["Computer Vision", "OCR", "NLP"],
     techStack: ["ResNet50", "YOLOv8", "EasyOCR", "NLP", "Streamlit"],
     featured: true,
-    category: "ai"
+    categories: ["ai"],
+    github: "https://github.com/devrahulbanjara/Document-Verification-System"
   },
   {
     id: "aarthikniti",
@@ -83,7 +108,7 @@ export const projects: Project[] = [
     tags: ["ML", "Finance", "API"],
     techStack: ["FastAPI", "ML", "Receipt Scanner", "Chatbot"],
     featured: true,
-    category: "fullstack",
+    categories: ["ai", "fullstack"],
     github: "https://github.com/devrahulbanjara/AarthikNiti-Expense-Tracker"
   },
   {
@@ -94,7 +119,7 @@ export const projects: Project[] = [
     tags: ["RAG", "LLM", "Healthcare"],
     techStack: ["Pinecone", "Langchain", "Flask"],
     featured: true,
-    category: "ai",
+    categories: ["ai"],
     github: "https://github.com/devrahulbanjara/Medical-Chatbot"
   },
   {
@@ -105,18 +130,71 @@ export const projects: Project[] = [
     tags: ["LLM", "Document Analysis", "Offline"],
     techStack: ["Mistral", "Ollama"],
     featured: false,
-    category: "ai"
+    categories: ["ai"],
+    github: "https://github.com/devrahulbanjara/ResumeSense-AI-Powered-ATS-Resume-Analyzer"
+  }
+];
+
+export const collegeProjects: Project[] = [
+  {
+    id: "water-quality",
+    title: "Water Quality Predictor",
+    description: "A machine learning project that predicts water potability using various water quality parameters.",
+    image: "/images/projects/college/water-quality.jpg",
+    tags: ["Machine Learning", "Classification", "Data Analysis"],
+    techStack: ["Python", "Jupyter Notebook", "SciKit Learn"],
+    featured: false,
+    categories: ["college"]
   },
   {
-    id: "potato-disease",
-    title: "Potato Disease Classifier",
-    description: "CNN-based classifier that identifies diseases in potato plants using leaf images for early detection.",
-    image: "/images/projects/potato-disease.jpg",
-    tags: ["CNN", "Agriculture", "Classification"],
-    techStack: ["CNN", "Computer Vision", "TensorFlow"],
+    id: "smart-quiz",
+    title: "Smart Quiz Hub",
+    description: "A quiz management system with both GUI and console interface for creating, administering, and evaluating quizzes.",
+    image: "/images/projects/college/smart-quiz.jpg",
+    tags: ["GUI", "Database", "OOP"],
+    techStack: ["Java", "MySQL", "Java Swing"],
     featured: false,
-    category: "ai",
-    github: "https://github.com/devrahulbanjara/Potato-Disease-Classification"
+    categories: ["college"]
+  },
+  {
+    id: "weather-app",
+    title: "Weather Application",
+    description: "A weather app using OpenWeatherMap API that stores data in MySQL and caches it in the browser.",
+    image: "/images/projects/college/weather-app.jpg",
+    tags: ["API", "Web", "Database"],
+    techStack: ["PHP", "HTML", "CSS", "JavaScript", "MySQL"],
+    featured: false,
+    categories: ["college"]
+  },
+  {
+    id: "banking-system",
+    title: "Online Banking System",
+    description: "A Java-based banking system demonstrating OOP principles with file handling and GUI.",
+    image: "/images/projects/college/banking-system.jpg",
+    tags: ["OOP", "GUI", "File Handling"],
+    techStack: ["Java", "Java Swing", "MySQL"],
+    featured: false,
+    categories: ["college"]
+  },
+  {
+    id: "tic-tac-toe",
+    title: "Noughts and Crosses",
+    description: "A console-based Tic-Tac-Toe game for two players with win/draw logic.",
+    image: "/images/projects/college/tic-tac-toe.jpg",
+    tags: ["Game", "Console", "Logic"],
+    techStack: ["Python"],
+    featured: false,
+    categories: ["college"]
+  },
+  {
+    id: "caesar-cipher",
+    title: "Caesar Cipher",
+    description: "A Python program to encrypt and decrypt messages from both console and file input.",
+    image: "/images/projects/college/caesar-cipher.jpg",
+    tags: ["Encryption", "File Handling", "Console"],
+    techStack: ["Python"],
+    featured: false,
+    categories: ["college"]
   }
 ];
 
@@ -188,7 +266,7 @@ export const personalInfo = {
   email: "rdbanjara07@gmail.com",
   phone: "+977 9866121812",
   location: "Nepal",
-  about: "Innovative ML Engineer skilled in computer vision and NLP using PyTorch and TensorFlow. I build end-to-end AI solutions across healthcare, finance, and document processing, leveraging CNNs, Transformers, LLMs, and RAG. Passionate about scalable, efficient systems and applying cutting-edge research to real-world problems.",
+  about: "Innovative ML Engineer skilled in computer vision, NLP, and LLM fine-tuning using PyTorch and TensorFlow. I specialize in optimizing large language models with techniques like LoRA and quantization. I build end-to-end AI solutions across healthcare, finance, and document processing, leveraging CNNs, Transformers, LLMs, and RAG. Passionate about scalable, efficient systems and applying cutting-edge research to real-world problems.",
   social: {
     github: "https://github.com/devrahulbanjara",
     linkedin: "https://www.linkedin.com/in/devrahulbanjara/"

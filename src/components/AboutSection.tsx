@@ -75,6 +75,10 @@ export function AboutSection() {
                 </li>
                 <li className="flex items-start">
                   <div className="mr-2 mt-1 h-2 w-2 rounded-full bg-primary"></div>
+                  <p>Fine-tune large language models (LLMs) using LoRA and quantization techniques</p>
+                </li>
+                <li className="flex items-start">
+                  <div className="mr-2 mt-1 h-2 w-2 rounded-full bg-primary"></div>
                   <p>Develop efficient backend systems for AI applications</p>
                 </li>
                 <li className="flex items-start">

@@ -1,13 +1,15 @@
-
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/sonner";
 import { Mail, Phone, Github, Linkedin } from "lucide-react";
 import { personalInfo } from "@/data/portfolio-data";
+import emailjs from '@emailjs/browser';
+import { emailjsConfig } from "@/config/emailjs";
 
 export function ContactSection() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,12 +27,35 @@ export function ContactSection() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      toast.success("Message sent successfully! I'll get back to you soon.");
-      setFormData({ name: "", email: "", subject: "", message: "" });
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address");
       setIsSubmitting(false);
-    }, 1500);
+      return;
+    }
+    
+    // Send the email using EmailJS with config
+    emailjs.init(emailjsConfig.publicKey); // Initialize EmailJS with your public key
+    
+    emailjs.sendForm(
+      emailjsConfig.serviceId, 
+      emailjsConfig.templateId, 
+      formRef.current!, 
+      emailjsConfig.publicKey
+    )
+      .then((result) => {
+        console.log('Email sent successfully:', result.text);
+        toast.success("Message sent successfully! I'll get back to you soon.");
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      })
+      .catch((error) => {
+        console.error('Failed to send email:', error.text);
+        toast.error("Failed to send message. Please check your email address and try again.");
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
   
   return (
@@ -103,7 +128,7 @@ export function ContactSection() {
           
           {/* Contact Form */}
           <div className="glassmorphism p-6">
-            <form onSubmit={handleSubmit}>
+            <form ref={formRef} onSubmit={handleSubmit}>
               <div className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-1">

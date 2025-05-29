@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from "react";
 import { skills } from "@/data/portfolio-data";
 import { Progress } from "@/components/ui/progress";
@@ -80,7 +79,7 @@ export function SkillsSection() {
                     <span className="font-medium">{skill.name}</span>
                     <span className="text-muted-foreground">{skill.level}%</span>
                   </div>
-                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden skill-bar">
                     <div 
                       data-progress={skill.level}
                       className="h-full bg-primary rounded-full transition-all duration-1000 ease-out" 
@@ -102,7 +101,7 @@ export function SkillsSection() {
                     <span className="font-medium">{skill.name}</span>
                     <span className="text-muted-foreground">{skill.level}%</span>
                   </div>
-                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden skill-bar">
                     <div 
                       data-progress={skill.level}
                       className="h-full bg-primary rounded-full transition-all duration-1000 ease-out" 
@@ -124,7 +123,7 @@ export function SkillsSection() {
                     <span className="font-medium">{skill.name}</span>
                     <span className="text-muted-foreground">{skill.level}%</span>
                   </div>
-                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden skill-bar">
                     <div 
                       data-progress={skill.level}
                       className="h-full bg-primary rounded-full transition-all duration-1000 ease-out" 
@@ -146,7 +145,7 @@ export function SkillsSection() {
                     <span className="font-medium">{skill.name}</span>
                     <span className="text-muted-foreground">{skill.level}%</span>
                   </div>
-                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden skill-bar">
                     <div 
                       data-progress={skill.level}
                       className="h-full bg-primary rounded-full transition-all duration-1000 ease-out" 
