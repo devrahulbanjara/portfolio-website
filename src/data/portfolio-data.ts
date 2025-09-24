@@ -65,6 +65,15 @@ export const skillsSummary = {
 
 export const projects: Project[] = [
   {
+    id: "llm-from-scratch",
+    title: "LLM from Scratch",
+    description: "Building a Large Language Model from first principles using plain PyTorch including data tokenization (BPE), training a Transformer-based causal language model with multi-head self-attention, layer normalization, residual connections, weight tying, and efficient training loops with mixed precision and gradient clipping. The project explores curriculum design, evals (perplexity), checkpointing, and inference sampling strategies (top-k, nucleus).",
+    tags: ["LLM", "Transformer", "From Scratch", "Coming Soon"],
+    techStack: ["PyTorch", "Transformer", "Self-Attention", "BPE", "CUDA", "AMP", "TensorBoard"],
+    featured: true,
+    categories: ["ai"]
+  },
+  {
     id: "recruitment-automation",
     title: "Recruitment Automation & Job Marketplace Platform",
     description: "Multi-Agent Recruitment Automation and Job Marketplace to Transform the hiring process with AI-powered recruitment platform that combines intelligent automation with human expertise ",
@@ -78,7 +87,7 @@ export const projects: Project[] = [
   {
     id: "aws-fraud-detection",
     title: "Credit Card Fraud Detection on AWS",
-    description: "real-time credit card fraud detection system built with AWS machine learning services, processing streaming transactions through the use of AWS Services for immediate fraud prevention.",
+    description: "Real-time credit card fraud detection system built with AWS machine learning services, processing streaming transactions through the use of AWS Services for immediate fraud prevention.",
     image: "/images/projects/deepseek-medical.jpg",
     tags: ["AWS", "SageMaker", "MLOps"],
     techStack: ["Kinesis", "Lambda", "S3", "Glue", "SageMaker", "XGBoost"],
@@ -89,7 +98,7 @@ export const projects: Project[] = [
   {
     id: "document-verification",
     title: "Document Verification System",
-    description: "AI-driven document fraud detection using ResNet50, YOLOv8, and EasyOCR.",
+    description: "The Document Verification System is designed to assist in verifying the authenticity of documents against a government database. This system is intended to help organizations detect fraudulent documents by checking if the provided document details match records stored in government portals. ",
     image: "/images/projects/document-verification.jpg",
     tags: ["Computer Vision", "OCR", "NLP"],
     techStack: ["ResNet50", "YOLOv8", "EasyOCR", "Regex", "Streamlit"],

@@ -37,12 +37,12 @@ export function EducationSection() {
           {education.map((edu, index) => (
             <Card key={`${edu.school}-${index}`} className="animate-on-scroll" style={{ transitionDelay: `${index * 100}ms` }}>
               <CardHeader>
-                <CardTitle className="text-lg leading-snug">{edu.school}</CardTitle>
+                <CardTitle className="text-xl leading-snug">{edu.degree}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-sm text-muted-foreground">
-                  <div>{edu.location}</div>
-                  <div className="mt-1">{edu.degree}</div>
+                  <div>{edu.school}</div>
+                  <div className="mt-1">{edu.location}</div>
                   <div className="mt-1">{edu.period}</div>
                 </div>
               </CardContent>

@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { projects } from "@/data/portfolio-data";
 import { ExternalLink, Github } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export function ProjectsSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -31,83 +32,101 @@ export function ProjectsSection() {
   // Only show main projects (the current "all" set)
   const mainProjects = projects;
   
-  // Render a compact grid card
-  const renderCompactCard = (project, index) => {
-    const truncatedDescription = project.description.length > 140
-      ? project.description.slice(0, 137) + "..."
-      : project.description;
-    const visibleTags = project.tags.slice(0, 2);
-    const hiddenTagsCount = Math.max(project.tags.length - visibleTags.length, 0);
-    const visibleTech = project.techStack.slice(0, 4);
+  // No inline expansion; use a modal for full content
 
+  // Render a clean, uniform card: Title → Description → Skills → Links
+  const renderCompactCard = (project, index) => {
     return (
       <Card
         key={project.id}
-        className="animate-on-scroll overflow-hidden group relative border border-border/60 bg-gradient-to-b from-background to-secondary/10 hover:to-secondary/20 transition-all duration-300"
+        className="animate-on-scroll overflow-hidden group relative border border-border/60 bg-gradient-to-b from-background to-secondary/10 hover:to-secondary/20 transition-all duration-300 h-full flex flex-col"
         style={{ transitionDelay: `${index * 80}ms` }}
       >
         <div className="h-0.5 w-full bg-gradient-to-r from-primary/80 via-primary to-transparent" />
 
         <CardHeader className="py-4">
-          <div className="flex items-start justify-between gap-3">
-            <CardTitle className="text-lg leading-snug group-hover:text-primary transition-colors">
-              {project.title}
-            </CardTitle>
-            <div className="flex flex-wrap gap-1.5">
-              {visibleTags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="text-[10px] px-2 py-0.5">
-                  {tag}
-                </Badge>
-              ))}
-              {hiddenTagsCount > 0 && (
-                <Badge variant="secondary" className="text-[10px] px-2 py-0.5">+{hiddenTagsCount}</Badge>
-              )}
-            </div>
+          <CardTitle className="text-lg leading-snug group-hover:text-primary transition-colors">
+            {project.title}
+          </CardTitle>
+          <div className="mt-1 text-sm leading-relaxed relative">
+            <p
+              style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}
+            >
+              {project.description}
+            </p>
+            {project.description && project.description.length > 120 && (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="mt-2 text-xs text-primary hover:underline">Read more</button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>{project.title}</DialogTitle>
+                    <DialogDescription>
+                      {project.description}
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="mt-4">
+                    <div className="mb-2 text-xs uppercase text-muted-foreground">Skills</div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.techStack.map((tech) => (
+                        <span key={tech} className="text-[11px] px-2 py-0.5 rounded-full border border-border bg-background/60">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="mt-4 flex items-center gap-2">
+                      {project.github && (
+                        <Button variant="outline" size="sm">
+                          <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+                            <Github className="h-4 w-4" /> View Code
+                          </a>
+                        </Button>
+                      )}
+                      {project.link && (
+                        <Button size="sm">
+                          <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+                            <ExternalLink className="h-4 w-4" /> Live Demo
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            )}
           </div>
-          <CardDescription className="mt-1 text-sm leading-relaxed">
-            {truncatedDescription}
-          </CardDescription>
         </CardHeader>
 
         <CardContent className="pb-3 pt-0">
           <div className="flex flex-wrap gap-1.5">
-            {visibleTech.map((tech) => (
+            {project.techStack.map((tech) => (
               <span key={tech} className="text-[11px] px-2 py-0.5 rounded-full border border-border bg-background/60">
                 {tech}
               </span>
             ))}
-            {project.techStack.length > visibleTech.length && (
-              <span className="text-[11px] px-2 py-0.5 rounded-full border border-border bg-background/60">
-                +{project.techStack.length - visibleTech.length}
-              </span>
-            )}
           </div>
         </CardContent>
 
-        <CardFooter className="pt-0">
+        <CardFooter className="pt-0 mt-auto">
           <div className="ml-auto flex items-center gap-2">
-            {/* AarthikNiti: show both Live and GitHub (if available) */}
-            {project.id === "aarthikniti" && project.link && (
+            {project.github && (
+              <Button variant="outline" size="icon" className="h-8 w-8">
+                <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label="View Code">
+                  <Github className="h-4 w-4" />
+                </a>
+              </Button>
+            )}
+            {project.link && (
               <Button size="icon" className="h-8 w-8">
                 <a href={project.link} target="_blank" rel="noopener noreferrer" aria-label="Live Demo">
                   <ExternalLink className="h-4 w-4" />
                 </a>
               </Button>
             )}
-            {project.id === "aarthikniti" && project.github && (
-              <Button variant="outline" size="icon" className="h-8 w-8">
-                <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label="View Code">
-                  <Github className="h-4 w-4" />
-                </a>
-              </Button>
-            )}
-
-            {/* Other projects: only GitHub if available */}
-            {project.id !== "aarthikniti" && project.github && (
-              <Button variant="outline" size="icon" className="h-8 w-8">
-                <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label="View Code">
-                  <Github className="h-4 w-4" />
-                </a>
+            {!project.github && !project.link && (
+              <Button variant="secondary" size="sm" disabled>
+                Coming Soon
               </Button>
             )}
           </div>
