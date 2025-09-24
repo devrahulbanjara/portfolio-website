@@ -1,9 +1,3 @@
-export interface Skill {
-  name: string;
-  icon?: string;
-  category: "languages" | "frameworks" | "tools" | "ml" | "other";
-  level?: number;
-}
 
 export interface Project {
   id: string;
@@ -47,91 +41,84 @@ export interface BlogPost {
   image?: string;
 }
 
-export const skills: Skill[] = [
-  { name: "Python", category: "languages", level: 65 },
-  { name: "Java", category: "languages", level: 50 },
-  { name: "C", category: "languages", level: 40 },
-  { name: "PyTorch", category: "ml", level: 60 },
-  { name: "TensorFlow", category: "ml", level: 50 },
-  { name: "LLM Fine-tuning", category: "ml", level: 60 },
-  { name: "LoRA", category: "ml", level: 60 },
-  { name: "FastAPI", category: "frameworks", level: 70 },
-  { name: "Flask", category: "frameworks", level: 65 },
-  { name: "Docker", category: "tools", level: 70 },
-  { name: "Git", category: "tools", level: 80 },
-  { name: "Weights and Biases", category: "tools", level: 70 },
-  { name: "MySQL", category: "tools", level: 70 },
-  { name: "NumPy", category: "ml", level: 70 },
-  { name: "Pandas", category: "ml", level: 70 },
-  { name: "Computer Vision", category: "ml", level: 65 },
-  { name: "NLP", category: "ml", level: 65 },
-];
+
+export const skillsSummary = {
+  languages: ["Python", "JavaScript", "C", "Java", "SQL"],
+  tools: [
+    "Langchain",
+    "Langraph",
+    "RAG",
+    "AWS Core Services (AWS Certified)",
+    "Docker",
+    "HuggingFace",
+    "MLflow",
+    "Git",
+    "TensorFlow",
+    "PyTorch",
+    "Transformers",
+    "Streamlit",
+    "YOLO",
+    "FastAPI",
+    "React"
+  ]
+};
 
 export const projects: Project[] = [
   {
-    id: "nepali-paraphraser",
-    title: "Nepali Language Paraphraser",
-    description: "A Nepali paraphrasing system using NLP, built with Transformer-based models to generate contextually accurate paraphrases from input text in Devanagari script.",
-    image: "/images/projects/nepali-paraphraser.jpg",
-    tags: ["NLP", "Transformers", "Devanagari"],
-    techStack: ["PyTorch", "Transformers", "NLTK", "FastAPI"],
-    featured: true,
-    categories: ["ai"]
-  },
-  {
-    id: "deepseek-medical",
-    title: "DeepSeek Medical LLM",
-    description: "Fine-tuned the DeepSeek-R1-Distill-Llama-8B model using LoRA adapters on a medical consultation dataset.",
-    image: "/images/projects/deepseek-medical.jpg",
-    tags: ["LLM", "LoRA", "Healthcare"],
-    techStack: ["PyTorch", "Unsloth", "PEFT", "Hugging Face"],
+    id: "recruitment-automation",
+    title: "Recruitment Automation & Job Marketplace Platform",
+    description: "Multi-Agent Recruitment Automation and Job Marketplace to Transform the hiring process with AI-powered recruitment platform that combines intelligent automation with human expertise ",
+    image: "/images/projects/document-verification.jpg",
+    tags: ["Agents", "LangGraph", "LLM"],
+    techStack: ["LangGraph", "LangChain", "FastAPI", "ASR", "RAG"],
     featured: true,
     categories: ["ai"],
-    github: "https://github.com/devrahulbanjara/DeepSeek-Finetuned-with-LoRA-on-Medical-Dataset"
+    github: "https://github.com/devrahulbanjara/ConvexHire"
+  },
+  {
+    id: "aws-fraud-detection",
+    title: "Credit Card Fraud Detection on AWS",
+    description: "real-time credit card fraud detection system built with AWS machine learning services, processing streaming transactions through the use of AWS Services for immediate fraud prevention.",
+    image: "/images/projects/deepseek-medical.jpg",
+    tags: ["AWS", "SageMaker", "MLOps"],
+    techStack: ["Kinesis", "Lambda", "S3", "Glue", "SageMaker", "XGBoost"],
+    featured: true,
+    categories: ["ai"],
+    github: "https://github.com/devrahulbanjara/financial-transaction-fraud-detection-using-aws"
   },
   {
     id: "document-verification",
     title: "Document Verification System",
-    description: "An intelligent system that verifies document authenticity using computer vision and NLP techniques.",
+    description: "AI-driven document fraud detection using ResNet50, YOLOv8, and EasyOCR.",
     image: "/images/projects/document-verification.jpg",
     tags: ["Computer Vision", "OCR", "NLP"],
-    techStack: ["ResNet50", "YOLOv8", "EasyOCR", "NLP", "Streamlit"],
+    techStack: ["ResNet50", "YOLOv8", "EasyOCR", "Regex", "Streamlit"],
     featured: true,
     categories: ["ai"],
     github: "https://github.com/devrahulbanjara/Document-Verification-System"
   },
   {
     id: "aarthikniti",
-    title: "AarthikNiti",
-    description: "Expense tracker application with ML-powered receipt scanner and integrated chatbot for financial insights.",
+    title: "AarthikNiti – Personal Finance Tool",
+    description: "A powerful personal finance management application designed to help you track expenses, analyze income patterns, and achieve your financial goals with AI-powered insights.",
     image: "/images/projects/aarthikniti.jpg",
-    tags: ["ML", "Finance", "API"],
-    techStack: ["FastAPI", "ML", "Receipt Scanner", "Chatbot"],
+    tags: ["Finance", "OCR", "Analytics"],
+    techStack: ["FastAPI", "Streamlit", "OCR", "Auth"],
     featured: true,
     categories: ["ai", "fullstack"],
+    link: "https://aarthik-niti-expense-tracker.vercel.app/",
     github: "https://github.com/devrahulbanjara/AarthikNiti-Expense-Tracker"
   },
   {
-    id: "medical-chatbot",
-    title: "Medical Chatbot",
-    description: "RAG-based large language model chatbot for answering medical queries with accurate information.",
-    image: "/images/projects/medical-chatbot.jpg",
-    tags: ["RAG", "LLM", "Healthcare"],
-    techStack: ["Pinecone", "Langchain", "Flask"],
+    id: "deepseek-medical",
+    title: "DeepSeek R1 Distill Llama 8B – Medical LoRA",
+    description: "Fine-tuned the DeepSeek-R1-Distill-Llama-8B model for medical consultation tasks to provide accurate, reliable medical information and reasoning based on user queries, serving as a virtual medical consultant.",
+    image: "/images/projects/deepseek-medical.jpg",
+    tags: ["LLM", "LoRA", "Quantization"],
+    techStack: ["PyTorch", "Unsloth", "PEFT", "Hugging Face"],
     featured: true,
     categories: ["ai"],
-    github: "https://github.com/devrahulbanjara/Medical-Chatbot"
-  },
-  {
-    id: "resume-sense",
-    title: "Resume Sense",
-    description: "Offline ATS resume analyzer that helps job seekers optimize their resumes without data privacy concerns.",
-    image: "/images/projects/resume-sense.jpg",
-    tags: ["LLM", "Document Analysis", "Offline"],
-    techStack: ["Mistral", "Ollama"],
-    featured: false,
-    categories: ["ai"],
-    github: "https://github.com/devrahulbanjara/ResumeSense-AI-Powered-ATS-Resume-Analyzer"
+    github: "https://github.com/devrahulbanjara/DeepSeek-Finetuned-with-LoRA-on-Medical-Dataset"
   }
 ];
 
@@ -200,36 +187,53 @@ export const collegeProjects: Project[] = [
 
 export const experiences: Experience[] = [
   {
-    id: "fusemachines",
-    company: "Fusemachines",
-    position: "AI Fellowship",
-    startDate: "2024-04",
-    endDate: "2024-09",
+    id: "adex-international",
+    company: "Adex International, Lalitpur",
+    position: "Associate AI/ML Engineer",
+    startDate: "2025-06",
+    endDate: "Present",
     description: [
-      "Engineered industry-grade AI for Governance & CV solutions",
-      "Worked with SOTA models: ResNet, YOLOv8, Llama 3.1",
-      "Hands-on end-to-end ML pipeline design",
-      "Group collaboration and research paper review"
+      "Built Automatic Speech Recognition (ASR) system for realtime speech to text",
+      "Developed practical curriculum for AWS Certified Machine Learning Engineer",
+      "Created comprehensive resources for AWS MLA-C01 candidates from 101 to advanced topics",
+      "Deployed website chatbot to answer all site-related queries",
+      "Made a Document Verification Pipeline for Insurance Claim Documents",
+      "Engineered a platform to identify all the resources creations on AWS based on tags for cost optimization.",
     ],
-    technologies: ["PyTorch", "TensorFlow", "YOLOv8", "Llama 3.1", "ResNet"]
+    technologies: ["ASR", "AWS", "LangChain", "FastAPI"]
+  },
+  {
+    id: "fusemachines-2025",
+    company: "Fusemachines",
+    position: "AI Fellowship 2024",
+    startDate: "2025-03",
+    endDate: "2025-10",
+    description: [
+      "Built industry-grade CV and AI for Governance solutions",
+      "End-to-end ML lifecycle and deployment experience",
+      "Handled data shifts and real-world challenges",
+      "Worked on sentiment analysis and text classification",
+      "Research paper reading and SOTA implementations",
+      "Training on supervised, unsupervised, and generative DL"
+    ],
+    technologies: ["PyTorch", "TensorFlow", "YOLOv8", "Transformers", "SageMaker"]
   }
 ];
 
 export const certifications: Certification[] = [
   {
+    title: "AWS Certified Machine Learning – Associate (MLA-C01)",
+    issuer: "Amazon Web Services",
+    date: "2025",
+    link: "https://cp.certmetrics.com/amazon/en/public/verify/credential/035ddb7ca35541e0a815a122d7afcb84",
+    image: "/images/certifications/aws-mla-c01.png"
+  },
+  {
     title: "Microdegree™ in Artificial Intelligence",
     issuer: "Fusemachines",
-    date: "2024-09",
-  },
-  {
-    title: "Machine Learning Specialization",
-    issuer: "DeepLearning.AI",
-    date: "2024-03",
-  },
-  {
-    title: "Python 3 Programming",
-    issuer: "University of Michigan",
-    date: "2023-11",
+    date: "2024",
+    link: "https://s3.amazonaws.com/fuseclassroom-resources-prod/student-certificates/Microdegree%E2%84%A2+in+Artificial+Intelligence-RAHUL+DEV+BANJARA.pdf",
+    image: "/images/certifications/fusemachines-microdegree.png"
   }
 ];
 
@@ -247,26 +251,26 @@ export const blogs: BlogPost[] = [
 
 export const education = [
   {
-    school: "Herald College",
-    location: "Kathmandu",
-    degree: "B.Hons Computer Science",
+    school: "Herald College Kathmandu",
+    location: "Naxal, Kathmandu",
+    degree: "B.Hons in Computer Science",
     period: "2023–2026"
   },
   {
     school: "Capital College & Research Center",
-    location: "Kathmandu",
-    degree: "10+2",
-    period: "2021–2023"
+    location: "Balkumari, Lalitpur",
+    degree: "10+2 Computer Science | NEB",
+    period: "2020–2022"
   }
 ];
 
 export const personalInfo = {
   name: "Rahul Dev Banjara",
-  title: "Machine Learning Engineer",
+  title: "AI Engineer",
   email: "rdbanjara07@gmail.com",
   phone: "+977 9866121812",
   location: "Nepal",
-  about: "Innovative ML Engineer skilled in computer vision, NLP, and LLM fine-tuning using PyTorch and TensorFlow. I specialize in optimizing large language models with techniques like LoRA and quantization. I build end-to-end AI solutions across healthcare, finance, and document processing, leveraging CNNs, Transformers, LLMs, and RAG. Passionate about scalable, efficient systems and applying cutting-edge research to real-world problems.",
+  about: "AI/ML Engineer specializing in Computer Vision, NLP, and Generative AI, creating end-to-end intelligent systems with optimized models, full-stack deployment, and cost-efficient solutions on AWS.",
   social: {
     github: "https://github.com/devrahulbanjara",
     linkedin: "https://www.linkedin.com/in/devrahulbanjara/"

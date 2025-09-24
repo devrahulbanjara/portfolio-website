@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import { skills } from "@/data/portfolio-data";
-import { Progress } from "@/components/ui/progress";
+import { skillsSummary } from "@/data/portfolio-data";
+import { Badge } from "@/components/ui/badge";
 
 export function SkillsSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -36,22 +36,10 @@ export function SkillsSection() {
     };
   }, []);
   
-  // Group skills by category
-  const groupedSkills = skills.reduce((acc, skill) => {
-    if (!acc[skill.category]) {
-      acc[skill.category] = [];
-    }
-    acc[skill.category].push(skill);
-    return acc;
-  }, {} as Record<string, typeof skills>);
-  
-  const categoryLabels: Record<string, string> = {
-    languages: "Programming Languages",
-    frameworks: "Frameworks & Libraries",
-    tools: "Tools & Platforms",
-    ml: "Machine Learning",
-    other: "Other Skills"
-  };
+  const sections = [
+    { title: "Languages", items: skillsSummary.languages },
+    { title: "Technologies & Tools", items: skillsSummary.tools },
+  ];
   
   return (
     <section 
@@ -69,93 +57,16 @@ export function SkillsSection() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-10">
-          {/* ML Skills */}
-          <div className="animate-on-scroll">
-            <h3 className="text-xl font-bold mb-6">{categoryLabels.ml}</h3>
-            <div className="space-y-6">
-              {groupedSkills.ml?.map((skill, index) => (
-                <div key={skill.name}>
-                  <div className="flex justify-between mb-1">
-                    <span className="font-medium">{skill.name}</span>
-                    <span className="text-muted-foreground">{skill.level}%</span>
-                  </div>
-                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden skill-bar">
-                    <div 
-                      data-progress={skill.level}
-                      className="h-full bg-primary rounded-full transition-all duration-1000 ease-out" 
-                      style={{ width: "0%" }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
+          {sections.map((section, idx) => (
+            <div key={section.title} className="animate-on-scroll">
+              <h3 className="text-xl font-bold mb-6">{section.title}</h3>
+              <div className="flex flex-wrap gap-2">
+                {section.items.map((item) => (
+                  <Badge key={item} variant="secondary" className="text-sm px-3 py-1">{item}</Badge>
+                ))}
+              </div>
             </div>
-          </div>
-          
-          {/* Programming Languages */}
-          <div className="animate-on-scroll">
-            <h3 className="text-xl font-bold mb-6">{categoryLabels.languages}</h3>
-            <div className="space-y-6">
-              {groupedSkills.languages?.map((skill, index) => (
-                <div key={skill.name}>
-                  <div className="flex justify-between mb-1">
-                    <span className="font-medium">{skill.name}</span>
-                    <span className="text-muted-foreground">{skill.level}%</span>
-                  </div>
-                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden skill-bar">
-                    <div 
-                      data-progress={skill.level}
-                      className="h-full bg-primary rounded-full transition-all duration-1000 ease-out" 
-                      style={{ width: "0%" }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          {/* Frameworks */}
-          <div className="animate-on-scroll">
-            <h3 className="text-xl font-bold mb-6">{categoryLabels.frameworks}</h3>
-            <div className="space-y-6">
-              {groupedSkills.frameworks?.map((skill, index) => (
-                <div key={skill.name}>
-                  <div className="flex justify-between mb-1">
-                    <span className="font-medium">{skill.name}</span>
-                    <span className="text-muted-foreground">{skill.level}%</span>
-                  </div>
-                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden skill-bar">
-                    <div 
-                      data-progress={skill.level}
-                      className="h-full bg-primary rounded-full transition-all duration-1000 ease-out" 
-                      style={{ width: "0%" }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          {/* Tools */}
-          <div className="animate-on-scroll">
-            <h3 className="text-xl font-bold mb-6">{categoryLabels.tools}</h3>
-            <div className="space-y-6">
-              {groupedSkills.tools?.map((skill, index) => (
-                <div key={skill.name}>
-                  <div className="flex justify-between mb-1">
-                    <span className="font-medium">{skill.name}</span>
-                    <span className="text-muted-foreground">{skill.level}%</span>
-                  </div>
-                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden skill-bar">
-                    <div 
-                      data-progress={skill.level}
-                      className="h-full bg-primary rounded-full transition-all duration-1000 ease-out" 
-                      style={{ width: "0%" }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
