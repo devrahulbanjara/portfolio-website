@@ -115,7 +115,7 @@ export const projects: Project[] = [
     techStack: ["FastAPI", "Streamlit", "OCR", "Auth"],
     featured: true,
     categories: ["ai", "fullstack"],
-    link: "https://aarthik-niti-expense-tracker.vercel.app/",
+    link: "https://aarthikniti.rahuldevbanjara.com.np/",
     github: "https://github.com/devrahulbanjara/AarthikNiti-Expense-Tracker"
   },
   {
