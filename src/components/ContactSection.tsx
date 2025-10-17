@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/sonner";
-import { Mail, Phone, Github, Linkedin } from "lucide-react";
+import { Mail, Github, Linkedin } from "lucide-react";
 import { personalInfo } from "@/data/portfolio-data";
 import emailjs from '@emailjs/browser';
 import { emailjsConfig } from "@/config/emailjs";
@@ -91,17 +91,6 @@ export function ContactSection() {
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <div className="p-3 rounded-full bg-primary/10">
-                <Phone className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Phone</p>
-                <a href={`tel:${personalInfo.phone}`} className="font-medium hover:text-primary">
-                  {personalInfo.phone}
-                </a>
-              </div>
-            </div>
             
             <div className="pt-6">
               <h4 className="text-lg font-semibold mb-4">Connect with me</h4>

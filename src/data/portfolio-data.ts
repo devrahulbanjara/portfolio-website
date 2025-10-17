@@ -277,7 +277,6 @@ export const personalInfo = {
   name: "Rahul Dev Banjara",
   title: "AI Engineer",
   email: "rdbanjara07@gmail.com",
-  phone: "+977 9866121812",
   location: "Nepal",
   about: "AI/ML Engineer specializing in Computer Vision, NLP, and Generative AI, creating end-to-end intelligent systems with optimized models, full-stack deployment, and cost-efficient solutions on AWS.",
   social: {

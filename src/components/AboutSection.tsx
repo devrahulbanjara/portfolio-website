@@ -98,10 +98,6 @@ export function AboutSection() {
                 <p>{personalInfo.email}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Phone</p>
-                <p>{personalInfo.phone}</p>
-              </div>
-              <div>
                 <p className="text-muted-foreground">Location</p>
                 <p>{personalInfo.location}</p>
               </div>
