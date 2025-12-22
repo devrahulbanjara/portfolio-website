@@ -132,7 +132,7 @@ export const projects: Project[] = [
             "Implemented secure filesystem operations and structured output generation",
         ],
         tags: ["Agentic AI", "CLI", "Python"],
-        githubUrl: "https://github.com/devrahulbanjara/Knit.dev",
+        githubUrl: "https://github.com/devrahulbanjara/cod.er",
         featured: true,
         inProgress: true,
     },
