@@ -8,7 +8,7 @@ export interface BlogPost {
 
 const posts: BlogPost[] = [
     {
-        slug: "sagemaker-caching-blog",
+        slug: "sagemaker-caching",
         title: "Mastering Caching in Amazon SageMaker Pipelines for Faster and More Economical ML Workflows",
         date: "December 21, 2025",
         excerpt:
