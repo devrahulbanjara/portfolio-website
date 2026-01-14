@@ -15,7 +15,7 @@ import { blogPosts } from "@/data/blog-metadata"
 
 export default function Home() {
     const featuredProjects = projects.filter((p) => p.featured)
-    const recentBlogs = blogPosts().slice(0, 3)
+    const latestBlogs = blogPosts().slice(0, 3)
 
     return (
         <div className="pb-20">
@@ -275,10 +275,10 @@ export default function Home() {
 
             <div className="max-w-2xl mx-auto px-6 py-16">
                 <h2 className="text-xl font-medium text-foreground mb-8">
-                    Recent Writings
+                    Latest Blogs
                 </h2>
                 <div className="space-y-4">
-                    {recentBlogs.map((blog) => (
+                    {latestBlogs.map((blog) => (
                         <Link
                             key={blog.slug}
                             href={`/blogs/${blog.slug}`}
@@ -300,7 +300,7 @@ export default function Home() {
                     href="/blogs"
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-block mt-4"
                 >
-                    View all posts →
+                    View all blogs →
                 </Link>
             </div>
 
