@@ -78,11 +78,12 @@ const markdownComponents: Components = {
                 return String(node)
             }
             if (React.isValidElement(node)) {
+                const props = node.props as { children?: any }
                 if (node.type === 'code') {
-                    return extractCodeString(node.props.children)
+                    return extractCodeString(props.children)
                 }
-                if (node.props?.children) {
-                    return extractCodeString(node.props.children)
+                if (props?.children) {
+                    return extractCodeString(props.children)
                 }
             }
             if (Array.isArray(node)) {
