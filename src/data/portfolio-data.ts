@@ -80,7 +80,7 @@ export const workExperience: WorkExperience[] = [
     },
     {
         id: 3,
-        title: "AI Fellowship 2025",
+        title: "AI Fellowship 2024",
         company: "Fusemachines",
         duration: "March 2024 – October 2024",
         description: [
