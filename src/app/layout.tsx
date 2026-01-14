@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Inter, Lora } from "next/font/google"
 import "./globals.css"
 import { Providers } from "@/components/providers"
 import { DotBackground } from "@/components/dot-background"
 import { Navigation } from "@/components/navigation"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
+const lora = Lora({ subsets: ["latin"], variable: "--font-serif" })
 
 export const metadata: Metadata = {
     title: "Rahul | AI Engineer & Teacher",
@@ -20,7 +21,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <body className={inter.className}>
+            <body className={`${inter.variable} ${lora.variable} font-sans`}>
                 <Providers>
                     <DotBackground />
                     <div className="container mx-auto min-h-screen">

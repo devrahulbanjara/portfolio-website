@@ -15,72 +15,72 @@ import { blogPosts } from "@/data/blog-metadata"
 
 export default function Home() {
     const featuredProjects = projects.filter((p) => p.featured)
-    const recentBlogs = blogPosts.slice(0, 3)
+    const recentBlogs = blogPosts().slice(0, 3)
 
     return (
         <div className="pb-20">
-            {/* Hero & Skills Section - No background */}
-            <div className="max-w-2xl mx-auto px-6 pt-0 sm:pt-20">
-                {/* Profile Image */}
-                <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-border">
-                    <Image
-                        src={personalInfo.profileImage}
-                        alt={`${personalInfo.name}'s profile`}
-                        width={80}
-                        height={80}
-                        className="w-full h-full object-cover"
-                    />
-                </div>
-
-                {/* Introduction */}
-                <div className="mt-5 flex-col flex gap-2">
-                    <h1 className="text-3xl font-medium text-foreground">
-                        Hi, I&apos;m {personalInfo.name}.
-                    </h1>
-                    <div className="mb-2 text-muted-foreground leading-relaxed">
-                        {personalInfo.bio.map((line, i) => (
-                            <p key={i}>{line}</p>
-                        ))}
+            <div className="max-w-2xl mx-auto px-6 pt-8 sm:pt-24">
+                <div className="mb-10">
+                    <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-border mb-8">
+                        <Image
+                            src={personalInfo.profileImage}
+                            alt={`${personalInfo.name}'s profile`}
+                            width={96}
+                            height={96}
+                            className="w-full h-full object-cover"
+                        />
                     </div>
 
-                    {/* Email Link */}
-                    <a
-                        href={`mailto:${personalInfo.email}`}
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5"
-                    >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        {personalInfo.email}
-                    </a>
+                    <div className="flex-col flex gap-6">
+                        <h1 className="text-[42px] sm:text-[48px] font-bold text-foreground leading-tight tracking-tight">
+                            Hi, I&apos;m {personalInfo.name}.
+                        </h1>
+                        <div className="text-[15px] text-muted-foreground leading-relaxed space-y-4">
+                            {personalInfo.bio.map((line, i) => (
+                                <p key={i}>{line}</p>
+                            ))}
+                        </div>
+
+                        <a
+                            href={`mailto:${personalInfo.email}`}
+                            className="text-base text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2 group"
+                        >
+                            <svg className="w-5 h-5 transition-transform group-hover:translate-y-[-2px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            {personalInfo.email}
+                        </a>
+                    </div>
                 </div>
 
-                {/* Current Work */}
-                <p className="text-muted-foreground mb-12 mt-4">
-                    Currently working on{" "}
-                    <span className="text-foreground font-medium">
-                        {personalInfo.currentWork} ⚡
-                    </span>
-                </p>
+                <div className="mb-16">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 dark:bg-muted/30 border border-border/50">
+                        <span className="text-sm text-muted-foreground">Currently working on</span>
+                        <span className="text-base font-semibold text-foreground">
+                            {personalInfo.currentWork}
+                        </span>
+                        <span className="text-lg">⚡</span>
+                    </div>
+                </div>
 
-                {/* Top Skills Section */}
-                <div className="mb-12">
-                    <h2 className="text-xl font-medium text-foreground mb-4">Top Skills</h2>
-                    <div className="flex flex-wrap gap-2 *:text-muted-foreground text-sm">
-                        {skills.map((skill, index) => (
-                            <React.Fragment key={skill}>
-                                <span>{skill}</span>
-                                {index < skills.length - 1 && <span>•</span>}
-                            </React.Fragment>
+                <div className="mb-16">
+                    <h2 className="text-xl font-medium text-foreground mb-6">Top Skills</h2>
+                    <div className="flex flex-wrap gap-2.5">
+                        {skills.map((skill) => (
+                            <span
+                                key={skill}
+                                className="px-3 py-1.5 text-sm text-foreground bg-muted/40 dark:bg-muted/20 rounded-full border border-border/50"
+                            >
+                                {skill}
+                            </span>
                         ))}
                     </div>
                 </div>
             </div>
 
-            {/* Work Experience Section - WITH FULL-WIDTH BACKGROUND */}
-            <div className="w-full bg-muted/50 dark:bg-muted/20 py-12">
+            <div className="w-full bg-muted/50 dark:bg-muted/20 py-16">
                 <div className="max-w-2xl mx-auto px-6">
-                    <h2 className="text-xl font-medium text-foreground mb-6">
+                    <h2 className="text-xl font-medium text-foreground mb-8">
                         Work Experience
                     </h2>
                     <div className="space-y-8">
@@ -108,9 +108,8 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Featured Projects Section - No background */}
-            <div className="max-w-2xl mx-auto px-6 py-12">
-                <h2 className="text-xl font-medium text-foreground mb-6">
+            <div className="max-w-2xl mx-auto px-6 py-16">
+                <h2 className="text-xl font-medium text-foreground mb-8">
                     Featured Projects
                 </h2>
                 <div className="space-y-6">
@@ -173,10 +172,9 @@ export default function Home() {
                 </Link>
             </div>
 
-            {/* Education Section - WITH FULL-WIDTH BACKGROUND */}
-            <div className="w-full bg-muted/50 dark:bg-muted/20 py-12">
+            <div className="w-full bg-muted/50 dark:bg-muted/20 py-16">
                 <div className="max-w-2xl mx-auto px-6">
-                    <h2 className="text-xl font-medium text-foreground mb-6">Education</h2>
+                    <h2 className="text-xl font-medium text-foreground mb-8">Education</h2>
                     <div className="space-y-6">
                         {education.map((edu) => (
                             <div key={edu.id} className="space-y-2">
@@ -202,9 +200,8 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Certifications Section - No background */}
-            <div className="max-w-2xl mx-auto px-6 py-12">
-                <h2 className="text-xl font-medium text-foreground mb-6">Certifications</h2>
+            <div className="max-w-2xl mx-auto px-6 py-16">
+                <h2 className="text-xl font-medium text-foreground mb-8">Certifications</h2>
                 <div className="space-y-4">
                     {certifications.map((cert) => (
                         <a
@@ -242,10 +239,9 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Activities & Leadership Section - WITH FULL-WIDTH BACKGROUND */}
-            <div className="w-full bg-muted/50 dark:bg-muted/20 py-12">
+            <div className="w-full bg-muted/50 dark:bg-muted/20 py-16">
                 <div className="max-w-2xl mx-auto px-6">
-                    <h2 className="text-xl font-medium text-foreground mb-6">
+                    <h2 className="text-xl font-medium text-foreground mb-8">
                         Activities & Leadership
                     </h2>
                     <div className="space-y-6">
@@ -277,9 +273,8 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Recent Writings Section - No background */}
-            <div className="max-w-2xl mx-auto px-6 py-12">
-                <h2 className="text-xl font-medium text-foreground mb-6">
+            <div className="max-w-2xl mx-auto px-6 py-16">
+                <h2 className="text-xl font-medium text-foreground mb-8">
                     Recent Writings
                 </h2>
                 <div className="space-y-4">
@@ -309,8 +304,7 @@ export default function Home() {
                 </Link>
             </div>
 
-            {/* Contact CTA - No background */}
-            <div className="max-w-2xl mx-auto px-6">
+            <div className="max-w-2xl mx-auto px-6 pt-8">
                 <Button variant="default" className="rounded-full" asChild>
                     <Link href={`mailto:${personalInfo.email}`}>Say Hello</Link>
                 </Button>

@@ -3,8 +3,19 @@ import { projects } from "@/data/portfolio-data"
 
 export default function ProjectsPage() {
     return (
-        <main className="max-w-2xl mx-auto flex flex-col px-6 pt-0 sm:pt-20 pb-20">
-            <h1 className="text-2xl font-medium text-foreground mb-8">All Projects</h1>
+        <main className="min-h-screen pb-24">
+            <header className="py-16 sm:py-24">
+                <div className="max-w-[720px] mx-auto px-6">
+                    <h1 className="text-[40px] sm:text-[48px] font-bold text-foreground tracking-tight leading-[1.1]">
+                        All Projects
+                    </h1>
+                    <p className="mt-4 text-[18px] sm:text-[20px] text-muted-foreground leading-relaxed max-w-[560px]">
+                        A collection of things I've built, from production ML systems to open-source tools.
+                    </p>
+                </div>
+            </header>
+
+            <section className="max-w-[720px] mx-auto px-6">
 
             <div className="space-y-8">
                 {projects.map((project) => (
@@ -56,6 +67,7 @@ export default function ProjectsPage() {
                     </div>
                 ))}
             </div>
+            </section>
         </main>
     )
 }
