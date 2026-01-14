@@ -41,7 +41,7 @@ const markdownComponents: Components = {
         )
     },
     img: ({ src, alt }) => {
-        if (!src) return null
+        if (!src || typeof src !== 'string') return null
         return (
             <figure className="my-7 -mx-4 sm:mx-0">
                 <div className="overflow-hidden rounded-lg sm:rounded-xl">
