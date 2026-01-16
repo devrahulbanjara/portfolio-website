@@ -1,6 +1,6 @@
 ---
-title: "The FinOps of GenAI: Reduce Bedrock Latency and Cost with Prompt Caching"
-date: "November 5, 2025"
+title: "Optimizing Generative AI Costs: A Deep Dive into Amazon Bedrock Prompt Caching & Benchmarks"
+date: "October 24, 2025"
 excerpt: "Learn how to cut GenAI costs by 90% and reduce latency by 59% using Amazon Bedrock Prompt Caching with real benchmarks and implementation code."
 readTime: "12 min read"
 ---
@@ -32,7 +32,7 @@ The majority of GenAI applications send the same content repeatedly:
 
 ## How Prompt Caching Works
 
-![Amazon Bedrock Prompt Caching Architecture](/blog-images/prompt-caching-architecture.svg)
+![Amazon Bedrock Prompt Caching Architecture](/blog-images/bedrock-prompt-caching/prompt-caching-architecture.svg)
 
 You can understand prompt caching with an analogy:
 
@@ -246,4 +246,6 @@ Having said that prompt caching is really useful doesn't mean it is perfect for 
 
 Prompt caching is one of the techniques that can provide any business a very high ROI. With having almost no catches, using this technique can massively save your money as well as improve the customer's experience by faster responses.
 
-**There are other important considerations to keep in mind while using prompt cachings**. For detailed model specifications, considerations, regional availability, and pricing, make sure to visit the [Amazon Bedrock Prompt Caching documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html).
+**Resources**:
+*   [Amazon Bedrock Prompt Caching Documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html)
+*   [AWS Bedrock Pricing](https://aws.amazon.com/bedrock/pricing/)

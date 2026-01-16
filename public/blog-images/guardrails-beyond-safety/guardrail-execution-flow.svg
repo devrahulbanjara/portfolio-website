@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <!-- Definitions for gradients and shadows -->
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+    <linearGradient id="gradientUser" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <linearGradient id="gradientGuardrail" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <linearGradient id="gradientLLM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="gradientBlock" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#dc2626" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="#f8fafc" rx="10" ry="10"/>
+
+  <!-- User Node -->
+  <g transform="translate(50, 175)" filter="url(#shadow)">
+    <rect x="0" y="0" width="120" height="80" rx="8" fill="url(#gradientUser)"/>
+    <text x="60" y="45" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle" font-weight="bold">User Prompt</text>
+  </g>
+
+  <!-- Arrow User -> Guardrail -->
+  <path d="M170 215 L240 215" stroke="#64748b" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <!-- Guardrail Node (Diamond Shape for decision) -->
+  <g transform="translate(250, 155)" filter="url(#shadow)">
+    <polygon points="100,0 200,60 100,120 0,60" fill="url(#gradientGuardrail)"/>
+    <text x="100" y="55" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Apply</text>
+    <text x="100" y="75" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Guardrail</text>
+  </g>
+
+  <!-- Path: Safe (Go to LLM) -->
+  <path d="M450 215 L520 215" stroke="#10b981" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <text x="485" y="205" font-family="Arial, sans-serif" font-size="12" fill="#10b981" text-anchor="middle" font-weight="bold">Safe Topic</text>
+
+  <!-- LLM Node -->
+  <g transform="translate(520, 175)" filter="url(#shadow)">
+    <rect x="0" y="0" width="120" height="80" rx="8" fill="url(#gradientLLM)"/>
+    <text x="60" y="45" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle" font-weight="bold">LLM Invocation</text>
+  </g>
+
+  <!-- Arrow LLM -> Response -->
+  <path d="M640 215 L710 215" stroke="#64748b" stroke-width="3" marker-end="url(#arrowhead)"/>
+  
+  <!-- Response Node -->
+  <g transform="translate(710, 185)">
+     <text x="0" y="30" font-family="Arial, sans-serif" font-size="14" fill="#334155">AI Response</text>
+     <text x="0" y="50" font-family="Arial, sans-serif" font-size="12" fill="#64748b">($ Cost)</text>
+  </g>
+
+
+  <!-- Path: Blocked (Short Circuit) -->
+  <path d="M350 275 L350 350 L520 350" stroke="#ef4444" stroke-width="3" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+  <text x="360" y="320" font-family="Arial, sans-serif" font-size="12" fill="#ef4444" text-anchor="start" font-weight="bold">Blocked Topic</text>
+
+  <!-- Blocked Node -->
+  <g transform="translate(520, 310)" filter="url(#shadow)">
+    <rect x="0" y="0" width="150" height="80" rx="8" fill="url(#gradientBlock)"/>
+    <text x="75" y="35" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Standard Message</text>
+    <text x="75" y="60" font-family="Arial, sans-serif" font-size="12" fill="white" text-anchor="middle" font-style="italic">"Sorry, cannot discuss..."</text>
+  </g>
+
+  <!-- Cost Savings Annotation -->
+  <g transform="translate(680, 330)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="16" fill="#16a34a" font-weight="bold">0 Token Cost</text>
+    <text x="0" y="20" font-family="Arial, sans-serif" font-size="12" fill="#15803d">Pre-LLM Filter</text>
+  </g>
+
+  <!-- Arrow Definitions -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <style>
+      .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      .title { font-size: 16px; font-weight: bold; fill: #333; }
+      .label { font-size: 12px; fill: #666; }
+      .box-label { font-size: 13px; font-weight: 500; fill: #333; }
+      .arrow { stroke: #94a3b8; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .box { stroke-width: 0; rx: 6; }
+      .user { fill: #dbeafe; stroke: #2563eb; stroke-width: 1; }
+      .filter { fill: #dcfce7; stroke: #16a34a; stroke-width: 1; }
+      .db { fill: #f1f5f9; stroke: #64748b; stroke-width: 1; }
+      .doc-allowed { fill: #dcfce7; stroke: #22c55e; stroke-width: 1; }
+      .doc-blocked { fill: #fee2e2; stroke: #ef4444; stroke-width: 1; }
+      .llm { fill: #f3e8ff; stroke: #9333ea; stroke-width: 1; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8"/>
+    </marker>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#00000020"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="white" rx="12"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" class="text title">Multi-Tenant Isolation Architecture</text>
+
+  <!-- Left Side: Conceptual Request -->
+  <g transform="translate(50, 60)">
+      
+      <!-- User Query -->
+      <g transform="translate(0, 100)">
+        <rect x="0" y="0" width="140" height="60" class="box user" filter="url(#shadow)"/>
+        <text x="70" y="25" text-anchor="middle" class="text box-label">User Query</text>
+        <text x="70" y="45" text-anchor="middle" class="text label" style="font-style: italic;">"Is P-123 on meds?"</text>
+      </g>
+
+      <!-- Arrow to Filter -->
+      <path d="M140,130 L200,130" class="arrow"/>
+
+      <!-- Metadata Filter -->
+      <g transform="translate(200, 80)">
+        <rect x="0" y="0" width="120" height="100" class="box filter" filter="url(#shadow)"/>
+        <text x="60" y="30" text-anchor="middle" class="text box-label">Metadata Filter</text>
+        <path d="M60,45 L60,85" stroke="#16a34a" stroke-width="2"/>
+        <path d="M40,65 L80,65" stroke="#16a34a" stroke-width="2"/>
+        <text x="60" y="90" text-anchor="middle" class="text label" style="font-weight: bold; fill: #059669;">patient_id = P-123</text>
+      </g>
+
+      <!-- Arrow to DB -->
+      <path d="M320,130 L380,130" class="arrow"/>
+  </g>
+
+  <!-- Middle: Database / Knowledge Base -->
+  <g transform="translate(380, 60)">
+      <rect x="0" y="0" width="200" height="260" class="box db" stroke-dasharray="4"/>
+      <text x="100" y="25" text-anchor="middle" class="text box-label">Vector Database (Shared)</text>
+
+      <!-- Doc 1 (Allowed) -->
+      <g transform="translate(20, 50)">
+          <rect x="0" y="0" width="160" height="40" class="box doc-allowed"/>
+          <text x="80" y="25" text-anchor="middle" class="text label">Doc: Lab Results (P-123)</text>
+          <path d="M160,20 L220,20" class="arrow" style="stroke: #22c55e;"/>
+      </g>
+
+      <!-- Doc 2 (Blocked) -->
+      <g transform="translate(20, 110)">
+          <rect x="0" y="0" width="160" height="40" class="box doc-blocked" style="opacity: 0.7;"/>
+          <text x="80" y="25" text-anchor="middle" class="text label">Doc: Notes (P-456)</text>
+          <text x="190" y="25" text-anchor="middle" class="text label" style="fill: #ef4444; font-weight: bold;">BLOCKED</text>
+          <line x1="170" y1="10" x2="210" y2="30" stroke="#ef4444" stroke-width="2"/>
+          <line x1="210" y1="10" x2="170" y2="30" stroke="#ef4444" stroke-width="2"/>
+      </g>
+
+      <!-- Doc 3 (Allowed) -->
+      <g transform="translate(20, 170)">
+          <rect x="0" y="0" width="160" height="40" class="box doc-allowed"/>
+          <text x="80" y="25" text-anchor="middle" class="text label">Doc: Prescription (P-123)</text>
+          <path d="M160,20 L220,20" class="arrow" style="stroke: #22c55e;"/>
+      </g>
+  </g>
+
+  <!-- Right Side: LLM Context -->
+  <g transform="translate(600, 60)">
+      <!-- Arrow Gathering -->
+      <path d="M600,110 L640,130" stroke="#94a3b8" stroke-width="2" fill="none"/>
+      <path d="M600,230 L640,130" stroke="#94a3b8" stroke-width="2" fill="none"/>
+      <path d="M640,130 L660,130" class="arrow"/>
+
+      <!-- LLM -->
+      <g transform="translate(660, 80)">
+          <rect x="0" y="0" width="100" height="100" class="box llm" filter="url(#shadow)"/>
+          <text x="50" y="40" text-anchor="middle" class="text box-label">LLM</text>
+          <text x="50" y="70" text-anchor="middle" class="text label" style="font-size: 10px;">Safe Context Only</text>
+      </g>
+  </g>
+
+  <!-- Bottom Legend/Explanation -->
+  <g transform="translate(150, 350)">
+      <text x="0" y="0" class="text label" style="font-size: 13px;">
+          <tspan style="font-weight: bold; fill: #16a34a;">✓ Isolation Enforced:</tspan> The system uses metadata to filter specific tenant (patient) data
+      </text>
+      <text x="0" y="20" class="text label" style="font-size: 13px;">before it ever reaches the Generation step. P-456 data effectively doesn't exist for this query.</text>
+  </g>
+
+</svg>

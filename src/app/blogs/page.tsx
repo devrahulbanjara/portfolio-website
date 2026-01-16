@@ -38,12 +38,12 @@ export default function BlogsPage() {
             <section className="max-w-[720px] mx-auto px-6">
                 <div className="space-y-1">
                     {posts.map((blog, index) => (
-                        <article 
-                            key={blog.slug} 
+                        <article
+                            key={blog.slug}
                             className="group"
                         >
-                            <Link 
-                                href={`/blogs/${blog.slug}`} 
+                            <Link
+                                href={`/blogs/${blog.slug}`}
                                 className="block py-8 -mx-4 px-4 rounded-xl transition-all duration-300 hover:bg-muted/50"
                             >
                                 <div className="flex items-center gap-2.5 mb-4">
@@ -80,7 +80,7 @@ export default function BlogsPage() {
                                                 </svg>
                                                 {blog.readTime}
                                             </span>
-                                            
+
                                             <span className="text-[13px] text-muted-foreground/70 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                                 Read more
                                                 <svg className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -91,7 +91,7 @@ export default function BlogsPage() {
                                     </div>
                                 </div>
                             </Link>
-                            
+
                             {index < posts.length - 1 && (
                                 <div className="border-b border-border/50" />
                             )}

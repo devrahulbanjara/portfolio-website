@@ -1,6 +1,6 @@
 ---
-title: "Stop Burning AWS Credits: How to Cut SageMaker Costs by 90% with One Simple Trick"
-date: "September 21, 2025"
+title: "Architecting Cost-Efficient ML Pipelines: Implementing Intelligent Caching in Amazon SageMaker"
+date: "August 21, 2025"
 excerpt: "Eliminate redundant computations and reduce costs by implementing intelligent caching in your SageMaker ML pipelines."
 readTime: "8 min read"
 ---
@@ -91,7 +91,7 @@ Let's examine actual cache behavior across three pipeline runs with different mo
 
 **Result:** All steps execute from scratch.
 
-![Initial run shows a cache miss. Preprocessing step executes fully, taking 5 minutes and 3 seconds.](/blog-images/sagemaker_pipelines_caching_1.png)
+![Initial run shows a cache miss. Preprocessing step executes fully, taking 5 minutes and 3 seconds.](/blog-images/sagemaker-caching/sagemaker_pipelines_caching_1.png)
 
 **Performance:**
 - Preprocessing step: 5m 3s
@@ -109,7 +109,7 @@ The preprocessing and training steps both execute completely, establishing the b
 
 **Result:** Preprocessing skips execution (cache hit), training re-runs with new hyperparameters.
 
-![Cache hit! The preprocessing step completes in 1 second by reusing cached results.](/blog-images/sagemaker_pipelines_caching_2.png)
+![Cache hit! The preprocessing step completes in 1 second by reusing cached results.](/blog-images/sagemaker-caching/sagemaker_pipelines_caching_2.png)
 
 **Performance:**
 - Preprocessing step: 1s (99.7% faster)
@@ -129,9 +129,9 @@ At 20 runs per day: **$0.38/day savings = $11.40/month** from preprocessing alon
 
 **Result:** Both preprocessing and training skip execution entirely.
 
-![Preprocessing step shows 0 seconds runtime — completely skipped via cache.](/blog-images/sagemaker_pipelines_caching_3.png)
+![Preprocessing step shows 0 seconds runtime — completely skipped via cache.](/blog-images/sagemaker-caching/sagemaker_pipelines_caching_3.png)
 
-![The training step also shows 0 seconds—no compute provisioned, instant result retrieval.](/blog-images/sagemaker_pipelines_caching_4.png)
+![The training step also shows 0 seconds—no compute provisioned, instant result retrieval.](/blog-images/sagemaker-caching/sagemaker_pipelines_caching_4.png)
 
 **Performance:**
 - Preprocessing step: 0s (instant)
@@ -145,11 +145,8 @@ At 20 runs per day: **$0.38/day savings = $11.40/month** from preprocessing alon
 
 ### Summary Table
 
-| Scenario | Cache Status | Preprocessing Time | Training Time | Cost Impact |
-| :--- | :--- | :--- | :--- | :--- |
-| **First Run** | MISS | 5m 03s | 4m 30s | Baseline Cost |
-| **Hyperparameter Change** | PARTIAL HIT | 1s | 4m 35s | Saved 5m compute |
-| **No Changes** | FULL HIT | 0s | 0s | Zero compute cost |
+![SageMaker Pipeline Caching Performance Summary](/blog-images/sagemaker-caching/sagemaker-caching-summary.svg)
+*Comparison of runtime across different caching scenarios*
 
 ## Best Practices
 
@@ -189,3 +186,7 @@ cache_config = prod_cache if environment == "prod" else dev_cache
 
 ## Conclusion
 SageMaker Pipeline caching is a low effort, high impact optimization. You can have up to a 90 percent reduction of step costs and near- impossible execution time of unmodified parts of your ML workflow by introducing two lines of code to your step definitions.
+
+**Resources**:
+*   [Amazon SageMaker Pipeline Caching Documentation](https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-caching.html)
+*   [Amazon SageMaker Pipelines Overview](https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html)

@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <style>
+      .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      .title { font-size: 16px; font-weight: bold; fill: #333; }
+      .label { font-size: 12px; fill: #666; }
+      .box-label { font-size: 13px; font-weight: 500; fill: #333; }
+      .arrow { stroke: #94a3b8; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .box { stroke-width: 0; rx: 6; }
+      .static { fill: #e0f2fe; stroke: #0ea5e9; stroke-width: 1; }
+      .dynamic { fill: #fef3c7; stroke: #d97706; stroke-width: 1; }
+      .model { fill: #f3e8ff; stroke: #9333ea; stroke-width: 1; }
+      .cache { fill: #dcfce7; stroke: #22c55e; stroke-width: 1; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="white" rx="12"/>
+
+  <!-- Left Side: Without Caching -->
+  <text x="200" y="40" text-anchor="middle" class="text title">Without Caching</text>
+  
+  <!-- Request 1 -->
+  <g transform="translate(50, 80)">
+    <rect x="0" y="0" width="120" height="40" class="box static"/>
+    <text x="60" y="25" text-anchor="middle" class="text box-label">Static Context</text>
+    
+    <rect x="0" y="50" width="120" height="40" class="box dynamic"/>
+    <text x="60" y="75" text-anchor="middle" class="text box-label">User Query 1</text>
+    
+    <path d="M130,45 L170,45" class="arrow"/>
+    
+    <rect x="180" y="15" width="80" height="60" class="box model"/>
+    <text x="220" y="40" text-anchor="middle" class="text box-label">LLM</text>
+    <text x="220" y="55" text-anchor="middle" class="text label" style="font-size: 10px;">Full Process</text>
+  </g>
+
+  <!-- Request 2 -->
+  <g transform="translate(50, 200)">
+    <rect x="0" y="0" width="120" height="40" class="box static"/>
+    <text x="60" y="25" text-anchor="middle" class="text box-label">Static Context</text>
+    
+    <rect x="0" y="50" width="120" height="40" class="box dynamic"/>
+    <text x="60" y="75" text-anchor="middle" class="text box-label">User Query 2</text>
+    
+    <path d="M130,45 L170,45" class="arrow"/>
+    
+    <rect x="180" y="15" width="80" height="60" class="box model"/>
+    <text x="220" y="40" text-anchor="middle" class="text box-label">LLM</text>
+    <text x="220" y="55" text-anchor="middle" class="text label" style="font-size: 10px;">Full Process</text>
+  </g>
+
+  <!-- Divider -->
+  <line x1="400" y1="60" x2="400" y2="340" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="4"/>
+
+  <!-- Right Side: With Caching -->
+  <text x="600" y="40" text-anchor="middle" class="text title">With Prompt Caching</text>
+
+  <!-- Request 1 (Cache Write) -->
+  <g transform="translate(450, 80)">
+    <rect x="0" y="0" width="120" height="40" class="box static"/>
+    <text x="60" y="25" text-anchor="middle" class="text box-label">Static Context</text>
+    
+    <rect x="0" y="50" width="120" height="40" class="box dynamic"/>
+    <text x="60" y="75" text-anchor="middle" class="text box-label">User Query 1</text>
+    
+    <path d="M130,20 L170,20" class="arrow"/> <!-- To Cache -->
+    <path d="M130,70 L210,70 L210,80" class="arrow"/> <!-- Query to LLM -->
+    
+    <!-- Cache Box -->
+    <rect x="180" y="0" width="80" height="40" class="box cache"/>
+    <text x="220" y="25" text-anchor="middle" class="text box-label">Cache</text>
+    
+    <path d="M220,45 L220,55" class="arrow"/>
+    
+    <rect x="180" y="60" width="80" height="50" class="box model"/>
+    <text x="220" y="85" text-anchor="middle" class="text box-label">LLM</text>
+    <text x="220" y="100" text-anchor="middle" class="text label" style="font-size: 10px;">Cache Write</text>
+  </g>
+
+  <!-- Request 2 (Cache Read) -->
+  <g transform="translate(450, 200)">
+    <!-- Static Context is ghosted/referenced -->
+    <rect x="0" y="0" width="120" height="40" class="box cache" style="opacity: 0.5; stroke-dasharray: 4;"/>
+    <text x="60" y="25" text-anchor="middle" class="text box-label" style="fill: #15803d;">Cached Context</text>
+    
+    <rect x="0" y="50" width="120" height="40" class="box dynamic"/>
+    <text x="60" y="75" text-anchor="middle" class="text box-label">User Query 2</text>
+    
+    <path d="M130,20 L170,30" class="arrow"/> <!-- From Cache -->
+    <path d="M130,70 L170,60" class="arrow"/> <!-- From Query -->
+    
+    <rect x="180" y="30" width="80" height="50" class="box model"/>
+    <text x="220" y="55" text-anchor="middle" class="text box-label">LLM</text>
+    <text x="220" y="70" text-anchor="middle" class="text label" style="font-size: 10px;">Cache HIT</text>
+    
+    <!-- Speed/Cost Badges -->
+    <g transform="translate(280, 25)">
+        <rect width="60" height="20" fill="#dcfce7" rx="4"/>
+        <text x="30" y="14" text-anchor="middle" class="text" style="font-size: 10px; fill: #15803d; font-weight: bold;">Faster</text>
+        
+        <rect y="25" width="60" height="20" fill="#dcfce7" rx="4"/>
+        <text x="30" y="39" text-anchor="middle" class="text" style="font-size: 10px; fill: #15803d; font-weight: bold;">Cheaper</text>
+    </g>
+  </g>
+  
+  <!-- Legend -->
+  <g transform="translate(250, 360)">
+    <circle cx="10" cy="10" r="5" class="static"/> <text x="25" y="14" class="text label">Static (Expensive)</text>
+    <circle cx="130" cy="10" r="5" class="dynamic"/> <text x="145" y="14" class="text label">Dynamic (Cheap)</text>
+    <circle cx="240" cy="10" r="5" class="cache"/> <text x="255" y="14" class="text label">Cached (Free-ish)</text>
+  </g>
+
+</svg>

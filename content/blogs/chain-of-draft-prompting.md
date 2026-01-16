@@ -1,6 +1,6 @@
 ---
-title: "Chain-of-Draft Prompting on Amazon Bedrock: Slashing Token Costs Without Losing Accuracy"
-date: "November 15, 2025"
+title: "Scaling Reasoning Models on Amazon Bedrock: Reducing Inference Latency with Chain-of-Draft Prompting"
+date: "September 25, 2025"
 excerpt: "High-quality reasoning with Chain-of-Thought often comes at an unsustainable token cost in production. This post introduces Chain-of-Draft prompting on Amazon Bedrock—a simple constraint-based technique that preserves reasoning accuracy while cutting token usage, latency, and inference costs at scale."
 readTime: "8 min read"
 ---
@@ -22,7 +22,7 @@ That's roughly 65 tokens for a simple direct calculation. Now if you are taking 
 
 ## Enter Chain-of-Draft
 
-![Chain-of-Thought vs Chain-of-Draft Comparison](/blog-images/cot_vs_cod_1.png)
+![Chain-of-Thought vs Chain-of-Draft Comparison](/blog-images/chain-of-draft-prompting/cot_vs_cod_1.png)
 
 Chain-of-Draft solves this litation by liiting each reasoning step to five words or even less than that. The model still reasons through the problem, but without the in depth explanations.
 
@@ -71,9 +71,7 @@ I compared CoD with the standard CoT on a logistics problem: optimization of the
 
 **Results with `us.anthropic.claude-3-5-sonnet-20240620-v1:0`**
 
-- **CoT:** 423 tokens, 2.1s latency
-- **CoD:** 118 tokens, 0.9s latency
-- **Accuracy:** Both approaches gave correct answers
+![CoT vs CoD Performance Comparison](/blog-images/chain-of-draft-prompting/cod-performance-comparison.svg)
 
 Eventhough same response, using CoD reasoning reduced tokens by 72% and cut latency by 57%, with no loss in accuracy.
 
@@ -132,8 +130,11 @@ Reduction in output tokens links directly with reduced bills in the month end. A
 
 With Bedrock models such as Claude Sonnet, which are currently priced at the lower side of the budget, that is a significant optimization of the budget with no performance compromise.
 
-![Detailed CoT vs CoD Comparison](/blog-images/cot_vs_cod_2.png)
+![Detailed CoT vs CoD Comparison](/blog-images/chain-of-draft-prompting/cot_vs_cod_2.png)
 
 ## Conclusion
 
 Chain-of-Draft is not about replacing Chain-of-Thoughts prompting or any other classic techniques. It is all about reducing the extra output thinking token usage when we significantly do not need our model to produce such elaborated thinking, and our task can benefit even with less thinking. Choosing between CoD or CoT completely depends on the usecase, and both can be used with certain if-else conditions as illustrated in the example above.
+
+**Resources**:
+*   [Chain of Draft: Thinking Faster by Writing Less](https://arxiv.org/abs/2502.18600)
