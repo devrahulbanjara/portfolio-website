@@ -24,8 +24,10 @@ export default function RootLayout({
             <body className={`${inter.variable} ${lora.variable} font-sans`}>
                 <Providers>
                     <DotBackground />
-                    <div className="container mx-auto min-h-screen">
-                        <Navigation />
+                    <div className="min-h-screen">
+                        <div className="container mx-auto">
+                            <Navigation />
+                        </div>
                         {children}
                     </div>
                 </Providers>
