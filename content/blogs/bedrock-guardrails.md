@@ -1,7 +1,7 @@
 ---
-title: "Beyond Safety: How I used Amazon Bedrock Guardrails to Keep My Bot On-Brand (Boto3 Only Tutorial)"
+title: "Amazon Bedrock Guardrails: Keep Your Bot On-Brand Tutorial"
 date: "January 17, 2026"
-excerpt: "Amazon Bedrock Guardrails extend beyond blocking harmful content to filter off-topic discussions, ensuring customer support bots stay focused. This tutorial demonstrates how to create a guardrail to block competitor mentions and financial advice using boto3."
+excerpt: "Use Amazon Bedrock Guardrails to filter off-topic discussions and keep customer support bots focused. Block competitor mentions using boto3."
 readTime: "6 min read"
 keywords: ["Amazon Bedrock Guardrails", "AI Safety", "Brand Voice Protection", "Chatbot Security", "Boto3 Tutorial", "Topic Filtering", "AI Content Moderation", "Customer Support Bot", "Bedrock ApplyGuardrail API", "AI Governance"]
 tags: ["AWS", "Amazon Bedrock", "AI Safety", "Python", "Boto3", "Tutorial"]

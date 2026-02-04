@@ -1,5 +1,5 @@
 ---
-title: "Optimizing Generative AI Costs: A Deep Dive into Amazon Bedrock Prompt Caching & Benchmarks"
+title: "Amazon Bedrock Prompt Caching: Cut GenAI Costs by 90%"
 date: "October 24, 2025"
 excerpt: "Learn how to cut GenAI costs by 90% and reduce latency by 59% using Amazon Bedrock Prompt Caching with real benchmarks and implementation code."
 readTime: "12 min read"

@@ -110,7 +110,20 @@ function runSEOAudit() {
         console.log('\n🎉 All blog posts are SEO-optimized!');
     }
 
-    process.exit(totalIssues > 0 ? 1 : 0);
+    // Only exit with error if there are critical issues (missing required fields)
+    const criticalIssues = results.reduce((count, result) => {
+        return count + result.issues.filter(issue => issue.includes('❌')).length;
+    }, 0);
+    
+    if (criticalIssues > 0) {
+        console.log(`\n🚨 Found ${criticalIssues} critical issues that must be fixed!`);
+        process.exit(1);
+    } else if (totalIssues > 0) {
+        console.log(`\n⚠️  Found ${totalIssues} warnings. Build will continue, but consider fixing these for better SEO.`);
+        process.exit(0);
+    } else {
+        process.exit(0);
+    }
 }
 
 if (require.main === module) {

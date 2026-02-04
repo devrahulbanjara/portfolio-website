@@ -1,7 +1,7 @@
 ---
-title: "Scaling Reasoning Models on Amazon Bedrock: Reducing Inference Latency with Chain-of-Draft Prompting"
+title: "Chain-of-Draft Prompting: Reduce Amazon Bedrock Costs 75%"
 date: "September 25, 2025"
-excerpt: "High-quality reasoning with Chain-of-Thought often comes at an unsustainable token cost in production. This post introduces Chain-of-Draft prompting on Amazon Bedrock—a simple constraint-based technique that preserves reasoning accuracy while cutting token usage, latency, and inference costs at scale."
+excerpt: "Chain-of-Draft prompting on Amazon Bedrock reduces token usage by 75% while preserving reasoning accuracy. Cut inference costs at scale."
 readTime: "8 min read"
 keywords: ["Chain-of-Draft Prompting", "Chain-of-Thought", "Amazon Bedrock Cost Optimization", "LLM Inference Optimization", "Token Usage Reduction", "AI Cost Reduction", "Prompt Engineering", "Production LLM", "Bedrock Converse API", "AI Efficiency"]
 tags: ["AWS", "Amazon Bedrock", "AI", "Cost Optimization", "Prompt Engineering", "Tutorial"]

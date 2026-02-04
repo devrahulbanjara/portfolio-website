@@ -1,5 +1,5 @@
 ---
-title: "Architecting Cost-Efficient ML Pipelines: Implementing Intelligent Caching in Amazon SageMaker"
+title: "Amazon SageMaker Pipeline Caching: Reduce ML Costs by 75%"
 date: "August 21, 2025"
 excerpt: "Eliminate redundant computations and reduce costs by implementing intelligent caching in your SageMaker ML pipelines."
 readTime: "8 min read"

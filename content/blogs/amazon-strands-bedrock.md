@@ -1,7 +1,7 @@
 ---
-title: "Building an Intelligent YouTube Assistant with Strands Agents and Amazon Bedrock"
+title: "Build YouTube Assistant with Amazon Bedrock & Strands Agents"
 date: "February 4, 2026"
-excerpt: "Learn how to build a YouTube Video Assistant using Amazon Bedrock and Strands Agents, an open-source AI agents SDK. This tutorial demonstrates how to create an agentic workflow that can summarize videos and engage in contextual, multi-turn conversations with video transcripts."
+excerpt: "Build a YouTube Video Assistant using Amazon Bedrock and Strands Agents SDK. Create agentic workflows for video summarization and Q&A conversations."
 readTime: "7 min read"
 keywords: ["Amazon Bedrock", "Strands Agents", "YouTube Assistant", "AI Agents", "Claude Sonnet", "Python Tutorial", "Video Summarization", "Agentic Workflow", "LLM Agents", "AWS Bedrock"]
 tags: ["AWS", "Amazon Bedrock", "AI", "Machine Learning", "Python", "Tutorial"]
