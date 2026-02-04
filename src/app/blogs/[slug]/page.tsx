@@ -6,10 +6,12 @@ import ReactMarkdown, { Components } from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeHighlight from "rehype-highlight"
 import { notFound } from "next/navigation"
-import { getBlogPost, getAllBlogSlugs } from "@/lib/blog-utils"
+import { getBlogPost, getAllBlogSlugs, getRelatedPosts } from "@/lib/blog-utils"
 import { personalInfo } from "@/data/portfolio-data"
 import { ReadingProgress } from "@/components/reading-progress"
 import { CopyButton } from "@/components/copy-button"
+import { FAQSchema } from "@/components/faq-schema"
+import { HowToSchema } from "@/components/howto-schema"
 
 const markdownComponents: Components = {
     h1: ({ children }) => (
@@ -190,34 +192,47 @@ export async function generateMetadata({
         return { title: "Post Not Found" }
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com"
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.rahuldevbanjara.com.np"
     const url = `${siteUrl}/blogs/${post.slug}`
     const publishedTime = new Date(post.date).toISOString()
+    const keywords = post.keywords?.join(", ") || ""
+    const tags = post.tags || []
+    const category = post.category || ""
+
+    // Enhanced description with keywords
+    const enhancedDescription = post.excerpt.length > 155 
+        ? post.excerpt.substring(0, 152) + "..."
+        : post.excerpt
 
     return {
         title: `${post.title} | ${personalInfo.name}`,
-        description: post.excerpt,
+        description: enhancedDescription,
+        keywords: keywords || undefined,
         authors: [{ name: personalInfo.name }],
         openGraph: {
             title: post.title,
-            description: post.excerpt,
+            description: enhancedDescription,
             url,
             siteName: personalInfo.name,
             type: "article",
             publishedTime,
             authors: [personalInfo.name],
             locale: "en_US",
+            ...(tags.length > 0 && { tags }),
+            ...(category && { section: category }),
         },
         twitter: {
             card: "summary_large_image",
             title: post.title,
-            description: post.excerpt,
+            description: enhancedDescription,
             creator: `@${personalInfo.name.replace(/\s+/g, "")}`,
         },
         alternates: { canonical: url },
         other: {
             "article:published_time": publishedTime,
             "article:author": personalInfo.name,
+            ...(category && { "article:section": category }),
+            ...(tags.length > 0 && { "article:tag": tags.join(", ") }),
         },
     }
 }
@@ -234,9 +249,53 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         notFound()
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com"
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.rahuldevbanjara.com.np"
     const publishedTime = new Date(post.date).getTime()
+    const relatedPosts = getRelatedPosts(post.slug, 3)
 
+    // Add FAQ schema for tutorial posts
+    const shouldShowFAQ = post.tags?.includes('Tutorial') || post.category?.includes('Tutorial')
+    const faqData = shouldShowFAQ ? [
+        {
+            question: "How long does it take to build a YouTube assistant with Amazon Bedrock?",
+            answer: "Following this tutorial, you can build a basic YouTube assistant in about 30 minutes. This includes setting up AWS credentials, installing dependencies, and implementing the core functionality."
+        },
+        {
+            question: "What AWS services do I need for this YouTube assistant?",
+            answer: "You need Amazon Bedrock for the AI model (Claude Sonnet), and optionally AWS Lambda and API Gateway for serverless deployment. Basic AWS account with Bedrock access is required."
+        },
+        {
+            question: "Can I use other AI models besides Claude Sonnet?",
+            answer: "Yes, you can experiment with other models available in Amazon Bedrock such as Claude Haiku for faster responses or Amazon Titan for text embeddings, depending on your specific use case."
+        }
+    ] : []
+
+    // Add HowTo schema for step-by-step tutorials
+    const shouldShowHowTo = post.title.toLowerCase().includes('tutorial') || post.title.toLowerCase().includes('guide')
+    const howToSteps = shouldShowHowTo ? [
+        {
+            name: "Environment Configuration",
+            text: "Set up AWS credentials using either .env file for local development or aws configure for production standard."
+        },
+        {
+            name: "Install Dependencies",
+            text: "Install required Python packages including Strands Agents SDK, YouTube Transcript API, and python-dotenv."
+        },
+        {
+            name: "Implement Tools",
+            text: "Create three tools: fetch_transcript_tool for getting YouTube transcripts, summarize_tool for generating summaries, and qa_tool for answering questions."
+        },
+        {
+            name: "Initialize Agent",
+            text: "Create a Strands Agent with the implemented tools and configure it to use Amazon Bedrock's Claude Sonnet model."
+        },
+        {
+            name: "Run and Test",
+            text: "Execute the script, input a YouTube URL, get a summary, and engage in Q&A about the video content."
+        }
+    ] : []
+
+    // Enhanced BlogPosting schema
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
@@ -258,6 +317,44 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             "@type": "WebPage",
             "@id": `${siteUrl}/blogs/${post.slug}`,
         },
+        ...(post.keywords && post.keywords.length > 0 && {
+            keywords: post.keywords.join(", "),
+        }),
+        ...(post.tags && post.tags.length > 0 && {
+            articleSection: post.category || "Technology",
+            keywords: [...(post.keywords || []), ...post.tags].join(", "),
+        }),
+        ...(post.category && {
+            articleSection: post.category,
+        }),
+        timeRequired: post.readTime,
+        inLanguage: "en-US",
+    }
+
+    // Breadcrumb schema
+    const breadcrumbJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: siteUrl,
+            },
+            {
+                "@type": "ListItem",
+                position: 2,
+                name: "Blogs",
+                item: `${siteUrl}/blogs`,
+            },
+            {
+                "@type": "ListItem",
+                position: 3,
+                name: post.title,
+                item: `${siteUrl}/blogs/${post.slug}`,
+            },
+        ],
     }
 
     return (
@@ -266,6 +363,21 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+            />
+            {shouldShowFAQ && faqData.length > 0 && (
+                <FAQSchema faqs={faqData} title={post.title} />
+            )}
+            {shouldShowHowTo && howToSteps.length > 0 && (
+                <HowToSchema 
+                    title={post.title}
+                    description={post.excerpt}
+                    steps={howToSteps}
+                    totalTime="PT30M"
+                />
+            )}
 
             <ReadingProgress />
 
@@ -339,6 +451,38 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         {post.content}
                     </ReactMarkdown>
                 </div>
+
+                {/* Related Posts Section */}
+                {relatedPosts.length > 0 && (
+                    <section className="max-w-[748px] mx-auto px-[26px] pb-[52px]">
+                        <h2 className="text-[22px] sm:text-[24px] font-sans font-bold text-foreground mb-6">
+                            Related Posts
+                        </h2>
+                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                            {relatedPosts.map((relatedPost) => (
+                                <Link
+                                    key={relatedPost.slug}
+                                    href={`/blogs/${relatedPost.slug}`}
+                                    className="group block p-5 bg-muted/30 rounded-xl hover:bg-muted/50 transition-colors duration-200"
+                                >
+                                    <h3 className="text-[16px] font-semibold text-foreground mb-2 group-hover:text-foreground/80 transition-colors line-clamp-2">
+                                        {relatedPost.title}
+                                    </h3>
+                                    <p className="text-[13px] text-muted-foreground line-clamp-2 mb-3">
+                                        {relatedPost.excerpt}
+                                    </p>
+                                    <div className="flex items-center gap-3 text-[12px] text-muted-foreground">
+                                        <time dateTime={new Date(relatedPost.date).toISOString()}>
+                                            {relatedPost.date}
+                                        </time>
+                                        <span>•</span>
+                                        <span>{relatedPost.readTime}</span>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </section>
+                )}
 
                 <footer className="max-w-[748px] mx-auto px-[26px] pb-[72px]">
                     <div className="flex justify-center gap-2 mb-9">

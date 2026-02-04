@@ -3,6 +3,9 @@ title: "Evaluating Foundation Models with Amazon Bedrock: LLM-as-a-Judge Tutoria
 date: "January 24, 2026"
 excerpt: "Learn how to use Amazon Bedrock's automatic evaluation feature to assess foundation model quality using LLM-as-a-Judge. A complete walkthrough from dataset preparation to interpreting evaluation results."
 readTime: "8 min read"
+keywords: ["Amazon Bedrock", "LLM-as-a-Judge", "Foundation Model Evaluation", "AI Model Testing", "Claude Sonnet", "Amazon Nova Pro", "Model Quality Assessment", "AI Safety Testing", "Bedrock Evaluation", "LLM Benchmarking"]
+tags: ["AWS", "Amazon Bedrock", "AI", "Machine Learning", "Model Evaluation", "Tutorial"]
+category: "AI & Machine Learning"
 ---
 
 # Evaluating Foundation Models with Amazon Bedrock: LLM-as-a-Judge

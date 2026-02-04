@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seo:audit": "node scripts/seo-audit.js",
+    "seo:check": "npm run seo:audit",
+    "prebuild": "npm run seo:audit"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.1",

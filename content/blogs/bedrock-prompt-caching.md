@@ -3,6 +3,9 @@ title: "Optimizing Generative AI Costs: A Deep Dive into Amazon Bedrock Prompt C
 date: "October 24, 2025"
 excerpt: "Learn how to cut GenAI costs by 90% and reduce latency by 59% using Amazon Bedrock Prompt Caching with real benchmarks and implementation code."
 readTime: "12 min read"
+keywords: ["Amazon Bedrock Prompt Caching", "GenAI Cost Optimization", "AI Latency Reduction", "Claude Sonnet Caching", "Bedrock Performance", "AI Cost Reduction", "LLM Optimization", "Prompt Engineering", "AI FinOps", "Bedrock Benchmarks"]
+tags: ["AWS", "Amazon Bedrock", "AI", "Cost Optimization", "Performance", "Tutorial"]
+category: "AI & Machine Learning"
 ---
 
 # The FinOps of GenAI: Reduce Bedrock Latency and Cost with Prompt Caching

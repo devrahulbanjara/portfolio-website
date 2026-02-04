@@ -3,6 +3,9 @@ title: "Architecting Cost-Efficient ML Pipelines: Implementing Intelligent Cachi
 date: "August 21, 2025"
 excerpt: "Eliminate redundant computations and reduce costs by implementing intelligent caching in your SageMaker ML pipelines."
 readTime: "8 min read"
+keywords: ["Amazon SageMaker Pipelines", "ML Pipeline Caching", "SageMaker Cost Optimization", "Machine Learning Efficiency", "Pipeline Optimization", "ML Ops", "SageMaker CacheConfig", "Data Science Workflow", "ML Pipeline Performance", "AWS Machine Learning"]
+tags: ["AWS", "SageMaker", "Machine Learning", "MLOps", "Cost Optimization", "Tutorial"]
+category: "Machine Learning & MLOps"
 ---
 
 ## The Problem: Redundant Computation

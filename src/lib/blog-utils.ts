@@ -8,6 +8,9 @@ export interface BlogPost {
     date: string
     excerpt: string
     readTime: string
+    keywords?: string[]
+    tags?: string[]
+    category?: string
     content?: string
 }
 
@@ -37,6 +40,9 @@ export function getAllBlogPosts(): BlogPost[] {
                 date: data.date || "",
                 excerpt: data.excerpt || "",
                 readTime: data.readTime || "",
+                keywords: data.keywords || [],
+                tags: data.tags || [],
+                category: data.category || "",
             }
         })
 
@@ -66,6 +72,9 @@ export function getBlogPost(slug: string): BlogPost | null {
         date: data.date || "",
         excerpt: data.excerpt || "",
         readTime: data.readTime || "",
+        keywords: data.keywords || [],
+        tags: data.tags || [],
+        category: data.category || "",
         content,
     }
 }
@@ -84,4 +93,48 @@ export function getAllBlogSlugs(): string[] {
     return filenames
         .filter((filename) => filename.endsWith(".md") && filename !== "README.md")
         .map((filename) => filename.replace(".md", ""))
+}
+
+/**
+ * Get related blog posts based on keywords/tags/category
+ */
+export function getRelatedPosts(currentSlug: string, limit: number = 3): BlogPost[] {
+    const currentPost = getBlogPost(currentSlug)
+    if (!currentPost) return []
+
+    const allPosts = getAllBlogPosts()
+    const relatedPosts = allPosts
+        .filter((post) => post.slug !== currentSlug)
+        .map((post) => {
+            let score = 0
+
+            // Score based on shared keywords
+            if (currentPost.keywords && post.keywords) {
+                const sharedKeywords = currentPost.keywords.filter((kw) =>
+                    post.keywords?.includes(kw)
+                )
+                score += sharedKeywords.length * 3
+            }
+
+            // Score based on shared tags
+            if (currentPost.tags && post.tags) {
+                const sharedTags = currentPost.tags.filter((tag) =>
+                    post.tags?.includes(tag)
+                )
+                score += sharedTags.length * 2
+            }
+
+            // Score based on category match
+            if (currentPost.category && post.category === currentPost.category) {
+                score += 5
+            }
+
+            return { post, score }
+        })
+        .filter(({ score }) => score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, limit)
+        .map(({ post }) => post)
+
+    return relatedPosts
 }

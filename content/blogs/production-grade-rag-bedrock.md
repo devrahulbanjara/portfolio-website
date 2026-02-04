@@ -3,7 +3,9 @@ title: "Implementing Multi-Tenant Isolation for HIPAA-Compliant RAG Systems usin
 date: "November 29, 2025"
 excerpt: "Implementing multi-tenant isolation in healthcare RAG systems is critical for HIPAA compliance. This guide demonstrates how to use AWS Bedrock Knowledge Bases with metadata filtering, reranking, and query decomposition to build a secure, verifiable medical assistant."
 readTime: "15 min read"
-
+keywords: ["HIPAA-Compliant RAG", "Multi-Tenant RAG", "Amazon Bedrock Knowledge Base", "Healthcare AI", "RAG Security", "Metadata Filtering", "Medical AI Assistant", "Bedrock RAG", "Healthcare Data Privacy", "Production RAG System"]
+tags: ["AWS", "Amazon Bedrock", "RAG", "Healthcare", "Security", "HIPAA", "Tutorial"]
+category: "AI & Machine Learning"
 ---
 
 ## We're Building:
