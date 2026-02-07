@@ -26,7 +26,8 @@ export async function addLike(slug: string): Promise<number> {
         const newCount = await redis.incr(`likes:${slug}`)
         revalidatePath(`/blogs/${slug}`)
         return newCount
-    } catch {
+    } catch (error) {
+        console.error("[addLike] Error:", error)
         return 0
     }
 }
@@ -67,6 +68,7 @@ export async function addComment(
         const trimmedAuthor = author.trim() || "Anonymous"
 
         if (!trimmedText || trimmedText.length > 1000) {
+            console.error("[addComment] Invalid text:", { length: trimmedText.length })
             return null
         }
 
@@ -82,7 +84,8 @@ export async function addComment(
         revalidatePath(`/blogs/${slug}`)
 
         return newComment
-    } catch {
+    } catch (error) {
+        console.error("[addComment] Error:", error)
         return null
     }
 }
