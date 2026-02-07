@@ -2,7 +2,8 @@ export const personalInfo = {
     name: "Rahul Dev Banjara",
     role: "Machine Learning Engineer & AI Educator",
     bio: [
-        "I work across the full machine learning lifecycle on AWS, building production-grade ML systems with strong MLOps practices, cloud best principles, and real-world reliability.", "I’m particularly interested in core machine learning research and agentic AI, with growing focus on system design and software architecture, and I also teach and mentor students for the AWS Machine Learning Engineer – Associate (MLA-C01) certification.",
+        "I work across the full machine learning lifecycle on AWS, building production-grade ML systems with strong MLOps practices, cloud best principles, and real-world reliability.",
+        "I’m particularly interested in core machine learning research and agentic AI, with growing focus on system design and software architecture, and I also teach and mentor students for the AWS Machine Learning Engineer – Associate (MLA-C01) certification.",
     ],
     currentWork: "ConvexHire",
     profileImage: "/my_pic.jpg",
@@ -109,7 +110,8 @@ export const projects: Project[] = [
     {
         id: 1,
         title: "Recruitment Automation & Job Marketplace Platform",
-        description: "Multi-agent recruitment automation system using LangGraph for the complete hiring lifecycle",
+        description:
+            "Multi-agent recruitment automation system using LangGraph for the complete hiring lifecycle",
         details: [
             "Designing multi-agent system with LangGraph for job posting to onboarding automation",
             "Implementing LLM-powered job descriptions and semantic resume screening with bias reduction",
@@ -125,7 +127,8 @@ export const projects: Project[] = [
     {
         id: 2,
         title: "AI Software Engineer (CLI Tool)",
-        description: "CLI-based AI software engineer generating complete systems including frontend, backend, and database",
+        description:
+            "CLI-based AI software engineer generating complete systems including frontend, backend, and database",
         details: [
             "Built CLI tool capable of generating complete systems with frontend, backend, and DB schemas",
             "Utilized advanced agentic concepts: subgraphs, guardrails, human-in-the-loop workflows",
@@ -139,7 +142,8 @@ export const projects: Project[] = [
     {
         id: 3,
         title: "Complete MLOps Fraud Detection System",
-        description: "End-to-end MLOps pipeline on Amazon SageMaker for credit card fraud detection",
+        description:
+            "End-to-end MLOps pipeline on Amazon SageMaker for credit card fraud detection",
         details: [
             "Implemented E2E MLOps pipeline with SageMaker for credit card fraud detection",
             "Configured EventBridge for automated 10-day retraining cycles",
@@ -154,7 +158,8 @@ export const projects: Project[] = [
     {
         id: 4,
         title: "Nepali Document Verification System",
-        description: "System to verify authenticity of Nepali government documents with 82% accuracy",
+        description:
+            "System to verify authenticity of Nepali government documents with 82% accuracy",
         details: [
             "Created synthetic dataset using templates and Python with dynamic augmentation",
             "Used ResNet50 for classification and YOLOv8 for localized feature detection",
@@ -185,7 +190,8 @@ export const projects: Project[] = [
     {
         id: 6,
         title: "AarthikNiti – AI-Powered Personal Finance Management Tool",
-        description: "AI-driven personal finance management tool for expense tracking and savings recommendations",
+        description:
+            "AI-driven personal finance management tool for expense tracking and savings recommendations",
         details: [
             "Built AI-driven features for automated expense categorization, spending trend analysis, and personalized savings recommendations",
             "Implemented OCR-based receipt scanning to extract financial data accurately and efficiently",
@@ -208,7 +214,8 @@ export const projects: Project[] = [
             "Integrated Weights & Biases for experiment tracking and deployed adapter weights to the Hugging Face Hub for easy reuse",
         ],
         tags: ["DeepSeek", "LoRA", "Fine-tuning", "Medical AI", "Unsloth"],
-        githubUrl: "https://github.com/devrahulbanjara/DeepSeek-Finetuned-with-LoRA-on-Medical-Dataset",
+        githubUrl:
+            "https://github.com/devrahulbanjara/DeepSeek-Finetuned-with-LoRA-on-Medical-Dataset",
         featured: false,
         inProgress: false,
     },
@@ -277,14 +284,17 @@ export const certifications: Certification[] = [
         issuer: "Amazon Web Services",
         date: "2025",
         credentialId: "035ddb7ca35541e0a815a122d7afcb84",
-        verificationUrl: "https://cp.certmetrics.com/amazon/en/public/verify/credential/035ddb7ca35541e0a815a122d7afcb84",
-        badgeUrl: "https://www.credly.com/badges/da4ccfc4-9ce1-45a7-8433-ef8b60fc68bc/linked_in?t=t1zkgo",
+        verificationUrl:
+            "https://cp.certmetrics.com/amazon/en/public/verify/credential/035ddb7ca35541e0a815a122d7afcb84",
+        badgeUrl:
+            "https://www.credly.com/badges/da4ccfc4-9ce1-45a7-8433-ef8b60fc68bc/linked_in?t=t1zkgo",
     },
     {
         id: 2,
         name: "Microdegree™ in Artificial Intelligence",
         issuer: "Fusemachines",
         date: "2024",
-        verificationUrl: "https://s3.amazonaws.com/fuseclassroom-resources-prod/student-certificates/Microdegree%E2%84%A2+in+Artificial+Intelligence-RAHUL+DEV+BANJARA.pdf",
+        verificationUrl:
+            "https://s3.amazonaws.com/fuseclassroom-resources-prod/student-certificates/Microdegree%E2%84%A2+in+Artificial+Intelligence-RAHUL+DEV+BANJARA.pdf",
     },
 ]

@@ -65,22 +65,22 @@ export async function addComment(
     try {
         const trimmedText = text.trim()
         const trimmedAuthor = author.trim() || "Anonymous"
-        
+
         if (!trimmedText || trimmedText.length > 1000) {
             return null
         }
-        
+
         const newComment: Comment = {
             id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             text: trimmedText,
             author: trimmedAuthor.slice(0, 50), // Limit author name length
             createdAt: Date.now(),
         }
-        
+
         // Add to the beginning of the list (newest first)
         await redis.lpush(`comments:${slug}`, newComment)
         revalidatePath(`/blogs/${slug}`)
-        
+
         return newComment
     } catch {
         return null

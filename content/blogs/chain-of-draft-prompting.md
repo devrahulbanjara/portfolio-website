@@ -3,7 +3,19 @@ title: "Chain-of-Draft Prompting: Reduce Amazon Bedrock Costs 75%"
 date: "September 25, 2025"
 excerpt: "Chain-of-Draft prompting on Amazon Bedrock reduces token usage by 75% while preserving reasoning accuracy. Cut inference costs at scale."
 readTime: "8 min read"
-keywords: ["Chain-of-Draft Prompting", "Chain-of-Thought", "Amazon Bedrock Cost Optimization", "LLM Inference Optimization", "Token Usage Reduction", "AI Cost Reduction", "Prompt Engineering", "Production LLM", "Bedrock Converse API", "AI Efficiency"]
+keywords:
+    [
+        "Chain-of-Draft Prompting",
+        "Chain-of-Thought",
+        "Amazon Bedrock Cost Optimization",
+        "LLM Inference Optimization",
+        "Token Usage Reduction",
+        "AI Cost Reduction",
+        "Prompt Engineering",
+        "Production LLM",
+        "Bedrock Converse API",
+        "AI Efficiency",
+    ]
 tags: ["AWS", "Amazon Bedrock", "AI", "Cost Optimization", "Prompt Engineering", "Tutorial"]
 category: "AI & Machine Learning"
 ---
@@ -11,7 +23,6 @@ category: "AI & Machine Learning"
 When I began creating production LLM apps, the same problem continued to occur regularly, i.e. my prompts performed well in testing but were extremely costly in production. Chain-of-Thought prompting provided the accuracy that I required, though the use of the tokens was burning my pocket.
 
 Unless you are on a different cloud than AWS, you have likely bumped into this problem as well. The most common suggestion is to use CoT to think more logically, though nobody speaks about what to do when you have thousands of requests per day. That's when Chain-of-Draft (CoD) changed everything for me.
-
 
 ## The Problem with Verbose Reasoning
 
@@ -49,7 +60,7 @@ bedrock = boto3.client('bedrock-runtime', region_name='us-east-1')
 def chain_of_draft_query(question, model_id):
     prompt = f"""{question}
 
-Think step by step to solve this, but keep each step to 5 words maximum. 
+Think step by step to solve this, but keep each step to 5 words maximum.
 Return your final answer after '###'."""
 
     response = bedrock.converse(
@@ -60,7 +71,7 @@ Return your final answer after '###'."""
         }],
         inferenceConfig={"maxTokens": 500, "temperature": 0.7}
     )
-    
+
     return response["output"]["message"]["content"][0]["text"]
 ```
 
@@ -95,6 +106,7 @@ Return VALID or INVALID after '###'."""
 ```
 
 **CoD Output:**
+
 ```
 Previous + Amount: 7,000
 Exceeds daily limit: 5,000
@@ -115,11 +127,11 @@ def adaptive_reasoning(question, context):
     # High-volume, structured queries
     if context == "calculation" or context == "validation":
         return chain_of_draft_query(question)
-    
+
     # User-facing explanations
     elif context == "support":
         return chain_of_thought_query(question)
-    
+
     # Simple lookups
     else:
         return direct_query(question)
@@ -140,4 +152,5 @@ With Bedrock models such as Claude Sonnet, which are currently priced at the low
 Chain-of-Draft is not about replacing Chain-of-Thoughts prompting or any other classic techniques. It is all about reducing the extra output thinking token usage when we significantly do not need our model to produce such elaborated thinking, and our task can benefit even with less thinking. Choosing between CoD or CoT completely depends on the usecase, and both can be used with certain if-else conditions as illustrated in the example above.
 
 **Resources**:
-*   [Chain of Draft: Thinking Faster by Writing Less](https://arxiv.org/abs/2502.18600)
+
+- [Chain of Draft: Thinking Faster by Writing Less](https://arxiv.org/abs/2502.18600)

@@ -1,6 +1,6 @@
-'use client'
+"use client"
 
-import Script from 'next/script'
+import Script from "next/script"
 
 export function Analytics() {
     const GA_ID = process.env.NEXT_PUBLIC_GA_ID

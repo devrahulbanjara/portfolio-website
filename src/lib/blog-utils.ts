@@ -27,8 +27,8 @@ export function getAllBlogPosts(): BlogPost[] {
 
     const filenames = fs.readdirSync(blogsDirectory)
     const posts = filenames
-        .filter((filename) => filename.endsWith(".md") && filename !== "README.md")
-        .map((filename) => {
+        .filter(filename => filename.endsWith(".md") && filename !== "README.md")
+        .map(filename => {
             const slug = filename.replace(".md", "")
             const fullPath = path.join(blogsDirectory, filename)
             const fileContents = fs.readFileSync(fullPath, "utf8")
@@ -47,9 +47,7 @@ export function getAllBlogPosts(): BlogPost[] {
         })
 
     // Sort by date (newest first)
-    return posts.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    )
+    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
 /**
@@ -91,8 +89,8 @@ export function getAllBlogSlugs(): string[] {
 
     const filenames = fs.readdirSync(blogsDirectory)
     return filenames
-        .filter((filename) => filename.endsWith(".md") && filename !== "README.md")
-        .map((filename) => filename.replace(".md", ""))
+        .filter(filename => filename.endsWith(".md") && filename !== "README.md")
+        .map(filename => filename.replace(".md", ""))
 }
 
 /**
@@ -104,13 +102,13 @@ export function getRelatedPosts(currentSlug: string, limit: number = 3): BlogPos
 
     const allPosts = getAllBlogPosts()
     const relatedPosts = allPosts
-        .filter((post) => post.slug !== currentSlug)
-        .map((post) => {
+        .filter(post => post.slug !== currentSlug)
+        .map(post => {
             let score = 0
 
             // Score based on shared keywords
             if (currentPost.keywords && post.keywords) {
-                const sharedKeywords = currentPost.keywords.filter((kw) =>
+                const sharedKeywords = currentPost.keywords.filter(kw =>
                     post.keywords?.includes(kw)
                 )
                 score += sharedKeywords.length * 3
@@ -118,9 +116,7 @@ export function getRelatedPosts(currentSlug: string, limit: number = 3): BlogPos
 
             // Score based on shared tags
             if (currentPost.tags && post.tags) {
-                const sharedTags = currentPost.tags.filter((tag) =>
-                    post.tags?.includes(tag)
-                )
+                const sharedTags = currentPost.tags.filter(tag => post.tags?.includes(tag))
                 score += sharedTags.length * 2
             }
 

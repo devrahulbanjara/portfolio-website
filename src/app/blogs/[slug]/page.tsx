@@ -39,7 +39,8 @@ const markdownComponents: Components = {
     ),
     p: ({ children, node }) => {
         const hasImage = node?.children?.some(
-            (child: any) => child.tagName === 'img' || child.type === 'element' && child.tagName === 'img'
+            (child: any) =>
+                child.tagName === "img" || (child.type === "element" && child.tagName === "img")
         )
         if (hasImage) {
             return <>{children}</>
@@ -51,7 +52,7 @@ const markdownComponents: Components = {
         )
     },
     img: ({ src, alt }) => {
-        if (!src || typeof src !== 'string') return null
+        if (!src || typeof src !== "string") return null
         return (
             <figure className="my-6 -mx-4 sm:mx-0">
                 <div className="overflow-hidden rounded-lg border border-border/30">
@@ -81,15 +82,15 @@ const markdownComponents: Components = {
     ),
     pre: ({ children }) => {
         const extractCodeString = (node: any): string => {
-            if (typeof node === 'string') {
+            if (typeof node === "string") {
                 return node
             }
-            if (typeof node === 'number') {
+            if (typeof node === "number") {
                 return String(node)
             }
             if (React.isValidElement(node)) {
                 const props = node.props as { children?: any }
-                if (node.type === 'code') {
+                if (node.type === "code") {
                     return extractCodeString(props.children)
                 }
                 if (props?.children) {
@@ -97,9 +98,9 @@ const markdownComponents: Components = {
                 }
             }
             if (Array.isArray(node)) {
-                return node.map(extractCodeString).join('')
+                return node.map(extractCodeString).join("")
             }
-            return ''
+            return ""
         }
 
         const codeString = extractCodeString(children)
@@ -133,9 +134,7 @@ const markdownComponents: Components = {
             {children}
         </ol>
     ),
-    li: ({ children }) => (
-        <li className="pl-1">{children}</li>
-    ),
+    li: ({ children }) => <li className="pl-1">{children}</li>,
     table: ({ children }) => (
         <div className="my-5 -mx-4 sm:mx-0 overflow-x-auto">
             <table className="w-full text-[14px] sm:text-[14.5px] font-sans border-collapse">
@@ -144,19 +143,17 @@ const markdownComponents: Components = {
         </div>
     ),
     thead: ({ children }) => (
-        <thead className="border-b border-border text-left bg-muted/30 dark:bg-muted/20">{children}</thead>
+        <thead className="border-b border-border text-left bg-muted/30 dark:bg-muted/20">
+            {children}
+        </thead>
     ),
     th: ({ children }) => (
         <th className="py-2.5 px-3 font-semibold text-foreground text-[13px] uppercase tracking-wide">
             {children}
         </th>
     ),
-    tbody: ({ children }) => (
-        <tbody className="divide-y divide-border/50">{children}</tbody>
-    ),
-    td: ({ children }) => (
-        <td className="py-2.5 px-3 text-foreground/80">{children}</td>
-    ),
+    tbody: ({ children }) => <tbody className="divide-y divide-border/50">{children}</tbody>,
+    td: ({ children }) => <td className="py-2.5 px-3 text-foreground/80">{children}</td>,
     a: ({ href, children }) => (
         <a
             href={href}
@@ -167,12 +164,8 @@ const markdownComponents: Components = {
             {children}
         </a>
     ),
-    strong: ({ children }) => (
-        <strong className="font-semibold text-foreground">{children}</strong>
-    ),
-    em: ({ children }) => (
-        <em className="italic text-foreground/90">{children}</em>
-    ),
+    strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
+    em: ({ children }) => <em className="italic text-foreground/90">{children}</em>,
     hr: () => (
         <div className="my-8 flex justify-center gap-2">
             <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
@@ -184,7 +177,7 @@ const markdownComponents: Components = {
 
 export async function generateStaticParams() {
     const slugs = getAllBlogSlugs()
-    return slugs.map((slug) => ({ slug }))
+    return slugs.map(slug => ({ slug }))
 }
 
 async function getBlogPostData(slug: string) {
@@ -211,9 +204,8 @@ export async function generateMetadata({
     const category = post.category || ""
 
     // Enhanced description with keywords
-    const enhancedDescription = post.excerpt.length > 155 
-        ? post.excerpt.substring(0, 152) + "..."
-        : post.excerpt
+    const enhancedDescription =
+        post.excerpt.length > 155 ? post.excerpt.substring(0, 152) + "..." : post.excerpt
 
     return {
         title: `${post.title} | ${personalInfo.name}`,
@@ -263,7 +255,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.rahuldevbanjara.com.np"
     const publishedTime = new Date(post.date).getTime()
     const relatedPosts = getRelatedPosts(post.slug, 3)
-    
+
     // Fetch likes and comments
     const [initialLikes, initialComments] = await Promise.all([
         getLikes(post.slug),
@@ -271,46 +263,52 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     ])
 
     // Add FAQ schema for tutorial posts
-    const shouldShowFAQ = post.tags?.includes('Tutorial') || post.category?.includes('Tutorial')
-    const faqData = shouldShowFAQ ? [
-        {
-            question: "How long does it take to build a YouTube assistant with Amazon Bedrock?",
-            answer: "Following this tutorial, you can build a basic YouTube assistant in about 30 minutes. This includes setting up AWS credentials, installing dependencies, and implementing the core functionality."
-        },
-        {
-            question: "What AWS services do I need for this YouTube assistant?",
-            answer: "You need Amazon Bedrock for the AI model (Claude Sonnet), and optionally AWS Lambda and API Gateway for serverless deployment. Basic AWS account with Bedrock access is required."
-        },
-        {
-            question: "Can I use other AI models besides Claude Sonnet?",
-            answer: "Yes, you can experiment with other models available in Amazon Bedrock such as Claude Haiku for faster responses or Amazon Titan for text embeddings, depending on your specific use case."
-        }
-    ] : []
+    const shouldShowFAQ = post.tags?.includes("Tutorial") || post.category?.includes("Tutorial")
+    const faqData = shouldShowFAQ
+        ? [
+              {
+                  question:
+                      "How long does it take to build a YouTube assistant with Amazon Bedrock?",
+                  answer: "Following this tutorial, you can build a basic YouTube assistant in about 30 minutes. This includes setting up AWS credentials, installing dependencies, and implementing the core functionality.",
+              },
+              {
+                  question: "What AWS services do I need for this YouTube assistant?",
+                  answer: "You need Amazon Bedrock for the AI model (Claude Sonnet), and optionally AWS Lambda and API Gateway for serverless deployment. Basic AWS account with Bedrock access is required.",
+              },
+              {
+                  question: "Can I use other AI models besides Claude Sonnet?",
+                  answer: "Yes, you can experiment with other models available in Amazon Bedrock such as Claude Haiku for faster responses or Amazon Titan for text embeddings, depending on your specific use case.",
+              },
+          ]
+        : []
 
     // Add HowTo schema for step-by-step tutorials
-    const shouldShowHowTo = post.title.toLowerCase().includes('tutorial') || post.title.toLowerCase().includes('guide')
-    const howToSteps = shouldShowHowTo ? [
-        {
-            name: "Environment Configuration",
-            text: "Set up AWS credentials using either .env file for local development or aws configure for production standard."
-        },
-        {
-            name: "Install Dependencies",
-            text: "Install required Python packages including Strands Agents SDK, YouTube Transcript API, and python-dotenv."
-        },
-        {
-            name: "Implement Tools",
-            text: "Create three tools: fetch_transcript_tool for getting YouTube transcripts, summarize_tool for generating summaries, and qa_tool for answering questions."
-        },
-        {
-            name: "Initialize Agent",
-            text: "Create a Strands Agent with the implemented tools and configure it to use Amazon Bedrock's Claude Sonnet model."
-        },
-        {
-            name: "Run and Test",
-            text: "Execute the script, input a YouTube URL, get a summary, and engage in Q&A about the video content."
-        }
-    ] : []
+    const shouldShowHowTo =
+        post.title.toLowerCase().includes("tutorial") || post.title.toLowerCase().includes("guide")
+    const howToSteps = shouldShowHowTo
+        ? [
+              {
+                  name: "Environment Configuration",
+                  text: "Set up AWS credentials using either .env file for local development or aws configure for production standard.",
+              },
+              {
+                  name: "Install Dependencies",
+                  text: "Install required Python packages including Strands Agents SDK, YouTube Transcript API, and python-dotenv.",
+              },
+              {
+                  name: "Implement Tools",
+                  text: "Create three tools: fetch_transcript_tool for getting YouTube transcripts, summarize_tool for generating summaries, and qa_tool for answering questions.",
+              },
+              {
+                  name: "Initialize Agent",
+                  text: "Create a Strands Agent with the implemented tools and configure it to use Amazon Bedrock's Claude Sonnet model.",
+              },
+              {
+                  name: "Run and Test",
+                  text: "Execute the script, input a YouTube URL, get a summary, and engage in Q&A about the video content.",
+              },
+          ]
+        : []
 
     // Enhanced BlogPosting schema
     const jsonLd = {
@@ -334,13 +332,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             "@type": "WebPage",
             "@id": `${siteUrl}/blogs/${post.slug}`,
         },
-        ...(post.keywords && post.keywords.length > 0 && {
-            keywords: post.keywords.join(", "),
-        }),
-        ...(post.tags && post.tags.length > 0 && {
-            articleSection: post.category || "Technology",
-            keywords: [...(post.keywords || []), ...post.tags].join(", "),
-        }),
+        ...(post.keywords &&
+            post.keywords.length > 0 && {
+                keywords: post.keywords.join(", "),
+            }),
+        ...(post.tags &&
+            post.tags.length > 0 && {
+                articleSection: post.category || "Technology",
+                keywords: [...(post.keywords || []), ...post.tags].join(", "),
+            }),
         ...(post.category && {
             articleSection: post.category,
         }),
@@ -384,11 +384,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
             />
-            {shouldShowFAQ && faqData.length > 0 && (
-                <FAQSchema faqs={faqData} title={post.title} />
-            )}
+            {shouldShowFAQ && faqData.length > 0 && <FAQSchema faqs={faqData} title={post.title} />}
             {shouldShowHowTo && howToSteps.length > 0 && (
-                <HowToSchema 
+                <HowToSchema
                     title={post.title}
                     description={post.excerpt}
                     steps={howToSteps}
@@ -404,20 +402,28 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         href="/blogs"
                         className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors duration-200 mb-8 group"
                     >
-                        <svg 
-                            className="w-3.5 h-3.5 transform group-hover:-translate-x-0.5 transition-transform duration-200" 
-                            fill="none" 
-                            viewBox="0 0 24 24" 
-                            stroke="currentColor" 
+                        <svg
+                            className="w-3.5 h-3.5 transform group-hover:-translate-x-0.5 transition-transform duration-200"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                             strokeWidth={2}
                         >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                            />
                         </svg>
                         All posts
                     </Link>
 
                     <div className="flex items-center gap-2 text-[13px] text-muted-foreground mb-4">
-                        <time dateTime={new Date(post.date).toISOString()} itemProp="datePublished" className="tabular-nums">
+                        <time
+                            dateTime={new Date(post.date).toISOString()}
+                            itemProp="datePublished"
+                            className="tabular-nums"
+                        >
                             {post.date}
                         </time>
                         <span className="text-muted-foreground/40">·</span>
@@ -447,9 +453,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                             <p className="text-[14px] font-medium text-foreground">
                                 {personalInfo.name}
                             </p>
-                            <p className="text-[12px] text-muted-foreground">
-                                {personalInfo.role}
-                            </p>
+                            <p className="text-[12px] text-muted-foreground">{personalInfo.role}</p>
                         </div>
                     </div>
                 </header>
@@ -473,7 +477,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                             Found this helpful? Give it a like!
                         </span>
                     </div>
-                    
+
                     {/* Comments Section */}
                     <div className="pt-8">
                         <h2 className="text-sm font-medium text-foreground uppercase tracking-wider mb-6">
@@ -491,7 +495,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                 Related Posts
                             </h2>
                             <div className="space-y-4">
-                                {relatedPosts.map((relatedPost) => (
+                                {relatedPosts.map(relatedPost => (
                                     <Link
                                         key={relatedPost.slug}
                                         href={`/blogs/${relatedPost.slug}`}
@@ -539,7 +543,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors"
                             >
-                                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <svg
+                                    className="w-3.5 h-3.5"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
                                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                 </svg>
                                 LinkedIn
@@ -548,8 +556,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                 href={`mailto:${personalInfo.email}`}
                                 className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors"
                             >
-                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                                <svg
+                                    className="w-3.5 h-3.5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    strokeWidth={1.5}
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                                    />
                                 </svg>
                                 Email
                             </a>
@@ -561,14 +579,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                             href="/blogs"
                             className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors group"
                         >
-                            <svg 
-                                className="w-3.5 h-3.5 transform group-hover:-translate-x-0.5 transition-transform duration-200" 
-                                fill="none" 
-                                viewBox="0 0 24 24" 
-                                stroke="currentColor" 
+                            <svg
+                                className="w-3.5 h-3.5 transform group-hover:-translate-x-0.5 transition-transform duration-200"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
                                 strokeWidth={2}
                             >
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                                />
                             </svg>
                             Back to all posts
                         </Link>

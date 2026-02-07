@@ -29,7 +29,8 @@ export default function BlogsPage() {
                     Blog
                 </h1>
                 <p className="mt-3 text-[15px] sm:text-base text-muted-foreground leading-relaxed max-w-[520px]">
-                    Thoughts on machine learning, cloud architecture, and building production AI systems.
+                    Thoughts on machine learning, cloud architecture, and building production AI
+                    systems.
                 </p>
             </header>
 
@@ -38,10 +39,7 @@ export default function BlogsPage() {
                 <div className="space-y-0">
                     {posts.map((blog, index) => (
                         <article key={blog.slug}>
-                            <Link
-                                href={`/blogs/${blog.slug}`}
-                                className="block group py-6"
-                            >
+                            <Link href={`/blogs/${blog.slug}`} className="block group py-6">
                                 <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
                                     <h2 className="text-[15px] sm:text-base font-semibold text-foreground group-hover:text-muted-foreground transition-colors leading-snug">
                                         {blog.title}

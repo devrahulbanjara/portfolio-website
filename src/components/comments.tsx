@@ -20,7 +20,7 @@ function formatDate(timestamp: number): string {
     if (diffMins < 60) return `${diffMins}m ago`
     if (diffHours < 24) return `${diffHours}h ago`
     if (diffDays < 7) return `${diffDays}d ago`
-    
+
     return date.toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
@@ -51,7 +51,7 @@ export function Comments({ slug, initialComments }: CommentsProps) {
 
         startTransition(async () => {
             const newComment = await addComment(slug, text, author)
-            
+
             if (newComment) {
                 setComments([newComment, ...comments])
                 setText("")
@@ -71,7 +71,7 @@ export function Comments({ slug, initialComments }: CommentsProps) {
                         type="text"
                         placeholder="Your name (optional)"
                         value={author}
-                        onChange={(e) => setAuthor(e.target.value)}
+                        onChange={e => setAuthor(e.target.value)}
                         maxLength={50}
                         className="flex-1 px-3 py-2 text-[14px] bg-background border border-border/60 rounded-lg
                             placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-foreground/10
@@ -81,20 +81,16 @@ export function Comments({ slug, initialComments }: CommentsProps) {
                 <textarea
                     placeholder="Write a comment..."
                     value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    onChange={e => setText(e.target.value)}
                     maxLength={1000}
                     rows={3}
                     className="w-full px-3 py-2 text-[14px] bg-background border border-border/60 rounded-lg
                         placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-foreground/10
                         transition-all duration-200 resize-none"
                 />
-                {error && (
-                    <p className="text-[13px] text-red-500">{error}</p>
-                )}
+                {error && <p className="text-[13px] text-red-500">{error}</p>}
                 <div className="flex items-center justify-between">
-                    <span className="text-[12px] text-muted-foreground/60">
-                        {text.length}/1000
-                    </span>
+                    <span className="text-[12px] text-muted-foreground/60">{text.length}/1000</span>
                     <button
                         type="submit"
                         disabled={isPending || !text.trim()}
@@ -102,9 +98,10 @@ export function Comments({ slug, initialComments }: CommentsProps) {
                             px-4 py-2 text-[13px] font-medium rounded-lg
                             bg-foreground text-background
                             transition-all duration-200
-                            ${isPending || !text.trim() 
-                                ? "opacity-50 cursor-not-allowed" 
-                                : "hover:opacity-90 cursor-pointer"
+                            ${
+                                isPending || !text.trim()
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : "hover:opacity-90 cursor-pointer"
                             }
                         `}
                     >
@@ -120,7 +117,7 @@ export function Comments({ slug, initialComments }: CommentsProps) {
                         {comments.length} {comments.length === 1 ? "comment" : "comments"}
                     </p>
                     <div className="space-y-4">
-                        {comments.map((comment) => (
+                        {comments.map(comment => (
                             <div
                                 key={comment.id}
                                 className="p-4 bg-muted/30 dark:bg-muted/20 rounded-lg"

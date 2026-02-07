@@ -22,7 +22,7 @@ export function LikeButton({ slug, initialLikes }: LikeButtonProps) {
     const handleClick = () => {
         startTransition(async () => {
             const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "{}")
-            
+
             if (hasLiked) {
                 // Unlike
                 const newCount = await removeLike(slug)
@@ -36,7 +36,7 @@ export function LikeButton({ slug, initialLikes }: LikeButtonProps) {
                 setHasLiked(true)
                 likedPosts[slug] = true
             }
-            
+
             localStorage.setItem("likedPosts", JSON.stringify(likedPosts))
         })
     }
@@ -49,9 +49,10 @@ export function LikeButton({ slug, initialLikes }: LikeButtonProps) {
                 inline-flex items-center gap-2 px-3.5 py-2 rounded-lg
                 text-[13px] font-medium transition-all duration-200
                 border
-                ${hasLiked 
-                    ? "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400" 
-                    : "bg-muted/40 dark:bg-muted/30 border-border/60 text-muted-foreground hover:text-foreground hover:bg-muted/60 dark:hover:bg-muted/40"
+                ${
+                    hasLiked
+                        ? "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400"
+                        : "bg-muted/40 dark:bg-muted/30 border-border/60 text-muted-foreground hover:text-foreground hover:bg-muted/60 dark:hover:bg-muted/40"
                 }
                 ${isPending ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
             `}

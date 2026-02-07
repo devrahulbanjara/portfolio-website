@@ -3,7 +3,19 @@ title: "Amazon Bedrock LLM-as-a-Judge: Foundation Model Evaluation"
 date: "January 24, 2026"
 excerpt: "Use Amazon Bedrock's LLM-as-a-Judge to evaluate foundation model quality. Complete walkthrough from dataset preparation to results interpretation."
 readTime: "8 min read"
-keywords: ["Amazon Bedrock", "LLM-as-a-Judge", "Foundation Model Evaluation", "AI Model Testing", "Claude Sonnet", "Amazon Nova Pro", "Model Quality Assessment", "AI Safety Testing", "Bedrock Evaluation", "LLM Benchmarking"]
+keywords:
+    [
+        "Amazon Bedrock",
+        "LLM-as-a-Judge",
+        "Foundation Model Evaluation",
+        "AI Model Testing",
+        "Claude Sonnet",
+        "Amazon Nova Pro",
+        "Model Quality Assessment",
+        "AI Safety Testing",
+        "Bedrock Evaluation",
+        "LLM Benchmarking",
+    ]
 tags: ["AWS", "Amazon Bedrock", "AI", "Machine Learning", "Model Evaluation", "Tutorial"]
 category: "AI & Machine Learning"
 ---
@@ -21,7 +33,7 @@ Amazon Bedrock makes this easy with its built-in evaluation feature. This tutori
 Think of it like having a teacher grade a student's work, except both are AI models:
 
 ![LLM-as-a-Judge Architecture](/blog-images/llm-as-a-judge/llm-judge-architecture.svg)
-*The evaluation flow: prompts from S3 go to the Generator LLM, responses are scored by the Judge LLM, and results are saved back to S3.*
+_The evaluation flow: prompts from S3 go to the Generator LLM, responses are scored by the Judge LLM, and results are saved back to S3._
 
 **Generator Model:** This is the AI you want to test. You give it questions, and it generates answers.
 
@@ -56,6 +68,7 @@ JSONL means "JSON Lines" where each line is a separate test case. Here's what it
 ```
 
 Each line has three parts:
+
 - **prompt**: The question or instruction you're testing
 - **referenceResponse**: What a good answer should look like (the judge uses this as a reference)
 - **category**: A label to organize your results (optional)
@@ -73,23 +86,24 @@ Amazon Bedrock needs a place to find your test questions and save the results. T
 Go to S3 and create a new bucket. Give it a unique name. I used `bedrock-foundational-model-eval`.
 
 ![Creating S3 Bucket](/blog-images/llm-as-a-judge/bucket-creation.png)
-*Create a new S3 bucket for your evaluation data.*
+_Create a new S3 bucket for your evaluation data._
 
 ### Create Two Folders
 
 Inside your bucket, make two folders:
+
 - `dataset/` - this is where your input.jsonl file goes
 - `output/` - Bedrock will save evaluation results here
 
 ![Creating Folders](/blog-images/llm-as-a-judge/create-prefix.png)
-*Create dataset and output folders inside your bucket.*
+_Create dataset and output folders inside your bucket._
 
 ### Upload Your Questions
 
 Upload your `input.jsonl` file into the `dataset/` folder.
 
 ![Uploaded Dataset](/blog-images/llm-as-a-judge/uploaded-dataset.png)
-*Your input.jsonl file uploaded to the dataset folder.*
+_Your input.jsonl file uploaded to the dataset folder._
 
 ### Enable CORS (Important!)
 
@@ -109,7 +123,7 @@ Go to your bucket's **Permissions** tab, scroll to **Cross-origin resource shari
 ```
 
 ![CORS Configuration](/blog-images/llm-as-a-judge/cors.png)
-*Enable CORS on your S3 bucket to allow Bedrock access.*
+_Enable CORS on your S3 bucket to allow Bedrock access._
 
 > **Why CORS?** This setting allows Bedrock to read from and write to your bucket. Skip this and your evaluation won't work.
 
@@ -124,7 +138,7 @@ Now we'll configure the actual evaluation in Amazon Bedrock.
 Open the **Amazon Bedrock Console**, click **Evaluations** in the sidebar, then click **Create** and choose **Automatic: LLM as a judge**.
 
 ![Bedrock Evaluation Console](/blog-images/llm-as-a-judge/bedrock-evaluation-console.png)
-*The Bedrock Evaluations console showing automatic and human evaluation options.*
+_The Bedrock Evaluations console showing automatic and human evaluation options._
 
 ### Name Your Evaluation
 
@@ -135,26 +149,28 @@ Give your evaluation a descriptive name and description. This helps you keep tra
 The **Evaluator Model** is the AI that will grade the responses. I selected **Amazon Nova Pro** because it's good at analyzing and reasoning.
 
 ![Step 1: Basic Configuration](/blog-images/llm-as-a-judge/step1.png)
-*Configure evaluation name, description, and select your judge model.*
+_Configure evaluation name, description, and select your judge model._
 
 ### Choose the Model You're Testing
 
 In the **Inference Source** section, select **Bedrock models** and choose the model you want to evaluate. I picked **Claude Sonnet 4.5**.
 
 ![Step 2: Inference Source](/blog-images/llm-as-a-judge/step2.png)
-*Select Claude Sonnet 4.5 as the generator model to evaluate.*
+_Select Claude Sonnet 4.5 as the generator model to evaluate._
 
 ### Pick What to Measure
 
 The **Metrics** section lets you choose what the judge will evaluate:
 
 **Quality Metrics:**
+
 - **Helpfulness**: Does the response actually answer the question?
 - **Coherence**: Is the response clear and logical?
 - **Relevance**: Does it stay on topic?
 - **Correctness**: Is the information accurate?
 
 **Safety Metrics:**
+
 - **Harmfulness**: Does it contain unsafe content?
 - **Stereotyping**: Does it use harmful stereotypes?
 - **Refusal appropriateness**: Does it properly decline inappropriate requests?
@@ -162,7 +178,7 @@ The **Metrics** section lets you choose what the judge will evaluate:
 For this tutorial, I kept the defaults: **Helpfulness** and **Harmfulness**. More metrics mean longer evaluation times and higher costs. For a complete list of available metrics, check the [Model Evaluation Metrics documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-metrics.html).
 
 ![Step 3: Metrics Selection](/blog-images/llm-as-a-judge/step3.png)
-*Select the quality and responsible AI metrics for evaluation.*
+_Select the quality and responsible AI metrics for evaluation._
 
 ### Connect Your Dataset
 
@@ -172,17 +188,17 @@ Tell Bedrock where to find your questions and where to save results:
 2. **Evaluation Results**: Select the `output/` folder
 
 ![Step 4: Select Input Dataset](/blog-images/llm-as-a-judge/step4.png)
-*Select your input.jsonl file from S3.*
+_Select your input.jsonl file from S3._
 
 ![Step 5: Dataset Configuration Complete](/blog-images/llm-as-a-judge/step5.png)
-*Both input dataset and output location configured.*
+_Both input dataset and output location configured._
 
 ### Set Up Permissions
 
 For **Service role**, choose **Create and use a new service role**. AWS will automatically create the permissions Bedrock needs.
 
 ![Step 6: IAM Role](/blog-images/llm-as-a-judge/step6.png)
-*Let Bedrock create a new service role with required permissions.*
+_Let Bedrock create a new service role with required permissions._
 
 ---
 
@@ -191,7 +207,7 @@ For **Service role**, choose **Create and use a new service role**. AWS will aut
 Click **Create** to start. You'll see the status change to **In Progress**.
 
 ![Step 7: Job Running](/blog-images/llm-as-a-judge/step7.png)
-*Evaluation job in progress.*
+_Evaluation job in progress._
 
 **How long does it take?** My 3-question evaluation took about **25 minutes**. Bigger datasets take longer.
 
@@ -202,9 +218,10 @@ Click **Create** to start. You'll see the status change to **In Progress**.
 When the status shows **Completed**, click on your evaluation to see the results.
 
 ![Evaluation Complete](/blog-images/llm-as-a-judge/image.png)
-*Evaluation job completed successfully.*
+_Evaluation job completed successfully._
 
 You'll see:
+
 - **Overall scores** averaging all your test questions
 - **Individual scores** for each question
 - **Explanations** from the judge model about why it gave each score
@@ -212,6 +229,7 @@ You'll see:
 ### Understanding the Scores
 
 Scores usually range from 1 to 5:
+
 - **Helpfulness**: Higher is better (5 = very helpful, 1 = not helpful)
 - **Harmfulness**: Lower is better (1 = safe, 5 = unsafe)
 
@@ -245,7 +263,7 @@ This evaluation approach is perfect for:
 Here's everything we did in one picture:
 
 ![What We Did Summary](/blog-images/llm-as-a-judge/what%20we%20did%20summary.png)
-*Complete workflow summary: from dataset preparation to evaluation results.*
+_Complete workflow summary: from dataset preparation to evaluation results._
 
 ---
 

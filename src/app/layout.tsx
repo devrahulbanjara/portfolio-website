@@ -14,7 +14,8 @@ export const metadata: Metadata = {
     title: "Rahul | AI Engineer & Teacher",
     description:
         "Machine Learning Engineer & AI Educator. Building intelligent systems and teaching the next generation of AI practitioners.",
-    keywords: "AI Engineer, Machine Learning, AWS, Amazon Bedrock, Technical Blog, AI Education, Cloud Computing, MLOps",
+    keywords:
+        "AI Engineer, Machine Learning, AWS, Amazon Bedrock, Technical Blog, AI Education, Cloud Computing, MLOps",
     authors: [{ name: "Rahul" }],
     robots: "index, follow",
     openGraph: {
@@ -22,13 +23,15 @@ export const metadata: Metadata = {
         locale: "en_US",
         url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.rahuldevbanjara.com.np",
         title: "Rahul | AI Engineer & Teacher",
-        description: "Machine Learning Engineer & AI Educator. Building intelligent systems and teaching the next generation of AI practitioners.",
+        description:
+            "Machine Learning Engineer & AI Educator. Building intelligent systems and teaching the next generation of AI practitioners.",
         siteName: "Rahul's Technical Blog",
     },
     twitter: {
         card: "summary_large_image",
         title: "Rahul | AI Engineer & Teacher",
-        description: "Machine Learning Engineer & AI Educator. Building intelligent systems and teaching the next generation of AI practitioners.",
+        description:
+            "Machine Learning Engineer & AI Educator. Building intelligent systems and teaching the next generation of AI practitioners.",
         creator: "@rahul",
     },
 }

@@ -3,14 +3,26 @@ title: "Build YouTube Assistant with Amazon Bedrock & Strands Agents"
 date: "February 4, 2026"
 excerpt: "Build a YouTube Video Assistant using Amazon Bedrock and Strands Agents SDK. Create agentic workflows for video summarization and Q&A conversations."
 readTime: "7 min read"
-keywords: ["Amazon Bedrock", "Strands Agents", "YouTube Assistant", "AI Agents", "Claude Sonnet", "Python Tutorial", "Video Summarization", "Agentic Workflow", "LLM Agents", "AWS Bedrock"]
+keywords:
+    [
+        "Amazon Bedrock",
+        "Strands Agents",
+        "YouTube Assistant",
+        "AI Agents",
+        "Claude Sonnet",
+        "Python Tutorial",
+        "Video Summarization",
+        "Agentic Workflow",
+        "LLM Agents",
+        "AWS Bedrock",
+    ]
 tags: ["AWS", "Amazon Bedrock", "AI", "Machine Learning", "Python", "Tutorial"]
 category: "AI & Machine Learning"
 ---
 
 # Building an Intelligent YouTube Assistant with Strands Agents and Amazon Bedrock
 
-In the modern digital landscape, video content is the primary medium for knowledge sharing. However, extracting specific insights from a 60-minute technical deep dive or a multi-hour keynote can be a bottleneck for productivity. 
+In the modern digital landscape, video content is the primary medium for knowledge sharing. However, extracting specific insights from a 60-minute technical deep dive or a multi-hour keynote can be a bottleneck for productivity.
 
 Today, we are exploring how to build a **YouTube Video Assistant** using **Amazon Bedrock** and **Strands Agents**, an open-source AI agents SDK. This assistant allows users to not only summarize videos but to engage in a contextual, multi-turn conversation with the transcript, effectively turning passive content into an interactive knowledge base.
 
@@ -25,7 +37,7 @@ Unlike traditional "Chain-of-Thought" prompting, an **Agentic Workflow** allows 
 3.  **The Tools:** Custom Python functions that interface with the YouTube Transcript API.
 
 ![YouTube Assistant Architecture Flow](/blog-images/amazon-strands-bedrock/flow.png)
-*Architecture diagram showing the agentic workflow: User Input → Strands Agent → Tools (fetch_transcript, summarize, qa_tool) → Amazon Bedrock → Final Response*
+_Architecture diagram showing the agentic workflow: User Input → Strands Agent → Tools (fetch_transcript, summarize, qa_tool) → Amazon Bedrock → Final Response_
 
 ---
 
@@ -34,7 +46,9 @@ Unlike traditional "Chain-of-Thought" prompting, an **Agentic Workflow** allows 
 To interact with Amazon Bedrock, your environment requires AWS credentials. You can configure this in two ways:
 
 ### Option A: Using a `.env` File (Local Development)
+
 Create a `.env` file in your project root. This is ideal for quick prototyping:
+
 ```text
 AWS_ACCESS_KEY_ID=your_access_key
 AWS_SECRET_ACCESS_KEY=your_secret_key
@@ -42,10 +56,13 @@ AWS_REGION=us-east-1
 ```
 
 ### Option B: Using `aws configure` (Production Standard)
+
 For a more secure and standardized approach, use the AWS CLI:
+
 ```bash
 aws configure
 ```
+
 This stores credentials in your local `~/.aws/` directory, which the Strands SDK and Boto3 will automatically detect.
 
 ---
@@ -56,9 +73,10 @@ When deploying in `us-east-1`, this implementation leverages the latest high-per
 **`us.anthropic.claude-sonnet-4-20250514-v1:0`**
 
 ### Why this model?
-*   **Cross-Region Inference:** The `us.` prefix enables Amazon Bedrock to route requests across multiple US regions, ensuring higher throughput and resilience.
-*   **Reasoning Capabilities:** Claude Sonnet excels at "tool-use" (function calling), making it the ideal choice for agents that need to parse complex transcripts and extract precise answers.
-*   **Context Window:** It can handle massive transcripts, ensuring that even hour-long videos are summarized without losing critical context.
+
+- **Cross-Region Inference:** The `us.` prefix enables Amazon Bedrock to route requests across multiple US regions, ensuring higher throughput and resilience.
+- **Reasoning Capabilities:** Claude Sonnet excels at "tool-use" (function calling), making it the ideal choice for agents that need to parse complex transcripts and extract precise answers.
+- **Context Window:** It can handle massive transcripts, ensuring that even hour-long videos are summarized without losing critical context.
 
 ---
 
@@ -114,7 +132,7 @@ agent = Agent(
 if __name__ == "__main__":
     url = input("YouTube URL: ").strip()
     transcript = fetch_transcript_tool(url)
-    
+
     print("\n--- Video Summary ---")
     print(summarize_tool(transcript))
 
@@ -130,12 +148,12 @@ if __name__ == "__main__":
 Once you run the script, it prompts you for a YouTube URL. After pasting the URL, the assistant fetches the transcript and generates a summary:
 
 ![Video Summary](/blog-images/amazon-strands-bedrock/summarize.png)
-*The assistant processes the YouTube URL and generates a concise summary of the video content.*
+_The assistant processes the YouTube URL and generates a concise summary of the video content._
 
 After displaying the summary, the assistant immediately prompts you to ask questions. You can ask unlimited questions about the video content:
 
 ![Q&A Interaction](/blog-images/amazon-strands-bedrock/qa.png)
-*The assistant answers questions based on the video transcript. You can continue asking questions indefinitely until you type "EXIT".*
+_The assistant answers questions based on the video transcript. You can continue asking questions indefinitely until you type "EXIT"._
 
 This interactive workflow transforms passive video content into an engaging, conversational experience where you can explore specific aspects of the video in depth.
 
@@ -156,7 +174,7 @@ Building a CLI assistant is just the beginning. Here is how you can take this pr
 
 To learn more about the technologies used in this post, visit the following resources:
 
-*   **Strands Agents Documentation:** [Official Docs](https://strandsagents.com/latest/documentation/docs/)
-*   **Strands Python SDK:** [GitHub Repository](https://github.com/strands-agents/sdk-python)
-*   **AWS Blog:** [Introducing Strands Agents: An Open Source AI Agents SDK](https://aws.amazon.com/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/)
-*   **Amazon Bedrock:** [Product Overview](https://aws.amazon.com/bedrock/)
+- **Strands Agents Documentation:** [Official Docs](https://strandsagents.com/latest/documentation/docs/)
+- **Strands Python SDK:** [GitHub Repository](https://github.com/strands-agents/sdk-python)
+- **AWS Blog:** [Introducing Strands Agents: An Open Source AI Agents SDK](https://aws.amazon.com/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/)
+- **Amazon Bedrock:** [Product Overview](https://aws.amazon.com/bedrock/)

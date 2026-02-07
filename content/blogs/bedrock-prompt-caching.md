@@ -3,7 +3,19 @@ title: "Amazon Bedrock Prompt Caching: Cut GenAI Costs by 90%"
 date: "October 24, 2025"
 excerpt: "Learn how to cut GenAI costs by 90% and reduce latency by 59% using Amazon Bedrock Prompt Caching with real benchmarks and implementation code."
 readTime: "12 min read"
-keywords: ["Amazon Bedrock Prompt Caching", "GenAI Cost Optimization", "AI Latency Reduction", "Claude Sonnet Caching", "Bedrock Performance", "AI Cost Reduction", "LLM Optimization", "Prompt Engineering", "AI FinOps", "Bedrock Benchmarks"]
+keywords:
+    [
+        "Amazon Bedrock Prompt Caching",
+        "GenAI Cost Optimization",
+        "AI Latency Reduction",
+        "Claude Sonnet Caching",
+        "Bedrock Performance",
+        "AI Cost Reduction",
+        "LLM Optimization",
+        "Prompt Engineering",
+        "AI FinOps",
+        "Bedrock Benchmarks",
+    ]
 tags: ["AWS", "Amazon Bedrock", "AI", "Cost Optimization", "Performance", "Tutorial"]
 category: "AI & Machine Learning"
 ---
@@ -23,6 +35,7 @@ In this post, I have discussed the caching mechanism, when one should you use it
 ## The Problem: Redundant Processing Is Expensive
 
 The majority of GenAI applications send the same content repeatedly:
+
 - A customer service bot includes your company's 50-page knowledge base in every request
 - AI Copilots re-process your entire codebase if they have to give an inline suggestion
 - A legal AI re-reads the same contract for every user question
@@ -51,14 +64,18 @@ Behind the scenes, Amazon Bedrock stores the **computational state** of the fixe
 To use caching effectively, break down your prompts into two parts:
 
 ### 1. Static Content (Cached)
+
 This is information that remains constant to numerous requests:
+
 - System instructions and rules
 - PDFs, long documents, or knowledge bases
 - Software catalogs or documentation
 - Few‑shot examples
 
 ### 2. Dynamic Content (Not Cached)
+
 This is different with every request:
+
 - User’s specific question
 - Current chat message
 - Parameters that are session-specific.
@@ -133,26 +150,28 @@ print(json.dumps(response_body, indent=2))
 The response includes usage metrics which shows the cache performance:
 
 **First Request (Cache Write):**
+
 ```json
 {
-  "usage": {
-    "input_tokens": 12,
-    "cache_creation_input_tokens": 7800,  // Tokens are cached
-    "cache_read_input_tokens": 0,
-    "output_tokens": 156
-  }
+    "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 7800, // Tokens are cached
+        "cache_read_input_tokens": 0,
+        "output_tokens": 156
+    }
 }
 ```
 
 **Second request onwards (Cache Hit):**
+
 ```json
 {
-  "usage": {
-    "input_tokens": 12,
-    "cache_creation_input_tokens": 0,
-    "cache_read_input_tokens": 7800,  // Reading from cache
-    "output_tokens": 143
-  }
+    "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 7800, // Reading from cache
+        "output_tokens": 143
+    }
 }
 ```
 
@@ -162,20 +181,22 @@ The response includes usage metrics which shows the cache performance:
 
 I tested a document Q&A system with a **7,800-token document** (approximately 20 pages). Here are the results:
 
-| Metric | Without Caching | With Caching | Improvement |
-|--------|----------------|--------------|-------------|
-| **Response Latency** | 7.61 seconds | 3.12 seconds | **59% faster** |
-| **Input Token Cost** | $0.0235 | $0.0024 | **90% cheaper** |
+| Metric               | Without Caching | With Caching | Improvement     |
+| -------------------- | --------------- | ------------ | --------------- |
+| **Response Latency** | 7.61 seconds    | 3.12 seconds | **59% faster**  |
+| **Input Token Cost** | $0.0235         | $0.0024      | **90% cheaper** |
 
 ### Cost Breakdown (Claude 3.7 Sonnet Pricing)
 
 **Scenario:** 1,000 requests with a 7,800-token document
 
 **Without Caching:**
+
 - 1,000 requests × 7,800 tokens = 7,800,000 tokens
 - Cost: 7,800,000 ÷ 1,000 × $0.003 = **$23.40**
 
 **With Caching:**
+
 - First request: 7,800 tokens (cache write) = $0.0235
 - Next 999 requests: 7,800 tokens (cache read) = 999 × $0.0003 = $0.234
 - Total: **$0.26**
@@ -185,6 +206,7 @@ I tested a document Q&A system with a **7,800-token document** (approximately 20
 ### Latency Impact
 
 For user experience, the difference between 7.6 seconds and 3.1 seconds is huge:
+
 - **7.6 seconds** feels like a broken application with some bugs inside of it
 - **3.1 seconds** feels like a natural conversation not hampering the UX
 
@@ -221,12 +243,12 @@ def chat_with_document_advanced(system_instructions, document, user_query):
             }
         ]
     }
-    
+
     response = bedrock_runtime.invoke_model(
         modelId="us.anthropic.claude-3-7-sonnet-20250219-v1:0",
         body=json.dumps(request_body)
     )
-    
+
     return json.loads(response['body'].read())
 ```
 
@@ -237,7 +259,6 @@ def chat_with_document_advanced(system_instructions, document, user_query):
 ### Ideal Use Cases
 
 In situations when you have to create Document QnA systems where users typically ask from the same PDF, or manuals, or making a coding assisant where same codebase context is passed for even a small suggestion, you can use prompt caching. Not limited to this, there are numerous other use cases for prompt caching.
-
 
 ### Poor Use Cases
 
@@ -250,5 +271,6 @@ Having said that prompt caching is really useful doesn't mean it is perfect for 
 Prompt caching is one of the techniques that can provide any business a very high ROI. With having almost no catches, using this technique can massively save your money as well as improve the customer's experience by faster responses.
 
 **Resources**:
-*   [Amazon Bedrock Prompt Caching Documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html)
-*   [AWS Bedrock Pricing](https://aws.amazon.com/bedrock/pricing/)
+
+- [Amazon Bedrock Prompt Caching Documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html)
+- [AWS Bedrock Pricing](https://aws.amazon.com/bedrock/pricing/)

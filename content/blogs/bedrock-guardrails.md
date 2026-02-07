@@ -3,7 +3,19 @@ title: "Amazon Bedrock Guardrails: Keep Your Bot On-Brand Tutorial"
 date: "January 17, 2026"
 excerpt: "Use Amazon Bedrock Guardrails to filter off-topic discussions and keep customer support bots focused. Block competitor mentions using boto3."
 readTime: "6 min read"
-keywords: ["Amazon Bedrock Guardrails", "AI Safety", "Brand Voice Protection", "Chatbot Security", "Boto3 Tutorial", "Topic Filtering", "AI Content Moderation", "Customer Support Bot", "Bedrock ApplyGuardrail API", "AI Governance"]
+keywords:
+    [
+        "Amazon Bedrock Guardrails",
+        "AI Safety",
+        "Brand Voice Protection",
+        "Chatbot Security",
+        "Boto3 Tutorial",
+        "Topic Filtering",
+        "AI Content Moderation",
+        "Customer Support Bot",
+        "Bedrock ApplyGuardrail API",
+        "AI Governance",
+    ]
 tags: ["AWS", "Amazon Bedrock", "AI Safety", "Python", "Boto3", "Tutorial"]
 category: "AI & Machine Learning"
 ---
@@ -66,7 +78,7 @@ print(f"Created guardrail: ID={guardrail_id}, ARN={guardrail_arn}, Version={vers
 ```
 
 ![Topic Policy Filtering Logic](/blog-images/guardrails-beyond-safety/topic-policy-logic.svg)
-*Visualizing how the Topic Policy Engine filters "Competitor Products" while allowing safe inputs.*
+_Visualizing how the Topic Policy Engine filters "Competitor Products" while allowing safe inputs._
 
 ## Get Guardrail Version
 
@@ -107,51 +119,57 @@ for name, prompt in test_prompts.items():
     )
     action = response['action']
     assessments = response.get('assessments', [{}])[0].get('topicPolicy', {}).get('topics', [])
-    
+
     print(f"\nPrompt: {prompt}")
     print(f"Action: {action}")
     print("Detected topics:", [t['name'] for t in assessments if t['detected']])
 ```
 
 ![Guardrail Execution Flow](/blog-images/guardrails-beyond-safety/guardrail-execution-flow.svg)
-*Execution flow showing how Guardrails short-circuit blocked prompts, resulting in 0 inference costs.*
+_Execution flow showing how Guardrails short-circuit blocked prompts, resulting in 0 inference costs._
 
 ## Expected Outputs
 
 **Safe prompt output:**
+
 ```
 Prompt: How do I use your customer support features?
 Action: NONE
 Detected topics: []
 ```
+
 No intervention; proceed to LLM.
 
 **Competitor prompt output:**
+
 ```
 Prompt: Compare your product to CompetitorX
 Action: GUARDRAIL_INTERVENED
 Detected topics: ['Competitor Products']
 ```
+
 Shows `topicPolicy` assessment with `detected: true`, `action: BLOCKED`; `actionReason` explains violation. Blocked message ready for user.
 
 **Financial prompt output:**
+
 ```
 Prompt: Give me stock investment advice
 Action: GUARDRAIL_INTERVENED
 Detected topics: ['Financial Advice']
 ```
+
 Similar intervention details, saving tokens by blocking pre-LLM.
 
 ## Key Learnings
 
-*   **Beyond Safety:** Guardrails can be used to enforce brand voice by blocking specific topics like competitor mentions or financial advice.
-*   **Cost Efficiency:** Using the `apply_guardrail` API with `source='INPUT'` allows you to filter prompts *before* they reach the LLM, significantly saving on inference tokens.
-*   **Granular Control:** The `topicPolicyConfig` allows for precise definitions of denied topics with specific examples, offering more control than generic prompts.
-*   **Production Pattern:** Integrate guardrails into your API layer (e.g., FastAPI) to sanitize inputs before invoking models, ensuring consistent behavior across applications.
+- **Beyond Safety:** Guardrails can be used to enforce brand voice by blocking specific topics like competitor mentions or financial advice.
+- **Cost Efficiency:** Using the `apply_guardrail` API with `source='INPUT'` allows you to filter prompts _before_ they reach the LLM, significantly saving on inference tokens.
+- **Granular Control:** The `topicPolicyConfig` allows for precise definitions of denied topics with specific examples, offering more control than generic prompts.
+- **Production Pattern:** Integrate guardrails into your API layer (e.g., FastAPI) to sanitize inputs before invoking models, ensuring consistent behavior across applications.
 
 ## Resources
 
-*   [Boto3 Documentation: create_guardrail](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/bedrock/client/create_guardrail.html)
-*   [Boto3 Documentation: apply_guardrail](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/bedrock-runtime/client/apply_guardrail.html)
-*   [AWS Bedrock User Guide: Use Guardrails with the ApplyGuardrail API](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-use-independent-api.html)
-*   [AWS Insider: Creating AI Guardrails for Amazon Bedrock](https://awsinsider.net/articles/2025/04/09/creating-ai-guardrails-for-amazon-bedrock-part-2.aspx)
+- [Boto3 Documentation: create_guardrail](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/bedrock/client/create_guardrail.html)
+- [Boto3 Documentation: apply_guardrail](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/bedrock-runtime/client/apply_guardrail.html)
+- [AWS Bedrock User Guide: Use Guardrails with the ApplyGuardrail API](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-use-independent-api.html)
+- [AWS Insider: Creating AI Guardrails for Amazon Bedrock](https://awsinsider.net/articles/2025/04/09/creating-ai-guardrails-for-amazon-bedrock-part-2.aspx)

@@ -12,15 +12,15 @@ export function FAQSchema({ faqs, title }: FAQSchemaProps) {
     const faqSchema = {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        "name": title,
-        "mainEntity": faqs.map((faq) => ({
+        name: title,
+        mainEntity: faqs.map(faq => ({
             "@type": "Question",
-            "name": faq.question,
-            "acceptedAnswer": {
+            name: faq.question,
+            acceptedAnswer: {
                 "@type": "Answer",
-                "text": faq.answer
-            }
-        }))
+                text: faq.answer,
+            },
+        })),
     }
 
     return (

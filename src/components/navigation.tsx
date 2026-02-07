@@ -51,8 +51,8 @@ export function Navigation() {
                 </Link>
                 <div className="w-px h-4 bg-border" />
                 {navLinks
-                    .filter((link) => link.external)
-                    .map((link) => (
+                    .filter(link => link.external)
+                    .map(link => (
                         <Link
                             key={link.label}
                             href={link.url}
