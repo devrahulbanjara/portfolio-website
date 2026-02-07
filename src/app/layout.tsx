@@ -46,9 +46,7 @@ export default function RootLayout({
                 <Providers>
                     <DotBackground />
                     <div className="min-h-screen">
-                        <div className="container mx-auto">
-                            <Navigation />
-                        </div>
+                        <Navigation />
                         {children}
                     </div>
                 </Providers>

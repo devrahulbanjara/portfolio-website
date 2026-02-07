@@ -8,15 +8,25 @@ import { cn } from "@/lib/utils"
 
 export function Navigation() {
     const pathname = usePathname()
+    const isActive = (path: string) => {
+        if (path === "/") return pathname === "/"
+        return pathname.startsWith(path)
+    }
 
     return (
-        <nav className="flex justify-end items-center py-4 px-6">
-            <div className="flex gap-6 items-center">
+        <nav className="max-w-[672px] mx-auto flex justify-between items-center py-5 px-6">
+            <Link
+                href="/"
+                className="text-sm font-medium text-foreground hover:text-muted-foreground transition-colors duration-200"
+            >
+                Rahul
+            </Link>
+            <div className="flex gap-5 items-center">
                 <Link
                     href="/"
                     className={cn(
-                        "text-muted-foreground cursor-pointer hover:text-foreground duration-300 transition-colors",
-                        pathname === "/" && "text-foreground"
+                        "text-sm text-muted-foreground hover:text-foreground transition-colors duration-200",
+                        isActive("/") && pathname === "/" && "text-foreground"
                     )}
                 >
                     Home
@@ -24,8 +34,8 @@ export function Navigation() {
                 <Link
                     href="/projects"
                     className={cn(
-                        "text-muted-foreground cursor-pointer hover:text-foreground duration-300 transition-colors",
-                        pathname === "/projects" && "text-foreground"
+                        "text-sm text-muted-foreground hover:text-foreground transition-colors duration-200",
+                        isActive("/projects") && "text-foreground"
                     )}
                 >
                     Projects
@@ -33,12 +43,13 @@ export function Navigation() {
                 <Link
                     href="/blogs"
                     className={cn(
-                        "text-muted-foreground cursor-pointer hover:text-foreground duration-300 transition-colors",
-                        pathname === "/blogs" && "text-foreground"
+                        "text-sm text-muted-foreground hover:text-foreground transition-colors duration-200",
+                        isActive("/blogs") && "text-foreground"
                     )}
                 >
                     Blogs
                 </Link>
+                <div className="w-px h-4 bg-border" />
                 {navLinks
                     .filter((link) => link.external)
                     .map((link) => (
@@ -47,7 +58,7 @@ export function Navigation() {
                             href={link.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-muted-foreground cursor-pointer hover:text-foreground duration-300 transition-colors"
+                            className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
                         >
                             {link.label}
                         </Link>

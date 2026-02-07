@@ -12,22 +12,30 @@ import { ReadingProgress } from "@/components/reading-progress"
 import { CopyButton } from "@/components/copy-button"
 import { FAQSchema } from "@/components/faq-schema"
 import { HowToSchema } from "@/components/howto-schema"
+import { LikeButton } from "@/components/like-button"
+import { Comments } from "@/components/comments"
+import { getLikes, getComments } from "@/app/actions/blog-actions"
 
 const markdownComponents: Components = {
     h1: ({ children }) => (
-        <h1 className="text-[22px] sm:text-[24px] font-sans font-bold text-foreground mt-11 mb-[18px] leading-tight tracking-[-0.02em]">
+        <h1 className="text-[20px] sm:text-[22px] font-sans font-bold text-foreground mt-10 mb-4 leading-tight tracking-[-0.02em]">
             {children}
         </h1>
     ),
     h2: ({ children }) => (
-        <h2 className="text-[19px] sm:text-[20px] font-sans font-bold text-foreground mt-9 mb-[14px] leading-snug tracking-[-0.02em]">
+        <h2 className="text-[18px] sm:text-[19px] font-sans font-bold text-foreground mt-8 mb-3 leading-snug tracking-[-0.01em]">
             {children}
         </h2>
     ),
     h3: ({ children }) => (
-        <h3 className="text-[17px] sm:text-[18px] font-sans font-semibold text-foreground mt-7 mb-[10px] leading-snug">
+        <h3 className="text-[16px] sm:text-[17px] font-sans font-semibold text-foreground mt-6 mb-2.5 leading-snug">
             {children}
         </h3>
+    ),
+    h4: ({ children }) => (
+        <h4 className="text-[15px] sm:text-[16px] font-sans font-semibold text-foreground mt-5 mb-2 leading-snug">
+            {children}
+        </h4>
     ),
     p: ({ children, node }) => {
         const hasImage = node?.children?.some(
@@ -37,7 +45,7 @@ const markdownComponents: Components = {
             return <>{children}</>
         }
         return (
-            <p className="text-[15px] sm:text-[17px] text-foreground/90 leading-[1.75] mb-[22px]">
+            <p className="text-[15px] sm:text-[16px] text-foreground/85 leading-[1.8] mb-5">
                 {children}
             </p>
         )
@@ -45,19 +53,19 @@ const markdownComponents: Components = {
     img: ({ src, alt }) => {
         if (!src || typeof src !== 'string') return null
         return (
-            <figure className="my-7 -mx-4 sm:mx-0">
-                <div className="overflow-hidden rounded-lg sm:rounded-xl">
+            <figure className="my-6 -mx-4 sm:mx-0">
+                <div className="overflow-hidden rounded-lg border border-border/30">
                     <Image
                         src={src}
                         alt={alt || "Blog image"}
                         width={800}
                         height={450}
-                        className="w-full h-auto transition-transform duration-500 hover:scale-[1.02]"
+                        className="w-full h-auto"
                         style={{ maxWidth: "100%", height: "auto" }}
                     />
                 </div>
-                {alt && (
-                    <figcaption className="text-center text-[13px] text-muted-foreground mt-3.5 font-sans">
+                {alt && alt !== "Blog image" && (
+                    <figcaption className="text-center text-[13px] text-muted-foreground mt-3 font-sans">
                         {alt}
                     </figcaption>
                 )}
@@ -65,8 +73,8 @@ const markdownComponents: Components = {
         )
     },
     blockquote: ({ children }) => (
-        <blockquote className="my-7 py-[6px] border-l-[2px] border-foreground pl-[18px] sm:pl-7">
-            <div className="text-[15px] sm:text-[18px] text-foreground/80 leading-[1.6] italic">
+        <blockquote className="my-6 py-1 border-l-[2px] border-foreground/30 pl-5">
+            <div className="text-[15px] sm:text-[16px] text-foreground/75 leading-[1.7] italic [&>p]:mb-0">
                 {children}
             </div>
         </blockquote>
@@ -97,8 +105,8 @@ const markdownComponents: Components = {
         const codeString = extractCodeString(children)
 
         return (
-            <div className="relative my-[22px] -mx-4 sm:mx-0 group">
-                <pre className="bg-[#0d1117] text-[13px] sm:text-[14px] rounded-none sm:rounded-lg p-[18px] overflow-x-auto font-mono border border-border/10">
+            <div className="relative my-5 -mx-4 sm:mx-0 group">
+                <pre className="bg-[#0d1117] text-[13px] sm:text-[13.5px] rounded-none sm:rounded-lg p-4 overflow-x-auto font-mono leading-relaxed">
                     {children}
                 </pre>
                 <CopyButton code={codeString} />
@@ -110,36 +118,36 @@ const markdownComponents: Components = {
             return <code className={className}>{children}</code>
         }
         return (
-            <code className="bg-muted/80 text-foreground px-1.5 py-0.5 rounded text-[0.9em] font-mono border border-border/50">
+            <code className="bg-muted/70 dark:bg-muted/50 text-foreground px-1.5 py-0.5 rounded text-[0.88em] font-mono">
                 {children}
             </code>
         )
     },
     ul: ({ children }) => (
-        <ul className="text-[15px] sm:text-[17px] text-foreground/90 leading-[1.75] mb-[22px] pl-[22px] space-y-[10px] list-disc marker:text-muted-foreground">
+        <ul className="text-[15px] sm:text-[16px] text-foreground/85 leading-[1.8] mb-5 pl-5 space-y-2 list-disc marker:text-muted-foreground/60">
             {children}
         </ul>
     ),
     ol: ({ children }) => (
-        <ol className="text-[15px] sm:text-[17px] text-foreground/90 leading-[1.75] mb-[22px] pl-[22px] space-y-[10px] list-decimal marker:text-muted-foreground">
+        <ol className="text-[15px] sm:text-[16px] text-foreground/85 leading-[1.8] mb-5 pl-5 space-y-2 list-decimal marker:text-muted-foreground/60">
             {children}
         </ol>
     ),
     li: ({ children }) => (
-        <li className="pl-[6px]">{children}</li>
+        <li className="pl-1">{children}</li>
     ),
     table: ({ children }) => (
-        <div className="my-[22px] -mx-4 sm:mx-0 overflow-x-auto">
-            <table className="w-full text-[14px] sm:text-[15px] font-sans">
+        <div className="my-5 -mx-4 sm:mx-0 overflow-x-auto">
+            <table className="w-full text-[14px] sm:text-[14.5px] font-sans border-collapse">
                 {children}
             </table>
         </div>
     ),
     thead: ({ children }) => (
-        <thead className="border-b-2 border-foreground/20 text-left">{children}</thead>
+        <thead className="border-b border-border text-left bg-muted/30 dark:bg-muted/20">{children}</thead>
     ),
     th: ({ children }) => (
-        <th className="py-[10px] px-[14px] font-semibold text-foreground tracking-tight">
+        <th className="py-2.5 px-3 font-semibold text-foreground text-[13px] uppercase tracking-wide">
             {children}
         </th>
     ),
@@ -147,26 +155,29 @@ const markdownComponents: Components = {
         <tbody className="divide-y divide-border/50">{children}</tbody>
     ),
     td: ({ children }) => (
-        <td className="py-[10px] px-[14px] text-foreground/80">{children}</td>
+        <td className="py-2.5 px-3 text-foreground/80">{children}</td>
     ),
     a: ({ href, children }) => (
         <a
             href={href}
             target={href?.startsWith("http") ? "_blank" : undefined}
             rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="text-foreground underline decoration-foreground/30 decoration-1 underline-offset-[3px] hover:decoration-foreground/60 transition-all duration-200"
+            className="text-foreground underline decoration-foreground/25 decoration-1 underline-offset-[3px] hover:decoration-foreground/50 transition-colors duration-150"
         >
             {children}
         </a>
     ),
     strong: ({ children }) => (
-        <strong className="font-bold text-foreground">{children}</strong>
+        <strong className="font-semibold text-foreground">{children}</strong>
+    ),
+    em: ({ children }) => (
+        <em className="italic text-foreground/90">{children}</em>
     ),
     hr: () => (
-        <div className="my-9 flex justify-center gap-2.5">
-            <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
-            <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
-            <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
+        <div className="my-8 flex justify-center gap-2">
+            <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+            <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+            <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
         </div>
     ),
 }
@@ -252,6 +263,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.rahuldevbanjara.com.np"
     const publishedTime = new Date(post.date).getTime()
     const relatedPosts = getRelatedPosts(post.slug, 3)
+    
+    // Fetch likes and comments
+    const [initialLikes, initialComments] = await Promise.all([
+        getLikes(post.slug),
+        getComments(post.slug),
+    ])
 
     // Add FAQ schema for tutorial posts
     const shouldShowFAQ = post.tags?.includes('Tutorial') || post.category?.includes('Tutorial')
@@ -382,67 +399,62 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <ReadingProgress />
 
             <article className="min-h-screen" itemScope itemType="https://schema.org/BlogPosting">
-                <header className="max-w-[748px] mx-auto px-[26px] pt-9 sm:pt-[72px] pb-9">
+                <header className="max-w-[672px] mx-auto px-6 pt-8 sm:pt-16 pb-8">
                     <Link
                         href="/blogs"
-                        className="inline-flex items-center gap-2 text-[14px] text-muted-foreground hover:text-foreground transition-colors duration-200 mb-9 group"
+                        className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors duration-200 mb-8 group"
                     >
                         <svg 
-                            className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform duration-200" 
+                            className="w-3.5 h-3.5 transform group-hover:-translate-x-0.5 transition-transform duration-200" 
                             fill="none" 
                             viewBox="0 0 24 24" 
                             stroke="currentColor" 
-                            strokeWidth={1.5}
+                            strokeWidth={2}
                         >
                             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                         </svg>
                         All posts
                     </Link>
 
-                    <div className="flex items-center gap-3 text-[13px] text-muted-foreground mb-4.5">
-                        <time dateTime={new Date(post.date).toISOString()} itemProp="datePublished">
+                    <div className="flex items-center gap-2 text-[13px] text-muted-foreground mb-4">
+                        <time dateTime={new Date(post.date).toISOString()} itemProp="datePublished" className="tabular-nums">
                             {post.date}
                         </time>
-                        <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
-                        <span className="flex items-center gap-1.5">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            {post.readTime}
-                        </span>
+                        <span className="text-muted-foreground/40">·</span>
+                        <span>{post.readTime}</span>
                     </div>
 
                     <h1
-                        className="text-[26px] sm:text-[31px] lg:text-[35px] font-sans font-bold text-foreground leading-[1.2] tracking-[-0.02em]"
+                        className="text-[24px] sm:text-[28px] lg:text-[32px] font-sans font-bold text-foreground leading-[1.2] tracking-[-0.02em]"
                         itemProp="headline"
                     >
                         {post.title}
                     </h1>
 
-                    <p className="mt-[18px] text-[15px] sm:text-[18px] text-muted-foreground leading-relaxed">
+                    <p className="mt-4 text-[15px] sm:text-base text-muted-foreground leading-relaxed max-w-[580px]">
                         {post.excerpt}
                     </p>
 
-                    <div className="flex items-center gap-3.5 mt-7 pt-7 border-t border-border/50">
+                    <div className="flex items-center gap-3 mt-6 pt-6 border-t border-border/50">
                         <Image
                             src={personalInfo.profileImage}
                             alt={personalInfo.name}
-                            width={40}
-                            height={40}
-                            className="rounded-full ring-2 ring-background shadow-md"
+                            width={36}
+                            height={36}
+                            className="rounded-full ring-1 ring-border"
                         />
                         <div>
-                            <p className="text-[14px] font-semibold text-foreground">
+                            <p className="text-[14px] font-medium text-foreground">
                                 {personalInfo.name}
                             </p>
-                            <p className="text-[13px] text-muted-foreground">
+                            <p className="text-[12px] text-muted-foreground">
                                 {personalInfo.role}
                             </p>
                         </div>
                     </div>
                 </header>
 
-                <div className="max-w-[748px] mx-auto px-[26px] pb-[52px]" itemProp="articleBody">
+                <div className="max-w-[672px] mx-auto px-6 pb-12" itemProp="articleBody">
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeHighlight]}
@@ -452,53 +464,72 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     </ReactMarkdown>
                 </div>
 
+                {/* Engagement Section - Likes & Comments */}
+                <section className="max-w-[672px] mx-auto px-6 pb-12">
+                    {/* Like Button */}
+                    <div className="flex items-center gap-4 pb-8 border-b border-border/50">
+                        <LikeButton slug={post.slug} initialLikes={initialLikes} />
+                        <span className="text-[13px] text-muted-foreground">
+                            Found this helpful? Give it a like!
+                        </span>
+                    </div>
+                    
+                    {/* Comments Section */}
+                    <div className="pt-8">
+                        <h2 className="text-sm font-medium text-foreground uppercase tracking-wider mb-6">
+                            Comments
+                        </h2>
+                        <Comments slug={post.slug} initialComments={initialComments} />
+                    </div>
+                </section>
+
                 {/* Related Posts Section */}
                 {relatedPosts.length > 0 && (
-                    <section className="max-w-[748px] mx-auto px-[26px] pb-[52px]">
-                        <h2 className="text-[22px] sm:text-[24px] font-sans font-bold text-foreground mb-6">
-                            Related Posts
-                        </h2>
-                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                            {relatedPosts.map((relatedPost) => (
-                                <Link
-                                    key={relatedPost.slug}
-                                    href={`/blogs/${relatedPost.slug}`}
-                                    className="group block p-5 bg-muted/30 rounded-xl hover:bg-muted/50 transition-colors duration-200"
-                                >
-                                    <h3 className="text-[16px] font-semibold text-foreground mb-2 group-hover:text-foreground/80 transition-colors line-clamp-2">
-                                        {relatedPost.title}
-                                    </h3>
-                                    <p className="text-[13px] text-muted-foreground line-clamp-2 mb-3">
-                                        {relatedPost.excerpt}
-                                    </p>
-                                    <div className="flex items-center gap-3 text-[12px] text-muted-foreground">
-                                        <time dateTime={new Date(relatedPost.date).toISOString()}>
-                                            {relatedPost.date}
-                                        </time>
-                                        <span>•</span>
-                                        <span>{relatedPost.readTime}</span>
-                                    </div>
-                                </Link>
-                            ))}
+                    <section className="bg-muted/40 dark:bg-muted/25 py-12">
+                        <div className="max-w-[672px] mx-auto px-6">
+                            <h2 className="text-sm font-medium text-foreground uppercase tracking-wider mb-6">
+                                Related Posts
+                            </h2>
+                            <div className="space-y-4">
+                                {relatedPosts.map((relatedPost) => (
+                                    <Link
+                                        key={relatedPost.slug}
+                                        href={`/blogs/${relatedPost.slug}`}
+                                        className="group block"
+                                    >
+                                        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-1">
+                                            <h3 className="text-[15px] font-semibold text-foreground group-hover:text-muted-foreground transition-colors">
+                                                {relatedPost.title}
+                                            </h3>
+                                            <span className="text-[13px] text-muted-foreground tabular-nums flex-shrink-0">
+                                                {relatedPost.date}
+                                            </span>
+                                        </div>
+                                        <p className="text-[14px] text-muted-foreground line-clamp-1">
+                                            {relatedPost.excerpt}
+                                        </p>
+                                    </Link>
+                                ))}
+                            </div>
                         </div>
                     </section>
                 )}
 
-                <footer className="max-w-[748px] mx-auto px-[26px] pb-[72px]">
-                    <div className="flex justify-center gap-2 mb-9">
-                        <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
-                        <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
-                        <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
+                <footer className="max-w-[672px] mx-auto px-6 pb-16">
+                    <div className="flex justify-center gap-2 mb-8">
+                        <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                        <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                        <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
                     </div>
 
-                    <div className="bg-muted/30 rounded-xl p-[22px] sm:p-7">
-                        <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium mb-1.5">
+                    <div className="bg-muted/40 dark:bg-muted/30 rounded-lg p-5 sm:p-6">
+                        <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium mb-1">
                             Written by
                         </p>
-                        <p className="text-[17px] sm:text-[18px] font-bold text-foreground">
+                        <p className="text-base font-semibold text-foreground">
                             {personalInfo.name}
                         </p>
-                        <p className="text-[13px] text-muted-foreground mt-0.5 leading-relaxed">
+                        <p className="text-[13px] text-muted-foreground mt-0.5">
                             {personalInfo.role}
                         </p>
                         <div className="flex items-center gap-4 mt-4">
@@ -506,18 +537,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                 href="https://linkedin.com/in/devrahulbanjara"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 text-[13px] text-foreground hover:text-muted-foreground transition-colors"
+                                className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors"
                             >
-                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                 </svg>
                                 LinkedIn
                             </a>
                             <a
                                 href={`mailto:${personalInfo.email}`}
-                                className="inline-flex items-center gap-2 text-[13px] text-foreground hover:text-muted-foreground transition-colors"
+                                className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors"
                             >
-                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                                 </svg>
                                 Email
@@ -525,17 +556,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         </div>
                     </div>
 
-                    <div className="mt-7 pt-7 border-t border-border/50">
+                    <div className="mt-6 pt-6 border-t border-border/50">
                         <Link
                             href="/blogs"
-                            className="inline-flex items-center gap-2 text-[14px] text-foreground hover:text-muted-foreground transition-colors group"
+                            className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors group"
                         >
                             <svg 
-                                className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform duration-200" 
+                                className="w-3.5 h-3.5 transform group-hover:-translate-x-0.5 transition-transform duration-200" 
                                 fill="none" 
                                 viewBox="0 0 24 24" 
                                 stroke="currentColor" 
-                                strokeWidth={1.5}
+                                strokeWidth={2}
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                             </svg>

@@ -14,39 +14,44 @@
     --popover-foreground: 0 0% 8%;
     --primary: 0 0% 9%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96%;
+    --secondary: 0 0% 96.5%;
     --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 0 0% 96.5%;
+    --muted-foreground: 0 0% 45%;
     --accent: 0 0% 96%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 90%;
+    --border: 0 0% 91%;
     --input: 0 0% 90%;
     --ring: 0 0% 8%;
     --radius: 0.5rem;
+    
+    /* Consistent spacing tokens */
+    --container-max: 672px;
+    --container-padding: 24px;
+    --section-spacing: 64px;
   }
 
   .dark {
-    --background: 0 0% 6%;
-    --foreground: 0 0% 95%;
-    --card: 0 0% 6%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 6%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 0 0% 95%;
+    --background: 0 0% 5%;
+    --foreground: 0 0% 94%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 94%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 94%;
+    --primary: 0 0% 94%;
     --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 95%;
-    --muted: 0 0% 12%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 94%;
+    --muted: 0 0% 10%;
     --muted-foreground: 0 0% 55%;
     --accent: 0 0% 12%;
-    --accent-foreground: 0 0% 95%;
+    --accent-foreground: 0 0% 94%;
     --destructive: 0 62% 30%;
-    --destructive-foreground: 0 0% 95%;
-    --border: 0 0% 16%;
-    --input: 0 0% 16%;
+    --destructive-foreground: 0 0% 94%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
     --ring: 0 0% 80%;
   }
 }
@@ -142,6 +147,26 @@ img {
   @apply text-foreground/90;
 }
 
+/* Section alternating background */
+.section-muted {
+  @apply bg-muted/40 dark:bg-muted/25;
+}
+
+/* Consistent section spacing */
+.section-block {
+  @apply py-16;
+}
+
+/* Container consistent */
+.container-narrow {
+  @apply max-w-[672px] mx-auto px-6;
+}
+
+/* Subtle separator */
+.separator {
+  @apply border-t border-border/60;
+}
+
 /* Animation keyframes */
 @keyframes fadeIn {
   from {
@@ -155,7 +180,7 @@ img {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -166,7 +191,7 @@ img {
 @keyframes slideInLeft {
   from {
     opacity: 0;
-    transform: translateX(-16px);
+    transform: translateX(-12px);
   }
   to {
     opacity: 1;
@@ -175,13 +200,23 @@ img {
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.5s ease-out forwards;
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
 .animate-fadeInUp {
-  animation: fadeInUp 0.5s ease-out forwards;
+  animation: fadeInUp 0.4s ease-out forwards;
 }
 
 .animate-slideInLeft {
-  animation: slideInLeft 0.5s ease-out forwards;
+  animation: slideInLeft 0.4s ease-out forwards;
+}
+
+/* Smooth hover transitions */
+.hover-lift {
+  @apply transition-transform duration-200 ease-out hover:-translate-y-0.5;
+}
+
+/* Text balance for better readability */
+.text-balance {
+  text-wrap: balance;
 }
