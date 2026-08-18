@@ -11,27 +11,27 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 const lora = Lora({ subsets: ["latin"], variable: "--font-serif" })
 
 export const metadata: Metadata = {
-    title: "Rahul | AI Engineer & Teacher",
+    title: "Rahul | AWS & NVIDIA Certified ML & Gen AI Engineer",
     description:
-        "Machine Learning Engineer & AI Educator. Building intelligent systems and teaching the next generation of AI practitioners.",
+        "AWS and NVIDIA Certified ML & Gen AI Engineer shipping end-to-end AI systems across healthcare and enterprise — RAG, multi-agent orchestration, backend engineering, and full MLOps lifecycles — and a certified trainer teaching the next wave of ML engineers.",
     keywords:
-        "AI Engineer, Machine Learning, AWS, Amazon Bedrock, Technical Blog, AI Education, Cloud Computing, MLOps",
-    authors: [{ name: "Rahul" }],
+        "AI Engineer, Machine Learning, AWS, Amazon Bedrock, Agentic AI, RAG, MLOps, Technical Blog, AI Education, Cloud Computing",
+    authors: [{ name: "Rahul Dev Banjara" }],
     robots: "index, follow",
     openGraph: {
         type: "website",
         locale: "en_US",
         url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.rahuldevbanjara.com.np",
-        title: "Rahul | AI Engineer & Teacher",
+        title: "Rahul | AWS & NVIDIA Certified ML & Gen AI Engineer",
         description:
-            "Machine Learning Engineer & AI Educator. Building intelligent systems and teaching the next generation of AI practitioners.",
+            "AWS and NVIDIA Certified ML & Gen AI Engineer shipping end-to-end AI systems across healthcare and enterprise — RAG, multi-agent orchestration, backend engineering, and full MLOps lifecycles — and a certified trainer teaching the next wave of ML engineers.",
         siteName: "Rahul's Technical Blog",
     },
     twitter: {
         card: "summary_large_image",
-        title: "Rahul | AI Engineer & Teacher",
+        title: "Rahul | AWS & NVIDIA Certified ML & Gen AI Engineer",
         description:
-            "Machine Learning Engineer & AI Educator. Building intelligent systems and teaching the next generation of AI practitioners.",
+            "AWS and NVIDIA Certified ML & Gen AI Engineer shipping end-to-end AI systems across healthcare and enterprise — RAG, multi-agent orchestration, backend engineering, and full MLOps lifecycles.",
         creator: "@rahul",
     },
 }
