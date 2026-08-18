@@ -5,7 +5,6 @@ export const personalInfo = {
         "I build end-to-end AI systems across healthcare and enterprise — generative and agentic AI (RAG, multi-agent orchestration), backend and software engineering, and full MLOps lifecycles on AWS.",
         "I'm also a certified trainer at TekBay Academy, teaching the next wave of ML engineers toward the AWS Machine Learning Engineer – Associate (MLA-C01) certification.",
     ],
-    currentWork: "ConvexHire",
     profileImage: "/my_pic.jpg",
     email: "rdbanjara07@gmail.com",
     phone: "+977-9866121812",

@@ -70,17 +70,6 @@ export default function Home() {
                 </div>
 
                 <div className="mb-14">
-                    <div className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-muted/50 dark:bg-muted/40 border border-border/60">
-                        <span className="text-[13px] text-muted-foreground">
-                            Currently working on
-                        </span>
-                        <span className="text-[13px] font-semibold text-foreground">
-                            {personalInfo.currentWork}
-                        </span>
-                    </div>
-                </div>
-
-                <div className="mb-14">
                     <h2 className="text-sm font-medium text-foreground uppercase tracking-wider mb-4">
                         Skills
                     </h2>
