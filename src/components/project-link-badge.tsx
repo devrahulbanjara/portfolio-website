@@ -1,31 +1,51 @@
-import { Globe } from "lucide-react";
-import { Icons } from "@/components/icons";
-import { Badge } from "@/components/ui/badge";
+import type { ComponentType } from "react";
+import { ExternalLink, FileText, Globe } from "lucide-react";
+import { GitHubMark, HuggingFaceLogo } from "@/components/brand-marks";
 import type { ProjectLink } from "@/lib/content/types";
-
-function HuggingFaceMark(props: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
-      <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-3.2 7.2a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4zm6.4 0a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4zM12 18c-2.5 0-4.6-1.6-5.4-3.8a.6.6 0 01.56-.8h9.68a.6.6 0 01.56.8C16.6 16.4 14.5 18 12 18z" />
-    </svg>
-  );
-}
-
-/** Each link kind gets the mark of the platform it actually points at. */
-const MARKS = {
-  repository: Icons.github,
-  model: HuggingFaceMark,
-  live: Globe,
-  article: Globe,
-} as const;
+import { cn } from "@/lib/utils";
 
 /**
- * Solid pill with the platform's mark, rather than an underlined text link.
- * A recognizable GitHub badge is scannable at a glance, which matters on cards
- * where the link is the call to action.
+ * Each destination gets its own brand treatment rather than one generic pill.
+ * A GitHub badge and a Hugging Face badge are instantly recognizable by colour
+ * alone, which is the whole point of using a badge instead of a text link.
+ *
+ * Colours are the platforms' own brand values, so they stay fixed across light
+ * and dark themes - a GitHub badge that changes colour with the site theme stops
+ * reading as GitHub. Contrast is checked against each background, not inherited.
  */
+type Style = {
+  mark: ComponentType<{ className?: string }>;
+  /** Fixed brand colours; deliberately not theme-reactive. */
+  className: string;
+};
+
+const STYLES: Record<ProjectLink["kind"], Style> = {
+  repository: {
+    mark: GitHubMark,
+    // GitHub's near-black. White ink.
+    className: "bg-[#181717] text-white hover:bg-[#2b2a2a]",
+  },
+  model: {
+    mark: HuggingFaceLogo,
+    // HF's own dark navy (#32343D), not their yellow: the logo IS yellow, so a
+    // yellow pill would put yellow on yellow. Dark lets the mark carry the brand.
+    className: "bg-[#32343D] text-white hover:bg-[#41444f]",
+  },
+  live: {
+    mark: Globe,
+    // No third-party brand to honour, so this one follows the site's accent.
+    className: "bg-brand text-white hover:opacity-90",
+  },
+  article: {
+    mark: FileText,
+    className:
+      "border border-border bg-background text-foreground hover:bg-accent",
+  },
+};
+
 export default function ProjectLinkBadge({ link }: { link: ProjectLink }) {
-  const Mark = MARKS[link.kind] ?? Globe;
+  const style = STYLES[link.kind] ?? STYLES.article;
+  const Mark = style.mark;
 
   return (
     <a
@@ -33,12 +53,15 @@ export default function ProjectLinkBadge({ link }: { link: ProjectLink }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`${link.label} (opens in a new tab)`}
-      className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition-colors",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        style.className,
+      )}
     >
-      <Badge className="flex gap-1.5 px-2.5 py-1 transition-opacity hover:opacity-85">
-        <Mark className="size-3.5" />
-        {link.label}
-      </Badge>
+      <Mark className="size-3.5" />
+      {link.label}
+      <ExternalLink className="size-3 opacity-60" aria-hidden />
     </a>
   );
 }

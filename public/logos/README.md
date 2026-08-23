@@ -13,7 +13,8 @@ All seven supplied and verified 2026-08-23 by rendering on light and dark backgr
 | `herald-college.png` | Herald College (education) | 200×200 | Opaque green tile by design |
 | `aws.svg` | AWS cert issuer | vector | Scales cleanly, prefer it |
 | `nvidia.png` | NVIDIA cert issuer | 1200×936 | Already transparent |
-| `devcorps-ailearners.png` | DevCorps AI Learners (activities) | 355×236 | White bg removed |
+| `devcorps-ailearners.png` | DevCorps AI Learners (activities) | 378×267 | White bg, tight crop |
+| `hf-logo.svg` | Hugging Face link badge | vector | Full colour, see note below |
 
 Reuse `fusemachines.png` for both the work entry and the Microdegree certification —
 do not duplicate the file.
@@ -62,3 +63,21 @@ normalizing by area rather than height alone.
 
 `work-section.tsx` has an `onError` fallback that degrades to initials, so a missing or
 broken logo never breaks the page.
+
+## `hf-logo.svg` — the one full-colour logo
+
+Unlike the organization logos above, this is used at small size inside a link
+badge, not on a neutral chip.
+
+- **Full colour** (#FFD21E yellow, #FF9D00/#FFAD03 orange, #FF323D, #32343D).
+  It must never be recoloured or forced to `currentColor`.
+- **The badge is HF's dark navy `#32343D`, not their yellow.** The logo is
+  already yellow, so a yellow pill would put yellow on yellow.
+- Referenced as a file (`<img src>`) rather than inlined, because it is ~35KB of
+  path data that would otherwise ship in the JS bundle on every page. `next/image`
+  is not used: it does not optimize vector formats.
+- Rendered by `HuggingFaceLogo` in `src/components/brand-marks.tsx`.
+
+For **monochrome** contexts — the nav dock and the contact row, where it sits
+beside outline icons — use `HuggingFaceMark` from the same file instead. A
+full-colour logo at 16px next to line icons reads as a mistake.
