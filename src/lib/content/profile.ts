@@ -10,8 +10,11 @@ export const profile: Profile = {
    * are enumerated. An earlier version repeated all three across all three
    * sections, so the page said the same thing to a reader three times.
    */
+  // No cloud or framework named on purpose. The work spans AWS, but also plain
+  // PyTorch training runs, multi-agent systems, and MLOps - naming one platform
+  // in the hero makes the range look narrower than it is.
   positioning:
-    "I build production AI systems on AWS, and teach the engineers who ship them.",
+    "I build AI systems end to end, and teach the engineers who ship them.",
   bio: [
     // Concrete work, not a second capability list. Every example here is drawn
     // from the Adex bullets in ./experience.ts - the client is not named.
