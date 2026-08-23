@@ -2,10 +2,10 @@ import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ContactSection from "@/components/section/contact-section";
-import CredentialsSection from "@/components/section/credentials-section";
+import CertificationsSection from "@/components/section/certifications-section";
 import EducationSection from "@/components/section/education-section";
 import ExperienceSection from "@/components/section/experience-section";
-import SelectedWorkSection from "@/components/section/selected-work-section";
+import ProjectsSection from "@/components/section/projects-section";
 import SkillsSection from "@/components/section/skills-section";
 import AboutSection from "@/components/section/about-section";
 import { profile } from "@/lib/content";
@@ -79,7 +79,7 @@ export default function Page() {
           SectionHeader, matching upstream. Passing one too would render a
           left-aligned h2 directly above it. */}
       <Section id="projects" delay={DELAY * 9}>
-        <SelectedWorkSection />
+        <ProjectsSection />
       </Section>
 
       <Section id="skills" title="Skills" delay={DELAY * 10}>
@@ -87,7 +87,7 @@ export default function Page() {
       </Section>
 
       <Section id="certifications" delay={DELAY * 11}>
-        <CredentialsSection />
+        <CertificationsSection />
       </Section>
 
       <Section id="education" delay={DELAY * 13}>

@@ -9,6 +9,7 @@ import {
   siHuggingface,
   siMlflow,
   siNeo4j,
+  siNestjs,
   siPostgresql,
   siPython,
   siPytorch,
@@ -41,15 +42,12 @@ const SIMPLE = {
   airflow: siApacheairflow,
   mlflow: siMlflow,
   neo4j: siNeo4j,
+  nestjs: siNestjs,
   qdrant: siQdrant,
 } as const;
 
 export type TechSlug =
-  | keyof typeof SIMPLE
-  | "aws"
-  | "scikitlearn"
-  | "langchain"
-  | "redis";
+  keyof typeof SIMPLE | "aws" | "scikitlearn" | "langchain" | "redis";
 
 export function TechIcon({
   slug,

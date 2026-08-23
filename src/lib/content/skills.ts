@@ -20,6 +20,7 @@ export const coreStack: readonly { name: string; slug: TechSlug }[] = [
   { name: "MLflow", slug: "mlflow" },
   { name: "Airflow", slug: "airflow" },
   { name: "FastAPI", slug: "fastapi" },
+  { name: "NestJS", slug: "nestjs" },
   { name: "PostgreSQL", slug: "postgresql" },
   { name: "Redis", slug: "redis" },
   { name: "Qdrant", slug: "qdrant" },

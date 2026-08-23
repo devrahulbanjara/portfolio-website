@@ -4,7 +4,7 @@ import SectionHeader from "@/components/section-header";
 import { initialsOf } from "@/lib/utils";
 import { certifications } from "@/lib/content";
 
-export default function CredentialsSection() {
+export default function CertificationsSection() {
   return (
     <div className="flex flex-col gap-10">
       <SectionHeader pill="Certifications" />
