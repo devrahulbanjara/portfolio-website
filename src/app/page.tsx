@@ -8,6 +8,7 @@ import CredentialsSection from "@/components/section/credentials-section";
 import EducationSection from "@/components/section/education-section";
 import ExperienceSection from "@/components/section/experience-section";
 import SelectedWorkSection from "@/components/section/selected-work-section";
+import SkillsSection from "@/components/section/skills-section";
 import WhatIBuildSection from "@/components/section/what-i-build-section";
 import { profile } from "@/lib/content";
 
@@ -92,19 +93,6 @@ export default function Page() {
         </div>
       </section>
 
-      <Section id="about" title="About" delay={DELAY * 3}>
-        <div className="flex flex-col gap-3">
-          {profile.bio.map((paragraph) => (
-            <p
-              key={paragraph}
-              className="text-pretty font-sans leading-relaxed text-muted-foreground"
-            >
-              {paragraph}
-            </p>
-          ))}
-        </div>
-      </Section>
-
       <Section id="what-i-build" title="What I Build" delay={DELAY * 5}>
         <WhatIBuildSection />
       </Section>
@@ -115,6 +103,10 @@ export default function Page() {
 
       <Section id="work" title="Selected Work" delay={DELAY * 9}>
         <SelectedWorkSection />
+      </Section>
+
+      <Section id="skills" title="Skills" delay={DELAY * 10}>
+        <SkillsSection />
       </Section>
 
       <Section id="certifications" title="Certifications" delay={DELAY * 11}>

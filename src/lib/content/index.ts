@@ -8,7 +8,7 @@
  */
 export { profile } from "./profile";
 export { experience } from "./experience";
-export { skillGroups } from "./skills";
+export { skillGroups, coreStack } from "./skills";
 export {
   projects,
   flagshipProjects,

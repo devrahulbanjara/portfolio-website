@@ -18,9 +18,6 @@ export default function WhatIBuildSection() {
           <p className="text-sm leading-relaxed text-muted-foreground">
             {group.summary}
           </p>
-          <p className="text-xs leading-relaxed text-muted-foreground/70">
-            {group.items.join(" · ")}
-          </p>
         </div>
       ))}
     </div>

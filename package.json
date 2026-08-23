@@ -33,6 +33,7 @@
     "rehype-pretty-code": "^0.14.1",
     "remark-gfm": "^4.0.1",
     "shiki": "^3.20.0",
+    "simple-icons": "^16.28.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7",
