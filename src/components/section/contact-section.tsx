@@ -7,11 +7,14 @@ import { profile } from "@/lib/content";
  * masked to transparent, then a large centred heading and one balanced
  * paragraph.
  *
- * Differences from upstream, both forced by content rather than taste:
+ * Differences from upstream, forced by content rather than taste:
  *   - upstream links to X for DMs; Rahul has no X account, so the call to
  *     action is email
  *   - upstream's copy ends "I will ignore all soliciting", which is Dillion's
  *     voice, not Rahul's
+ *
+ * Copy is kept to a single sentence on purpose. The heading already states the
+ * intent, so anything past "send me an email" is padding.
  *
  * The social icons this section used to carry are gone: they already live in the
  * dock, and upstream does not repeat them here.
@@ -47,8 +50,7 @@ export default function ContactSection() {
           >
             an email
           </a>{" "}
-          and I&apos;ll get back to you whenever I can. Always glad to talk
-          about production AI systems, ML engineering, or teaching.
+          and I&apos;ll get back to you whenever I can.
         </p>
       </div>
     </div>
