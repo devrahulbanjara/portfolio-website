@@ -16,10 +16,7 @@ import { certifications } from "@/lib/content";
 export default function CredentialsSection() {
   return (
     <div className="flex flex-col gap-10">
-      <SectionHeader
-        pill="Certifications"
-        heading="Credentials you can check"
-      />
+      <SectionHeader pill="Credentials" heading="Certifications" />
 
       <ul className="flex flex-col gap-3">
         {certifications.map((cert) => (
