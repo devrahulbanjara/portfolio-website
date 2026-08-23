@@ -1,6 +1,6 @@
 import { allPosts } from "content-collections";
 import { formatDate } from "@/lib/utils";
-import { DATA } from "@/data/resume";
+import { profile } from "@/lib/content";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MDXContent } from "@content-collections/mdx/react";
@@ -52,11 +52,11 @@ export async function generateMetadata({
       description,
       type: "article",
       publishedTime,
-      url: `${DATA.url}/blogs/${slug}`,
+      url: `${profile.siteUrl}/blogs/${slug}`,
       ...(image && {
         images: [
           {
-            url: `${DATA.url}${image}`,
+            url: `${profile.siteUrl}${image}`,
           },
         ],
       }),
@@ -66,7 +66,7 @@ export async function generateMetadata({
       title,
       description,
       ...(image && {
-        images: [`${DATA.url}${image}`],
+        images: [`${profile.siteUrl}${image}`],
       }),
     },
   };
@@ -104,12 +104,12 @@ export default async function Blog({
     dateModified: post.publishedAt,
     description: post.summary,
     image: post.image
-      ? `${DATA.url}${post.image}`
-      : `${DATA.url}/blogs/${slug}/opengraph-image`,
-    url: `${DATA.url}/blogs/${slug}`,
+      ? `${profile.siteUrl}${post.image}`
+      : `${profile.siteUrl}/blogs/${slug}/opengraph-image`,
+    url: `${profile.siteUrl}/blogs/${slug}`,
     author: {
       "@type": "Person",
-      name: DATA.name,
+      name: profile.name,
     },
   }).replace(/</g, "\\u003c");
 

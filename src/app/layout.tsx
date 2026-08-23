@@ -1,7 +1,7 @@
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { DATA } from "@/data/resume";
+import { profile } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -21,17 +21,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(DATA.url),
+  metadataBase: new URL(profile.siteUrl),
   title: {
-    default: DATA.name,
-    template: `%s | ${DATA.name}`,
+    default: profile.name,
+    template: `%s | ${profile.name}`,
   },
-  description: DATA.description,
+  description: profile.positioning,
   openGraph: {
-    title: `${DATA.name}`,
-    description: DATA.description,
-    url: DATA.url,
-    siteName: `${DATA.name}`,
+    title: `${profile.name}`,
+    description: profile.positioning,
+    url: profile.siteUrl,
+    siteName: `${profile.name}`,
     locale: "en_US",
     type: "website",
   },
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: `${DATA.name}`,
+    title: `${profile.name}`,
     card: "summary_large_image",
   },
   alternates: {
