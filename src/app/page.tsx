@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -41,20 +43,44 @@ export default function Page() {
   return (
     <main className="relative flex min-h-dvh flex-col gap-14">
       <section id="hero">
-        <div className="mx-auto w-full max-w-2xl space-y-8">
+        <div className="mx-auto w-full max-w-2xl">
           <div className="flex flex-col justify-between gap-2 gap-y-6 md:flex-row">
-            <div className="order-2 flex flex-col gap-2 md:order-1">
+            <div className="order-2 flex flex-col gap-2.5 md:order-1">
               <BlurFadeText
                 delay={DELAY}
                 className="text-3xl font-semibold tracking-tighter sm:text-4xl lg:text-5xl"
                 yOffset={8}
                 text={`Hi, I'm ${profile.name.split(" ")[0]}`}
               />
+              {/* Role, then one positioning line. The brief asks for both; the
+                  previous version had a paragraph and no role at all. */}
+              <BlurFade delay={DELAY * 1.5}>
+                <p className="text-sm font-medium tracking-wide text-brand">
+                  {profile.headline}
+                </p>
+              </BlurFade>
               <BlurFadeText
-                className="max-w-[600px] text-muted-foreground md:text-lg lg:text-xl"
-                delay={DELAY}
+                className="max-w-[520px] text-muted-foreground md:text-lg"
+                delay={DELAY * 2}
                 text={profile.positioning}
               />
+              <BlurFade delay={DELAY * 3}>
+                <div className="flex flex-wrap gap-2 pt-2">
+                  <Link
+                    href="#work"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                  >
+                    Explore my work
+                    <ArrowRight className="size-3.5" aria-hidden />
+                  </Link>
+                  <Link
+                    href="/blogs"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium transition-colors hover:bg-accent"
+                  >
+                    Read my writing
+                  </Link>
+                </div>
+              </BlurFade>
             </div>
             <BlurFade delay={DELAY} className="order-1 md:order-2">
               <Avatar className="size-24 rounded-full border shadow-lg ring-4 ring-muted md:size-32">

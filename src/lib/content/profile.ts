@@ -4,11 +4,19 @@ export const profile: Profile = {
   name: "Rahul Dev Banjara",
   initials: "RB",
   headline: "AI / ML & Software Engineer",
+  /**
+   * Hero line and meta description. Kept to one clause: the hero says WHO, the
+   * bio says what the work was, and What I Build is the only place capabilities
+   * are enumerated. An earlier version repeated all three across all three
+   * sections, so the page said the same thing to a reader three times.
+   */
   positioning:
-    "I build end-to-end AI systems in production — generative and agentic AI, machine learning, and full MLOps lifecycles on AWS.",
+    "I build production AI systems on AWS, and teach the engineers who ship them.",
   bio: [
-    "I build end-to-end AI systems across healthcare and enterprise — generative and agentic AI (RAG, multi-agent orchestration), backend and software engineering, and full MLOps lifecycles on AWS.",
-    "I'm also a certified trainer at TekBay Academy, teaching the next wave of ML engineers toward the AWS Machine Learning Engineer – Associate (MLA-C01) certification.",
+    // Concrete work, not a second capability list. Every example here is drawn
+    // from the Adex bullets in ./experience.ts - the client is not named.
+    "My work sits where models meet real users: a churn-prevention platform an enterprise acts on daily, a clinical retrieval system validated with practising physicians, and document pipelines that hold up against messy real-world input.",
+    "Alongside that I teach. I designed TekBay Academy's AWS Machine Learning Engineer curriculum from scratch and have taken 60+ engineers through it in person, with a 100% pass rate in the first batch.",
   ],
   email: "rdbanjara07@gmail.com",
   // Stored, deliberately not rendered. See the note on Profile.phone.
