@@ -27,9 +27,10 @@ Verified by rendering: on the dark theme background, **AWS and NVIDIA are both b
 wordmarks and become nearly invisible** — only the orange smile and the green eye
 remain readable. Adex purple (`#4D2D7C`) goes dim.
 
-Render each logo inside a light rounded surface (approximately `#f4f4f5`, radius 8px,
-~7px×11px padding) in **both** themes. This is what makes the set legible and reads as
-deliberate. Do not special-case per logo.
+In **dark mode**, render each logo on a light surface. In **light mode** use only a
+thin ring on the page background - a grey fill there reads as a heavy box and makes
+the page look less finished than it should (compared side by side with the upstream
+template, this was the single biggest visual regression).
 
 ```
 dark mode, no chip          dark mode, with chip

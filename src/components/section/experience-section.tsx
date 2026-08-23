@@ -23,9 +23,9 @@ export default function ExperienceSection() {
         <AccordionItem
           key={role.slug}
           value={role.slug}
-          className="border-b border-border/60"
+          className="border-b border-border/50 last:border-0"
         >
-          <AccordionTrigger className="py-4 hover:no-underline [&>svg]:text-muted-foreground">
+          <AccordionTrigger className="py-3 hover:no-underline [&>svg]:text-muted-foreground">
             <div className="flex flex-1 items-center gap-3 text-left">
               <Logo
                 src={role.logoUrl}

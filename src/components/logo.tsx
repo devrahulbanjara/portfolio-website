@@ -47,7 +47,14 @@ export function Logo({
   return (
     <span
       className={cn(
-        "inline-flex h-10 min-w-10 flex-none items-center justify-center rounded-lg border border-border/60 bg-zinc-50 px-2 shadow-sm",
+        "inline-flex h-10 min-w-10 flex-none items-center justify-center rounded-xl px-1.5",
+        // Light: just a thin ring on the page background, so the mark floats
+        // instead of sitting in a grey box. Matches the airier feel of the
+        // upstream template's ringed avatars.
+        "bg-background ring-1 ring-border",
+        // Dark: a light surface is unavoidable. AWS and NVIDIA ship black
+        // wordmarks that disappear on a dark ground - verified by rendering.
+        "dark:bg-zinc-50 dark:ring-0",
         className,
       )}
     >
@@ -57,11 +64,11 @@ export function Logo({
           alt={alt}
           loading="lazy"
           decoding="async"
-          className="h-6 w-auto max-w-28 object-contain"
+          className="h-6 w-auto max-w-24 object-contain"
           onError={() => setFailed(true)}
         />
       ) : (
-        <span className="px-1 text-xs font-semibold text-zinc-500">
+        <span className="text-xs font-semibold text-muted-foreground dark:text-zinc-500">
           {fallback}
         </span>
       )}
