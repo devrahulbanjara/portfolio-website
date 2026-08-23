@@ -1,18 +1,18 @@
 /* eslint-disable @next/next/no-img-element -- the AWS mark is a local SVG file;
    next/image does not optimize vector formats. */
+import { Langchain } from "@/components/ui/svgs/langchain";
+import { Redis } from "@/components/ui/svgs/redis";
 import {
   siApacheairflow,
   siDocker,
   siFastapi,
   siHuggingface,
-  siLangchain,
   siMlflow,
   siNeo4j,
   siPostgresql,
   siPython,
   siPytorch,
   siQdrant,
-  siRedis,
   siScikitlearn,
   siTensorflow,
 } from "simple-icons";
@@ -37,10 +37,8 @@ const SIMPLE = {
   tensorflow: siTensorflow,
   scikitlearn: siScikitlearn,
   huggingface: siHuggingface,
-  langchain: siLangchain,
   fastapi: siFastapi,
   postgresql: siPostgresql,
-  redis: siRedis,
   docker: siDocker,
   airflow: siApacheairflow,
   mlflow: siMlflow,
@@ -48,7 +46,7 @@ const SIMPLE = {
   qdrant: siQdrant,
 } as const;
 
-export type TechSlug = keyof typeof SIMPLE | "aws";
+export type TechSlug = keyof typeof SIMPLE | "aws" | "langchain" | "redis";
 
 export function TechIcon({
   slug,
@@ -61,6 +59,17 @@ export function TechIcon({
     return (
       <img src="/logos/aws.svg" alt="" aria-hidden className={className} />
     );
+  }
+
+  // Monochrome mark: takes the theme's foreground colour so it stays visible on
+  // both grounds. A baked #000 would disappear in dark mode.
+  if (slug === "langchain") {
+    return <Langchain className={`${className} text-foreground`} aria-hidden />;
+  }
+
+  // Full-colour mark with its own fills; nothing to theme.
+  if (slug === "redis") {
+    return <Redis className={className} aria-hidden />;
   }
 
   const icon = SIMPLE[slug];
