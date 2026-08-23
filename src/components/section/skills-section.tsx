@@ -12,13 +12,15 @@ export default function SkillsSection() {
   return (
     <div className="flex flex-wrap gap-2">
       {coreStack.map((tech) => (
-        <span
+        <div
           key={tech.slug}
-          className="inline-flex h-8 items-center gap-2 rounded-xl border border-border bg-background px-3 text-sm font-medium ring-2 ring-border/20"
+          className="border bg-background border-border ring-2 ring-border/20 rounded-xl h-8 w-fit px-4 flex items-center gap-2"
         >
           <TechIcon slug={tech.slug} />
-          {tech.name}
-        </span>
+          <span className="text-foreground text-sm font-medium">
+            {tech.name}
+          </span>
+        </div>
       ))}
     </div>
   );

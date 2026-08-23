@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,7 +7,7 @@ import EducationSection from "@/components/section/education-section";
 import ExperienceSection from "@/components/section/experience-section";
 import SelectedWorkSection from "@/components/section/selected-work-section";
 import SkillsSection from "@/components/section/skills-section";
-import WhatIBuildSection from "@/components/section/what-i-build-section";
+import AboutSection from "@/components/section/about-section";
 import { profile } from "@/lib/content";
 
 const DELAY = 0.04;
@@ -31,7 +29,7 @@ function Section({
       <div className="flex min-h-0 flex-col gap-y-5">
         {title ? (
           <BlurFade delay={delay}>
-            <h2 className="text-xl font-bold tracking-tight">{title}</h2>
+            <h2 className="text-xl font-bold">{title}</h2>
           </BlurFade>
         ) : null}
         <BlurFade delay={delay + DELAY}>{children}</BlurFade>
@@ -61,27 +59,10 @@ export default function Page() {
                 </p>
               </BlurFade>
               <BlurFadeText
-                className="max-w-[520px] text-muted-foreground md:text-lg"
+                className="text-muted-foreground max-w-[600px] md:text-lg lg:text-xl"
                 delay={DELAY * 2}
                 text={profile.positioning}
               />
-              <BlurFade delay={DELAY * 3}>
-                <div className="flex flex-wrap gap-2 pt-2">
-                  <Link
-                    href="#work"
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-                  >
-                    Explore my work
-                    <ArrowRight className="size-3.5" aria-hidden />
-                  </Link>
-                  <Link
-                    href="/blogs"
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium transition-colors hover:bg-accent"
-                  >
-                    Read my writing
-                  </Link>
-                </div>
-              </BlurFade>
             </div>
             <BlurFade delay={DELAY} className="order-1 md:order-2">
               <Avatar className="size-24 rounded-full border shadow-lg ring-4 ring-muted md:size-32">
@@ -93,15 +74,15 @@ export default function Page() {
         </div>
       </section>
 
-      <Section id="what-i-build" title="What I Build" delay={DELAY * 5}>
-        <WhatIBuildSection />
+      <Section id="about" title="About" delay={DELAY * 5}>
+        <AboutSection />
       </Section>
 
       <Section id="experience" title="Experience" delay={DELAY * 7}>
         <ExperienceSection />
       </Section>
 
-      <Section id="work" title="Selected Work" delay={DELAY * 9}>
+      <Section id="projects" title="Projects" delay={DELAY * 9}>
         <SelectedWorkSection />
       </Section>
 

@@ -72,17 +72,17 @@ export default async function WorkPage({
 
       <BlurFade delay={DELAY}>
         <Link
-          href="/#work"
+          href="/#projects"
           className="group mb-2 inline-flex w-fit items-center gap-1.5 rounded-lg border border-border px-2 py-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
-          Selected Work
+          Projects
         </Link>
       </BlurFade>
 
       <BlurFade delay={DELAY * 2}>
         <header className="flex flex-col gap-4">
-          <h1 className="text-3xl font-semibold tracking-tighter sm:text-4xl">
+          <h1 className="title font-semibold text-3xl md:text-4xl tracking-tighter leading-tight">
             {project.shortTitle}
           </h1>
           <p className="text-pretty text-lg leading-relaxed text-muted-foreground">
@@ -101,7 +101,7 @@ export default async function WorkPage({
 
       <BlurFade delay={DELAY * 3}>
         <section className="flex flex-col gap-4">
-          <h2 className="text-xl font-bold tracking-tight">What I built</h2>
+          <h2 className="text-xl font-bold">What I built</h2>
           <ul className="flex flex-col gap-3">
             {project.highlights.map((highlight) => (
               <li
@@ -117,7 +117,7 @@ export default async function WorkPage({
 
       <BlurFade delay={DELAY * 4}>
         <section className="flex flex-col gap-4">
-          <h2 className="text-xl font-bold tracking-tight">Stack</h2>
+          <h2 className="text-xl font-bold">Stack</h2>
           <div className="flex flex-wrap gap-2">
             {project.technologies.map((tech) => (
               <Badge key={tech} variant="secondary">

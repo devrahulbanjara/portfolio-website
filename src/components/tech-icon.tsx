@@ -13,7 +13,6 @@ import {
   siPython,
   siPytorch,
   siQdrant,
-  siScikitlearn,
   siTensorflow,
 } from "simple-icons";
 
@@ -35,7 +34,6 @@ const SIMPLE = {
   python: siPython,
   pytorch: siPytorch,
   tensorflow: siTensorflow,
-  scikitlearn: siScikitlearn,
   huggingface: siHuggingface,
   fastapi: siFastapi,
   postgresql: siPostgresql,
@@ -46,7 +44,12 @@ const SIMPLE = {
   qdrant: siQdrant,
 } as const;
 
-export type TechSlug = keyof typeof SIMPLE | "aws" | "langchain" | "redis";
+export type TechSlug =
+  | keyof typeof SIMPLE
+  | "aws"
+  | "scikitlearn"
+  | "langchain"
+  | "redis";
 
 export function TechIcon({
   slug,
@@ -55,9 +58,17 @@ export function TechIcon({
   slug: TechSlug;
   className?: string;
 }) {
-  if (slug === "aws") {
+  // Wordmark logos: constrain HEIGHT and let width follow, or they squash.
+  // AWS is ~3:1 and scikit-learn ~1.85:1, so neither fits a square slot.
+  if (slug === "aws" || slug === "scikitlearn") {
+    const file = slug === "aws" ? "aws.svg" : "scikit-learn.svg";
     return (
-      <img src="/logos/aws.svg" alt="" aria-hidden className={className} />
+      <img
+        src={`/logos/${file}`}
+        alt=""
+        aria-hidden
+        className={`${className} w-auto`}
+      />
     );
   }
 

@@ -64,14 +64,6 @@ export interface Experience {
   technologies: readonly string[];
 }
 
-export interface SkillGroup {
-  /** e.g. "Generative AI" */
-  title: string;
-  /** One line on what this capability actually delivers. */
-  summary: string;
-  items: readonly string[];
-}
-
 export interface ProjectLink {
   kind: "repository" | "live" | "article" | "model";
   label: string;
