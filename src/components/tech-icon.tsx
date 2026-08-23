@@ -15,6 +15,7 @@ import {
   siPytorch,
   siQdrant,
   siTensorflow,
+  siTypescript,
 } from "simple-icons";
 
 /**
@@ -35,6 +36,7 @@ const SIMPLE = {
   python: siPython,
   pytorch: siPytorch,
   tensorflow: siTensorflow,
+  typescript: siTypescript,
   huggingface: siHuggingface,
   fastapi: siFastapi,
   postgresql: siPostgresql,

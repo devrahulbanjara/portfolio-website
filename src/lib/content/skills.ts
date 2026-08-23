@@ -10,6 +10,7 @@ import type { TechSlug } from "@/components/tech-icon";
  */
 export const coreStack: readonly { name: string; slug: TechSlug }[] = [
   { name: "Python", slug: "python" },
+  { name: "TypeScript", slug: "typescript" },
   { name: "PyTorch", slug: "pytorch" },
   { name: "TensorFlow", slug: "tensorflow" },
   { name: "scikit-learn", slug: "scikitlearn" },
