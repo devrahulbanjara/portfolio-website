@@ -12,14 +12,14 @@ import type { Experience } from "./types";
 export const experience: readonly Experience[] = [
   {
     slug: "adex-international",
-    role: "Associate AI/ML Engineer",
+    role: "Junior AI/ML Engineer",
     organization: "Adex International",
     period: "June 2025 – Present",
     startedAt: "2025-06-01",
     endedAt: null,
     logoUrl: "/logos/adex-international.png",
     highlights: [
-      "Built a predictive, explainable churn-prevention platform for a managed service provider client (10K+ client companies) that saved the client over $100K/year by catching churn early — 45 engineered features from Presto/Iceberg data, per-customer SHAP explainability, and DoWhy causal inference to recommend retention interventions, served via an Auth0-secured dashboard",
+      "Built a predictive, explainable churn-prevention platform for a managed service provider client (10K+ client companies) that saved the client over $100K/year by catching churn early — created trend based monthly features from Presto/Iceberg data, per-customer SHAP explainability, and DoWhy causal inference to recommend retention interventions, served via an Auth0-secured dashboard",
       "Built a healthcare RAG system for doctors and patients: deployed MedGemma on SageMaker with Bedrock Knowledge Bases using query decomposition and reranking to cut missed and hallucinated details, with dual response personas for clinical and plain-language audiences, validated with practicing physicians",
       "Shipped an OCR pipeline preserving multi-column layout by combining layout analysis, OCR, and a vision-language model for post-processing, reconstructing documents with correct structure and reading order",
       "Built an internal AWS cost-tracking dashboard over Athena queries against terabytes of CloudTrail logs, grouping resources by project, department, and compliance tags to cut wasted AWS spend and give finance a clear cost-allocation view",

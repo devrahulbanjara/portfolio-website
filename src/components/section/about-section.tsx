@@ -22,9 +22,9 @@ export default function AboutSection() {
     <p className="text-pretty font-sans leading-relaxed text-muted-foreground">
       I build end-to-end AI systems across healthcare and enterprise —
       generative and agentic AI, machine learning, and full MLOps lifecycles on
-      AWS. Right now I&apos;m an{" "}
+      AWS. Right now I&apos;m a{" "}
       <Link href="#experience" className={LINK}>
-        Associate AI/ML Engineer at Adex International
+        Junior AI/ML Engineer at Adex International
       </Link>
       , where I&apos;ve shipped a churn-prevention platform an enterprise acts
       on daily, a clinical retrieval system validated with practising

@@ -1,51 +1,55 @@
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
-import { resolveIcon } from "@/components/icon-registry";
 import { profile } from "@/lib/content";
 
 /**
- * Replaces the template's "shoot me a dm on twitter ... I will ignore all
- * soliciting" copy, which also hard-coupled to a `social.X` key by literal
- * lookup. Rahul has no X account, so that key does not exist - links are now
- * iterated, and adding or removing a platform is a data edit.
+ * Structure matches the upstream template exactly: a bordered panel, a "Contact"
+ * pill straddling its top edge, a flickering grid confined to the TOP HALF and
+ * masked to transparent, then a large centred heading and one balanced
+ * paragraph.
+ *
+ * Differences from upstream, both forced by content rather than taste:
+ *   - upstream links to X for DMs; Rahul has no X account, so the call to
+ *     action is email
+ *   - upstream's copy ends "I will ignore all soliciting", which is Dillion's
+ *     voice, not Rahul's
+ *
+ * The social icons this section used to carry are gone: they already live in the
+ * dock, and upstream does not repeat them here.
  */
 export default function ContactSection() {
   return (
-    <div className="relative overflow-hidden rounded-xl border border-border/70">
-      <FlickeringGrid
-        className="absolute inset-0 z-0 [mask-image:radial-gradient(400px_circle_at_center,white,transparent)]"
-        squareSize={3}
-        gridGap={6}
-        color="#6B7280"
-        maxOpacity={0.28}
-        flickerChance={0.08}
-      />
+    <div className="border rounded-xl p-10 relative">
+      <div className="absolute -top-4 border bg-primary z-10 rounded-xl px-4 py-1 left-1/2 -translate-x-1/2">
+        <span className="text-background text-sm font-medium">Contact</span>
+      </div>
 
-      <div className="relative z-10 flex flex-col items-center gap-4 px-6 py-14 text-center">
-        <h2 className="text-2xl font-semibold tracking-tighter sm:text-3xl">
-          Get in touch
+      <div className="absolute inset-0 top-0 left-0 right-0 h-1/2 rounded-xl overflow-hidden">
+        <FlickeringGrid
+          className="h-full w-full"
+          squareSize={2}
+          gridGap={2}
+          style={{
+            maskImage: "linear-gradient(to bottom, black, transparent)",
+            WebkitMaskImage: "linear-gradient(to bottom, black, transparent)",
+          }}
+        />
+      </div>
+
+      <div className="relative flex flex-col items-center gap-4 text-center">
+        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+          Get in Touch
         </h2>
-        <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-          Open to conversations about production AI systems, ML engineering, and
-          teaching. The fastest way to reach me is email.
+        <p className="mx-auto max-w-lg text-muted-foreground text-balance">
+          Want to chat? Send me{" "}
+          <a
+            href={`mailto:${profile.email}`}
+            className="text-blue-500 hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+          >
+            an email
+          </a>{" "}
+          and I&apos;ll get back to you whenever I can. Always glad to talk
+          about production AI systems, ML engineering, or teaching.
         </p>
-
-        <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-          {profile.social.map((link) => {
-            const Icon = resolveIcon(link.icon);
-            return (
-              <a
-                key={link.name}
-                href={link.url}
-                target={link.url.startsWith("mailto:") ? undefined : "_blank"}
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg border border-border/70 bg-background/80 px-3 py-2 text-sm backdrop-blur transition-colors hover:bg-accent"
-              >
-                <Icon className="size-4" />
-                {link.name}
-              </a>
-            );
-          })}
-        </div>
       </div>
     </div>
   );

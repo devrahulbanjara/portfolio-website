@@ -51,13 +51,6 @@ export default function Page() {
                 yOffset={8}
                 text={`Hi, I'm ${profile.name.split(" ")[0]}`}
               />
-              {/* Role, then one positioning line. The brief asks for both; the
-                  previous version had a paragraph and no role at all. */}
-              <BlurFade delay={DELAY * 1.5}>
-                <p className="text-sm font-medium tracking-wide text-brand">
-                  {profile.headline}
-                </p>
-              </BlurFade>
               <BlurFadeText
                 className="text-muted-foreground max-w-[600px] md:text-lg lg:text-xl"
                 delay={DELAY * 2}
