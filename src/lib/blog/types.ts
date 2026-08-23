@@ -5,9 +5,10 @@
  * GraphQL fragment, or SDK type may appear above src/lib/blog.
  *
  * The boundary is not indecision about the CMS - Hashnode is committed. It
- * exists because Hashnode Pro is a paid external dependency and a single point
- * of failure, so there has to be one place where caching, mapping, and
- * fallback live.
+ * exists because Hashnode is an external dependency and a single point of
+ * failure, so there has to be one place where caching, mapping, and fallback
+ * live. It has already earned itself once: the read path moved from the
+ * Pro-gated GraphQL API to the free RSS feed without a single change above it.
  */
 
 export interface Author {
@@ -41,14 +42,14 @@ export interface BlogPost {
   subtitle: string | null;
   /** Short summary used for cards, meta description, and OG cards. */
   brief: string;
-  /** Post body as Markdown. */
+  /** Post body as Markdown, converted from the feed's HTML. */
   markdown: string;
   /** ISO 8601. */
   publishedAt: string;
   /** ISO 8601, or null when never edited. */
   updatedAt: string | null;
   readingTimeMinutes: number;
-  /** Absolute URL, or null. Hashnode returns absolute URLs on its own CDN. */
+  /** Absolute URL, or null. Hashnode serves these from its own CDN. */
   coverImage: string | null;
   author: Author;
   tags: readonly Tag[];
@@ -60,11 +61,11 @@ export interface BlogPost {
 export type BlogPostSummary = Omit<BlogPost, "markdown">;
 
 /** Where a given result came from, for logging and degraded-state UI. */
-export type BlogSource = "hashnode" | "snapshot";
+export type BlogSource = "feed" | "snapshot";
 
 export interface BlogResult<T> {
   data: T;
   source: BlogSource;
-  /** Set when Hashnode was attempted and failed. */
+  /** Set when the live feed was attempted and failed. */
   error?: string;
 }

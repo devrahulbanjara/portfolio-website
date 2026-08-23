@@ -30,7 +30,7 @@ export default async function BlogsPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: pageParam } = await searchParams;
-  const { data: posts, source } = await listPosts();
+  const { data: posts, error } = await listPosts();
 
   const totalPages = Math.max(1, Math.ceil(posts.length / PAGE_SIZE));
   const currentPage = normalizePage(pageParam, totalPages);
@@ -136,7 +136,10 @@ export default async function BlogsPage({
         <BlurFade delay={DELAY * 2}>
           <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-border px-4 py-12">
             <p className="text-center text-muted-foreground">
-              {source === "snapshot"
+              {/* `error` is set only when a configured feed was reached for
+                  and failed. No feed configured yet, or a feed with no posts,
+                  is not a degraded state - it just has nothing to show. */}
+              {error
                 ? "Posts are temporarily unavailable. Please check back shortly."
                 : "No posts yet. Check back soon."}
             </p>

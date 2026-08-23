@@ -1,13 +1,8 @@
 import "server-only";
 
-import { HashnodeError, getPublicationHost, hashnodeRequest } from "./hashnode/client";
-import { POSTS_QUERY, POST_QUERY } from "./hashnode/queries";
-import { type HashnodePostNode, toPost, toSummary } from "./hashnode/map";
-import {
-  snapshotIsEmpty,
-  snapshotPost,
-  snapshotSummaries,
-} from "./snapshot";
+import { profile } from "@/lib/content";
+import { BlogFeedError, type FeedOptions, fetchFeed } from "./hashnode/rss";
+import { snapshotIsEmpty, snapshotPost, snapshotSummaries } from "./snapshot";
 import type { BlogPost, BlogPostSummary, BlogResult, Tag } from "./types";
 
 export type { BlogPost, BlogPostSummary, BlogResult, Tag } from "./types";
@@ -17,118 +12,106 @@ export type { BlogPost, BlogPostSummary, BlogResult, Tag } from "./types";
  *
  * Every function returns a BlogResult carrying which source answered, so pages
  * can render a degraded-state notice and logs can distinguish "no posts" from
- * "Hashnode unavailable". See ./snapshot for why the fallback is committed.
+ * "the feed is unreachable". See ./snapshot for why the fallback is committed.
+ *
+ * The feed is one request that returns full post bodies, so there is no
+ * separate per-post fetch: getPost filters the same cached response listPosts
+ * uses. Next dedupes it within a render pass and caches it across requests.
  */
 
-/** Posts change rarely; the webhook handles freshness. */
-const REVALIDATE_SECONDS = 3600;
-const PAGE_SIZE = 20;
-/** Guards against an unbounded loop if pageInfo ever misbehaves. */
-const MAX_PAGES = 25;
+/**
+ * Ten minutes. The GraphQL path could rely on a publish webhook for instant
+ * freshness; the free RSS path has no webhook, so the timer IS the freshness
+ * mechanism and an hour would be too long to wait for a new post.
+ */
+const REVALIDATE_SECONDS = 600;
+
+function feedOptions(): FeedOptions | null {
+  const host = process.env.HASHNODE_PUBLICATION_HOST?.trim();
+  if (!host) return null;
+
+  return {
+    host,
+    siteUrl: profile.siteUrl,
+    author: {
+      name: profile.name,
+      username: "devrahulbanjara",
+      profilePicture: profile.avatarUrl,
+    },
+  };
+}
 
 function logFallback(scope: string, error: unknown) {
   const message =
-    error instanceof HashnodeError
+    error instanceof BlogFeedError
       ? `${error.kind}: ${error.message}`
       : String(error);
-  // Loud on purpose. Serving stale content silently is how a lapsed
-  // subscription goes unnoticed for weeks.
+  // Loud on purpose. Serving stale content silently is how a broken feed goes
+  // unnoticed for weeks.
   console.warn(`[blog] ${scope} falling back to snapshot -> ${message}`);
 }
 
-interface PostsResponse {
-  publication: {
-    posts: {
-      edges: { node: HashnodePostNode }[];
-      pageInfo: { hasNextPage: boolean; endCursor: string | null };
-    };
-  } | null;
-}
+async function loadPosts(): Promise<BlogResult<BlogPost[]>> {
+  const options = feedOptions();
 
-async function fetchAllFromHashnode(): Promise<HashnodePostNode[]> {
-  const host = getPublicationHost();
-  if (!host) throw new HashnodeError("Publication host not set", "unconfigured");
-
-  const nodes: HashnodePostNode[] = [];
-  let after: string | null = null;
-
-  for (let page = 0; page < MAX_PAGES; page += 1) {
-    const data: PostsResponse = await hashnodeRequest<PostsResponse>(
-      POSTS_QUERY,
-      { host, first: PAGE_SIZE, after },
-      REVALIDATE_SECONDS,
-    );
-
-    if (!data.publication) {
-      throw new HashnodeError(
-        `No publication found for host "${host}"`,
-        "graphql",
-      );
-    }
-
-    nodes.push(...data.publication.posts.edges.map((e) => e.node));
-
-    const { hasNextPage, endCursor } = data.publication.posts.pageInfo;
-    if (!hasNextPage || !endCursor) break;
-    after = endCursor;
+  if (!options) {
+    // Not an error worth shouting about: this is the state before the blog is
+    // configured at all.
+    return { data: [], source: "snapshot" };
   }
 
-  return nodes;
-}
-
-/**
- * All posts, newest first, without bodies.
- *
- * Fetch-all rather than cursor-paging the UI: at current volume it is one or
- * two requests, it makes local pagination and tag filtering trivial, and it is
- * what lets the snapshot be a complete mirror. Revisit past ~100 posts.
- */
-export async function listPosts(): Promise<BlogResult<BlogPostSummary[]>> {
   try {
-    const nodes = await fetchAllFromHashnode();
-    const data = nodes
-      .map(toSummary)
-      .sort((a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt));
-    return { data, source: "hashnode" };
-  } catch (error) {
-    logFallback("listPosts", error);
     return {
-      data: snapshotSummaries().sort(
-        (a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt),
-      ),
+      data: await fetchFeed(options, REVALIDATE_SECONDS),
+      source: "feed",
+    };
+  } catch (error) {
+    logFallback("loadPosts", error);
+    return {
+      data: [],
       source: "snapshot",
       error: error instanceof Error ? error.message : String(error),
     };
   }
 }
 
-interface PostResponse {
-  publication: { post: HashnodePostNode | null } | null;
+/**
+ * Merges the live feed over the snapshot.
+ *
+ * The feed holds only the 20 most recent posts. Once there are more than that,
+ * the older ones exist ONLY in the committed snapshot - so the two must be
+ * unioned, not chosen between. Live wins on slug collision, since it reflects
+ * any edit made since the snapshot was taken.
+ */
+function mergeWithSnapshot(live: BlogPost[]): BlogPostSummary[] {
+  const bySlug = new Map<string, BlogPostSummary>();
+  for (const post of snapshotSummaries()) bySlug.set(post.slug, post);
+  for (const post of live) {
+    const { markdown: _markdown, ...summary } = post;
+    bySlug.set(post.slug, summary);
+  }
+  return [...bySlug.values()].sort(
+    (a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt),
+  );
+}
+
+/** All known posts, newest first, without bodies. */
+export async function listPosts(): Promise<BlogResult<BlogPostSummary[]>> {
+  const { data, source, error } = await loadPosts();
+  return { data: mergeWithSnapshot(data), source, error };
 }
 
 /** One post with its body, or null when the slug does not exist anywhere. */
 export async function getPost(
   slug: string,
 ): Promise<BlogResult<BlogPost | null>> {
-  const host = getPublicationHost();
+  const { data, source, error } = await loadPosts();
+  const live = data.find((post) => post.slug === slug);
+  if (live) return { data: live, source };
 
-  if (host) {
-    try {
-      const data = await hashnodeRequest<PostResponse>(
-        POST_QUERY,
-        { host, slug },
-        REVALIDATE_SECONDS,
-      );
-      const node = data.publication?.post ?? null;
-      if (node) return { data: toPost(node), source: "hashnode" };
-      // Reached Hashnode successfully and it genuinely has no such post. Still
-      // check the snapshot: a post could have been unpublished by accident.
-    } catch (error) {
-      logFallback(`getPost(${slug})`, error);
-    }
-  }
-
-  return { data: snapshotPost(slug), source: "snapshot" };
+  // Either the feed is unreachable, or the post has aged out of its 20 items.
+  // Both are exactly what the snapshot is for.
+  return { data: snapshotPost(slug), source: "snapshot", error };
 }
 
 /**
@@ -189,7 +172,8 @@ export async function listPostsByTag(
  * Related posts, scored by tag and series overlap.
  *
  * Ported from the previous site's blog-utils, which used shared tag x2 and same
- * category +5. Series is the closest analogue to category here.
+ * category +5. Series is the closest analogue to category - though the RSS feed
+ * never sets it, so in practice only the tag score fires today.
  */
 export async function listRelatedPosts(
   post: BlogPost,
@@ -205,7 +189,8 @@ export async function listRelatedPosts(
         (acc, tag) => acc + (tagSlugs.has(tag.slug) ? 2 : 0),
         0,
       );
-      if (post.series && candidate.series?.slug === post.series.slug) score += 5;
+      if (post.series && candidate.series?.slug === post.series.slug)
+        score += 5;
       return { candidate, score };
     })
     .filter(({ score }) => score > 0)
