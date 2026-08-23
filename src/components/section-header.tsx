@@ -9,6 +9,10 @@
  *
  * Sections that use this header are rendered WITHOUT a `title` in page.tsx;
  * otherwise the page shows a left-aligned `h2` above this one.
+ *
+ * The subtitle is OPTIONAL and the default is to omit it. A subtitle that only
+ * paraphrases the rows underneath is padding, and worse, it reads as boasting.
+ * Pass one only when it tells the reader something the section itself cannot.
  */
 export default function SectionHeader({
   pill,
@@ -18,8 +22,8 @@ export default function SectionHeader({
   /** Short label for the pill, e.g. "My Projects". */
   pill: string;
   heading: string;
-  /** Subtitle prose. */
-  children: React.ReactNode;
+  /** Optional subtitle prose. Omit unless it earns its place. */
+  children?: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-y-4">
@@ -34,9 +38,11 @@ export default function SectionHeader({
         <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
           {heading}
         </h2>
-        <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed text-balance text-center">
-          {children}
-        </p>
+        {children ? (
+          <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed text-balance text-center">
+            {children}
+          </p>
+        ) : null}
       </div>
     </div>
   );

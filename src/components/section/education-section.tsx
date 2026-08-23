@@ -10,9 +10,8 @@ import { activities, education } from "@/lib/content";
  * role in Experience.
  *
  * Uses the shared centred SectionHeader, so page.tsx renders this section
- * without a `title`. The subtitle names the two halves the entries below cover -
- * the degree and the community leadership - since one heading has to introduce
- * both.
+ * without a `title`. No subtitle: the heading already covers both halves, and a
+ * paragraph restating the entries below is padding.
  */
 export default function EducationSection() {
   const entries = [
@@ -39,11 +38,7 @@ export default function EducationSection() {
       <SectionHeader
         pill="Education & Community"
         heading="Where I learned, and where I teach"
-      >
-        A Computer Science degree in Kathmandu, alongside leading a student AI
-        community — running events and teaching workshops to 100+ students a
-        session.
-      </SectionHeader>
+      />
 
       <div className="flex flex-col gap-6">
         {entries.map((entry) => (

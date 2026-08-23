@@ -10,16 +10,16 @@ import { certifications } from "@/lib/content";
  * that matters, and a wall of certificate JPEGs reads as padding.
  *
  * Uses the shared centred SectionHeader, so page.tsx renders this section
- * without a `title`. The subtitle points at the verification links rather than
- * restating the certificate names listed directly below it.
+ * without a `title`. No subtitle: anything said there would just paraphrase the
+ * three rows below it.
  */
 export default function CredentialsSection() {
   return (
     <div className="flex flex-col gap-10">
-      <SectionHeader pill="Certifications" heading="Credentials you can check">
-        AWS, NVIDIA, and Fusemachines certifications behind the AI and ML work.
-        Every one links straight to its official verification page.
-      </SectionHeader>
+      <SectionHeader
+        pill="Certifications"
+        heading="Credentials you can check"
+      />
 
       <ul className="flex flex-col gap-3">
         {certifications.map((cert) => (
