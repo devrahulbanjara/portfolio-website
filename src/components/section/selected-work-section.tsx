@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import ProjectLinkBadge from "@/components/project-link-badge";
 import { archiveProjects, flagshipProjects } from "@/lib/content";
 
 /**
@@ -20,7 +21,7 @@ export default function SelectedWorkSection() {
           const href = project.hasCaseStudy ? `/work/${project.slug}` : null;
 
           const card = (
-            <article className="flex flex-col gap-3 rounded-xl border border-border/70 bg-card p-5 transition-colors hover:border-border">
+            <article className="flex flex-col gap-3 rounded-xl border border-border/70 bg-card p-5 transition-colors group-hover:border-brand/40">
               <div className="flex items-start justify-between gap-3">
                 <h3 className="font-semibold leading-tight tracking-tight">
                   {project.shortTitle}
@@ -50,14 +51,9 @@ export default function SelectedWorkSection() {
               </div>
 
               {project.links.length > 0 ? (
-                <div className="flex flex-wrap gap-3 pt-1">
+                <div className="flex flex-wrap gap-2 pt-1">
                   {project.links.map((link) => (
-                    <span
-                      key={link.url}
-                      className="text-xs text-muted-foreground underline underline-offset-4"
-                    >
-                      {link.label}
-                    </span>
+                    <ProjectLinkBadge key={link.url} link={link} />
                   ))}
                 </div>
               ) : null}
@@ -91,16 +87,7 @@ export default function SelectedWorkSection() {
                   <span className="text-muted-foreground">
                     {project.summary}
                   </span>
-                  {primary ? (
-                    <a
-                      href={primary.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-muted-foreground underline underline-offset-4"
-                    >
-                      {primary.label}
-                    </a>
-                  ) : null}
+                  {primary ? <ProjectLinkBadge link={primary} /> : null}
                 </li>
               );
             })}

@@ -30,7 +30,7 @@ export const projects: readonly Project[] = [
     links: [
       {
         kind: "repository",
-        label: "Repository",
+        label: "GitHub",
         url: "https://github.com/devrahulbanjara/nirantar",
       },
     ],
@@ -61,7 +61,7 @@ export const projects: readonly Project[] = [
     links: [
       {
         kind: "repository",
-        label: "Repository",
+        label: "GitHub",
         url: "https://github.com/devrahulbanjara/ConvexHire",
       },
     ],
@@ -110,7 +110,7 @@ export const projects: readonly Project[] = [
     links: [
       {
         kind: "model",
-        label: "Model on Hugging Face",
+        label: "Hugging Face",
         url: "https://huggingface.co/devrahulbanjara/whisper-small-nepali",
       },
     ],

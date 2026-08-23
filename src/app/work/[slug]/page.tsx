@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import BlurFade from "@/components/magicui/blur-fade";
 import { Badge } from "@/components/ui/badge";
+import ProjectLinkBadge from "@/components/project-link-badge";
 import { caseStudyProjects, profile, projects } from "@/lib/content";
 
 const DELAY = 0.04;
@@ -91,16 +92,7 @@ export default async function WorkPage({
           {project.links.length > 0 ? (
             <div className="flex flex-wrap gap-2 pt-1">
               {project.links.map((link) => (
-                <a
-                  key={link.url}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm transition-colors hover:bg-accent"
-                >
-                  {link.label}
-                  <ArrowUpRight className="size-3.5" aria-hidden />
-                </a>
+                <ProjectLinkBadge key={link.url} link={link} />
               ))}
             </div>
           ) : null}

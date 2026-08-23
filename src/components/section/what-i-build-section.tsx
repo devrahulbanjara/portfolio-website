@@ -12,7 +12,7 @@ export default function WhatIBuildSection() {
     <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
       {skillGroups.map((group) => (
         <div key={group.title} className="flex flex-col gap-2">
-          <h3 className="text-sm font-semibold tracking-tight">
+          <h3 className="text-sm font-semibold tracking-tight text-brand">
             {group.title}
           </h3>
           <p className="text-sm leading-relaxed text-muted-foreground">
