@@ -21,7 +21,12 @@ export default function SectionHeader({
 }: {
   /** Short label for the pill, e.g. "My Projects". */
   pill: string;
-  heading: string;
+  /**
+   * Optional. With no heading and no subtitle the header is just the pill on its
+   * rule, which is the right amount of chrome for a section whose rows already
+   * say what they are.
+   */
+  heading?: string;
   /** Optional subtitle prose. Omit unless it earns its place. */
   children?: React.ReactNode;
 }) {
@@ -34,16 +39,20 @@ export default function SectionHeader({
         </div>
         <div className="h-px flex-1 bg-linear-to-l from-transparent from-5% via-border via-95% to-transparent" />
       </div>
-      <div className="flex flex-col items-center justify-center gap-y-3">
-        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-          {heading}
-        </h2>
-        {children ? (
-          <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed text-balance text-center">
-            {children}
-          </p>
-        ) : null}
-      </div>
+      {heading || children ? (
+        <div className="flex flex-col items-center justify-center gap-y-3">
+          {heading ? (
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+              {heading}
+            </h2>
+          ) : null}
+          {children ? (
+            <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed text-balance text-center">
+              {children}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

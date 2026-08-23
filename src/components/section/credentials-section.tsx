@@ -4,19 +4,10 @@ import SectionHeader from "@/components/section-header";
 import { initialsOf } from "@/lib/utils";
 import { certifications } from "@/lib/content";
 
-/**
- * Compact credential rows, per the brief: issuer, name, year, verification link.
- * Deliberately no large certificate images - the verification link is the proof
- * that matters, and a wall of certificate JPEGs reads as padding.
- *
- * Uses the shared centred SectionHeader, so page.tsx renders this section
- * without a `title`. No subtitle: anything said there would just paraphrase the
- * three rows below it.
- */
 export default function CredentialsSection() {
   return (
     <div className="flex flex-col gap-10">
-      <SectionHeader pill="Credentials" heading="Certifications" />
+      <SectionHeader pill="Certifications" />
 
       <ul className="flex flex-col gap-3">
         {certifications.map((cert) => (

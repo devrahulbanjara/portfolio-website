@@ -1,3 +1,5 @@
+"use client";
+
 import type { ComponentType } from "react";
 import { ExternalLink, FileText, Globe } from "lucide-react";
 import { GitHubMark, HuggingFaceLogo } from "@/components/brand-marks";
@@ -43,7 +45,19 @@ const STYLES: Record<ProjectLink["kind"], Style> = {
   },
 };
 
-export default function ProjectLinkBadge({ link }: { link: ProjectLink }) {
+export default function ProjectLinkBadge({
+  link,
+  variant = "brand",
+}: {
+  link: ProjectLink;
+  /**
+   * "overlay" is for badges sitting ON a project screenshot. There they all go
+   * solid black, as upstream does: over arbitrary imagery, per-platform brand
+   * colours stop being a legibility win and start fighting the picture. The
+   * mark still identifies the destination.
+   */
+  variant?: "brand" | "overlay";
+}) {
   const style = STYLES[link.kind] ?? STYLES.article;
   const Mark = style.mark;
 
@@ -53,15 +67,21 @@ export default function ProjectLinkBadge({ link }: { link: ProjectLink }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`${link.label} (opens in a new tab)`}
+      // Stop the click bubbling to the card's own link underneath.
+      onClick={(event) => event.stopPropagation()}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition-colors",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        style.className,
+        variant === "overlay"
+          ? "bg-black text-white hover:bg-black/90"
+          : style.className,
       )}
     >
       <Mark className="size-3.5" />
       {link.label}
-      <ExternalLink className="size-3 opacity-60" aria-hidden />
+      {variant === "brand" ? (
+        <ExternalLink className="size-3 opacity-60" aria-hidden />
+      ) : null}
     </a>
   );
 }

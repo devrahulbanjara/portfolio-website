@@ -3,16 +3,6 @@ import SectionHeader from "@/components/section-header";
 import { initialsOf } from "@/lib/utils";
 import { activities, education } from "@/lib/content";
 
-/**
- * Education and community leadership share a section: both are "how Rahul
- * learned and taught", and neither warrants a full section of its own on the
- * homepage. Detail stays compact; the teaching story is carried by the TekBay
- * role in Experience.
- *
- * Uses the shared centred SectionHeader, so page.tsx renders this section
- * without a `title`. No subtitle: the heading already covers both halves, and a
- * paragraph restating the entries below is padding.
- */
 export default function EducationSection() {
   const entries = [
     ...education.map((e) => ({
@@ -36,8 +26,7 @@ export default function EducationSection() {
   return (
     <div className="flex flex-col gap-10">
       <SectionHeader
-        pill="Education & Community"
-        heading="Where I learned, and where I teach"
+        pill="Education & Community Engagement"
       />
 
       <div className="flex flex-col gap-6">

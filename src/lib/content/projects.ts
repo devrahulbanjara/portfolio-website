@@ -8,11 +8,15 @@ import type { Project } from "./types";
  * ./experience.ts. Publishing it as a project would misrepresent ownership and
  * risk client confidentiality.
  *
- * Gaps, tracked rather than papered over:
+ * Gaps, tracked rather than papered over. All are PLACEHOLDERS awaiting Rahul:
  *   - insurance-claim-fraud-detection has no public repository link
  *   - nepali-asr has no repository link (model is public on the Hub)
- *   - no project has a screenshot yet, so imageUrl is null everywhere and cards
- *     must render without one
+ *   - `imageUrl` / `videoUrl` are null everywhere: no capture exists yet, so
+ *     every card shows the muted media block. Drop a file in public/projects
+ *     and point imageUrl at it - see public/projects/README.md
+ *   - `dates` is null everywhere. The previous site did not record project date
+ *     ranges and they must not be guessed, so the date line is simply hidden
+ *     until Rahul fills them in.
  */
 export const projects: readonly Project[] = [
   {
@@ -34,7 +38,9 @@ export const projects: readonly Project[] = [
         url: "https://github.com/devrahulbanjara/nirantar",
       },
     ],
+    dates: null,
     imageUrl: null,
+    videoUrl: null,
     flagship: true,
     hasCaseStudy: true,
   },
@@ -65,14 +71,15 @@ export const projects: readonly Project[] = [
         url: "https://github.com/devrahulbanjara/ConvexHire",
       },
     ],
+    dates: null,
     imageUrl: null,
+    videoUrl: null,
     flagship: true,
     hasCaseStudy: true,
   },
   {
     slug: "insurance-claim-fraud-detection",
-    title:
-      "Insurance Claim Fraud Detection – End-to-End AWS MLOps Pipeline",
+    title: "Insurance Claim Fraud Detection – End-to-End AWS MLOps Pipeline",
     shortTitle: "Insurance Fraud Detection",
     summary:
       "An ingest-to-deployment AWS MLOps pipeline with a model registry, approval gates, and live drift detection.",
@@ -91,7 +98,9 @@ export const projects: readonly Project[] = [
       "CloudFormation",
     ],
     links: [],
+    dates: null,
     imageUrl: null,
+    videoUrl: null,
     flagship: true,
     hasCaseStudy: true,
   },
@@ -114,7 +123,9 @@ export const projects: readonly Project[] = [
         url: "https://huggingface.co/devrahulbanjara/whisper-small-nepali",
       },
     ],
+    dates: null,
     imageUrl: null,
+    videoUrl: null,
     flagship: false,
     hasCaseStudy: false,
   },

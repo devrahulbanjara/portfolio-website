@@ -81,8 +81,19 @@ export interface Project {
   highlights: readonly string[];
   technologies: readonly string[];
   links: readonly ProjectLink[];
-  /** Screenshot or diagram. null renders a typographic card instead. */
+  /**
+   * Human-readable range shown under the card title, e.g. "Jan 2024 - Feb 2024"
+   * or "June 2023 - Present". null hides the line - preferred over guessing,
+   * since a wrong date on a portfolio is worse than no date.
+   */
+  dates: string | null;
+  /**
+   * Card media. Both null renders the muted placeholder block, which is the
+   * intended state until real captures exist. `videoUrl` wins when both are set,
+   * matching the upstream card.
+   */
   imageUrl: string | null;
+  videoUrl: string | null;
   /**
    * Flagship projects get large cards on the homepage and a case-study page.
    * Non-flagship projects live in the archive.
