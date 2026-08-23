@@ -1,137 +1,144 @@
-import BlurFade from "@/components/magicui/blur-fade";
-import { allPosts } from "content-collections";
-import Link from "next/link";
 import type { Metadata } from "next";
-import { paginate, normalizePage } from "@/lib/pagination";
+import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import BlurFade from "@/components/magicui/blur-fade";
+import { listPosts } from "@/lib/blog";
+import { normalizePage, paginate } from "@/lib/pagination";
+import { formatDate } from "@/lib/utils";
+
+const DESCRIPTION =
+  "Thoughts on AI engineering, machine learning, and building production systems.";
 
 export const metadata: Metadata = {
-  title: "Blog",
-  description: "Thoughts on AI engineering, machine learning, and building production systems.",
-  openGraph: {
-    title: "Blog",
-    description: "Thoughts on AI engineering, machine learning, and building production systems.",
-  },
+  title: "Writing",
+  description: DESCRIPTION,
+  alternates: { canonical: "/blogs" },
+  openGraph: { title: "Writing", description: DESCRIPTION },
   twitter: {
     card: "summary_large_image",
-    title: "Blog",
-    description: "Thoughts on AI engineering, machine learning, and building production systems.",
+    title: "Writing",
+    description: DESCRIPTION,
   },
 };
 
 const PAGE_SIZE = 5;
-const BLUR_FADE_DELAY = 0.04;
+const DELAY = 0.04;
 
-export default async function BlogPage({
+export default async function BlogsPage({
   searchParams,
 }: {
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: pageParam } = await searchParams;
+  const { data: posts, source } = await listPosts();
 
-  const posts = allPosts;
-  const sortedPosts = [...posts].sort((a, b) => {
-    if (new Date(a.publishedAt) > new Date(b.publishedAt)) {
-      return -1;
-    }
-    return 1;
-  });
-
-  const totalPages = Math.ceil(sortedPosts.length / PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(posts.length / PAGE_SIZE));
   const currentPage = normalizePage(pageParam, totalPages);
-  const { items: paginatedPosts, pagination } = paginate(sortedPosts, {
+  const { items, pagination } = paginate(posts, {
     page: currentPage,
     pageSize: PAGE_SIZE,
   });
 
   return (
     <section id="blog">
-      <BlurFade delay={BLUR_FADE_DELAY}>
-        <h1 className="text-2xl font-semibold tracking-tight mb-2">Blog <span className="ml-1 bg-card border border-border rounded-md px-2 py-1 text-muted-foreground text-sm">{sortedPosts.length} posts</span></h1>
-        <p className="text-sm text-muted-foreground mb-8">
-          My thoughts on software development, life, and more.
-        </p>
+      <BlurFade delay={DELAY}>
+        <h1 className="mb-2 text-2xl font-semibold tracking-tight">
+          Writing
+          {posts.length > 0 ? (
+            <span className="ml-2 rounded-md border border-border bg-card px-2 py-1 align-middle text-sm text-muted-foreground">
+              {posts.length} {posts.length === 1 ? "post" : "posts"}
+            </span>
+          ) : null}
+        </h1>
+        <p className="mb-8 text-sm text-muted-foreground">{DESCRIPTION}</p>
       </BlurFade>
 
-      {paginatedPosts.length > 0 ? (
+      {items.length > 0 ? (
         <>
-          <BlurFade delay={BLUR_FADE_DELAY * 2}>
-            <div className="flex flex-col gap-5">
-              {paginatedPosts.map((post, id) => {
-                const slug = post._meta.path.replace(/\.mdx$/, "");
-                const indexNumber = (pagination.page - 1) * PAGE_SIZE + id + 1;
-                return (
-                  <BlurFade delay={BLUR_FADE_DELAY * 3 + id * 0.05} key={slug}>
-                    <Link
-                      className="flex items-start gap-x-2 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                      href={`/blogs/${slug}`}
-                    >
-                      <span className="text-xs font-mono tabular-nums font-medium mt-[5px]">
-                        {String(indexNumber).padStart(2, "0")}.
-                      </span>
-                      <div className="flex flex-col gap-y-2 flex-1">
-                        <p className="tracking-tight text-lg font-medium">
-                          <span className="group-hover:text-foreground transition-colors">
-                            {post.title}
-                            <ChevronRight
-                              className="ml-1 inline-block size-4 stroke-3 text-muted-foreground opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0"
-                              aria-hidden
-                            />
-                          </span>
+          <div className="flex flex-col gap-5">
+            {items.map((post, index) => {
+              const number = (pagination.page - 1) * PAGE_SIZE + index + 1;
+              return (
+                <BlurFade delay={DELAY * 3 + index * 0.05} key={post.slug}>
+                  <Link
+                    className="group flex cursor-pointer items-start gap-x-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    href={`/blogs/${post.slug}`}
+                  >
+                    <span className="mt-[5px] font-mono text-xs font-medium tabular-nums">
+                      {String(number).padStart(2, "0")}.
+                    </span>
+                    <div className="flex flex-1 flex-col gap-y-1.5">
+                      <p className="text-lg font-medium tracking-tight">
+                        <span className="transition-colors group-hover:text-foreground">
+                          {post.title}
+                          <ChevronRight
+                            className="ml-1 inline-block size-4 -translate-x-2 stroke-3 text-muted-foreground opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
+                            aria-hidden
+                          />
+                        </span>
+                      </p>
+                      {post.brief ? (
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          {post.brief}
                         </p>
-                        <p className="text-xs text-muted-foreground">
-                          {post.publishedAt}
-                        </p>
-                      </div>
-                    </Link>
-                  </BlurFade>
-                );
-              })}
-            </div>
-          </BlurFade>
+                      ) : null}
+                      <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
+                        <time dateTime={post.publishedAt}>
+                          {formatDate(post.publishedAt)}
+                        </time>
+                        <span aria-hidden>·</span>
+                        <span>{post.readingTimeMinutes} min read</span>
+                      </p>
+                    </div>
+                  </Link>
+                </BlurFade>
+              );
+            })}
+          </div>
 
-          {/* Pagination Controls */}
-          {pagination.totalPages > 1 && (
-            <BlurFade delay={BLUR_FADE_DELAY * 4}>
-              <div className="flex gap-3 flex-row items-center justify-between mt-8">
+          {pagination.totalPages > 1 ? (
+            <BlurFade delay={DELAY * 4}>
+              <div className="mt-8 flex flex-row items-center justify-between gap-3">
                 <div className="text-sm text-muted-foreground">
                   Page {pagination.page} of {pagination.totalPages}
                 </div>
                 <div className="flex gap-2 sm:justify-end">
                   {pagination.hasPreviousPage ? (
                     <Link
-                      href={`/blog?page=${pagination.page - 1}`}
-                      className="h-8 w-fit px-2 flex items-center justify-center text-sm border border-border rounded-lg hover:bg-accent/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      href={`/blogs?page=${pagination.page - 1}`}
+                      className="flex h-8 w-fit items-center justify-center rounded-lg border border-border px-2 text-sm transition-colors hover:bg-accent/50"
                     >
                       Previous
                     </Link>
                   ) : (
-                    <span className="h-8 w-fit px-2 flex items-center justify-center text-sm border border-border rounded-lg opacity-50 cursor-not-allowed">
+                    <span className="flex h-8 w-fit cursor-not-allowed items-center justify-center rounded-lg border border-border px-2 text-sm opacity-50">
                       Previous
                     </span>
                   )}
                   {pagination.hasNextPage ? (
                     <Link
-                      href={`/blog?page=${pagination.page + 1}`}
-                      className="h-8 w-fit px-2 flex items-center justify-center text-sm border border-border rounded-lg hover:bg-accent/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      href={`/blogs?page=${pagination.page + 1}`}
+                      className="flex h-8 w-fit items-center justify-center rounded-lg border border-border px-2 text-sm transition-colors hover:bg-accent/50"
                     >
                       Next
                     </Link>
                   ) : (
-                    <span className="h-8 w-fit px-2 flex items-center justify-center text-sm border border-border rounded-lg opacity-50 cursor-not-allowed">
+                    <span className="flex h-8 w-fit cursor-not-allowed items-center justify-center rounded-lg border border-border px-2 text-sm opacity-50">
                       Next
                     </span>
                   )}
                 </div>
               </div>
             </BlurFade>
-          )}
+          ) : null}
         </>
       ) : (
-        <BlurFade delay={BLUR_FADE_DELAY * 2}>
-          <div className="flex flex-col items-center justify-center py-12 px-4 border border-border rounded-xl">
-            <p className="text-muted-foreground text-center">
-              No blog posts yet. Check back soon!
+        <BlurFade delay={DELAY * 2}>
+          <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-border px-4 py-12">
+            <p className="text-center text-muted-foreground">
+              {source === "snapshot"
+                ? "Posts are temporarily unavailable. Please check back shortly."
+                : "No posts yet. Check back soon."}
             </p>
           </div>
         </BlurFade>

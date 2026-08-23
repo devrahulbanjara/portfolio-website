@@ -10,6 +10,8 @@ const eslintConfig = defineConfig([
         'out/**',
         'build/**',
         'next-env.d.ts',
+        // Removed tooling can leave this behind; never lint generated output.
+        '.content-collections/**',
     ]),
 ])
 
