@@ -75,7 +75,10 @@ export default function Page() {
         <ExperienceSection />
       </Section>
 
-      <Section id="projects" title="Projects" delay={DELAY * 9}>
+      {/* No `title` on the next three: each carries its own centred
+          SectionHeader, matching upstream. Passing one too would render a
+          left-aligned h2 directly above it. */}
+      <Section id="projects" delay={DELAY * 9}>
         <SelectedWorkSection />
       </Section>
 
@@ -83,15 +86,11 @@ export default function Page() {
         <SkillsSection />
       </Section>
 
-      <Section id="certifications" title="Certifications" delay={DELAY * 11}>
+      <Section id="certifications" delay={DELAY * 11}>
         <CredentialsSection />
       </Section>
 
-      <Section
-        id="education"
-        title="Education &amp; Community"
-        delay={DELAY * 13}
-      >
+      <Section id="education" delay={DELAY * 13}>
         <EducationSection />
       </Section>
 

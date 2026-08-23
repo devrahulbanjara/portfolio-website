@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import ProjectLinkBadge from "@/components/project-link-badge";
+import SectionHeader from "@/components/section-header";
 import { archiveProjects, flagshipProjects } from "@/lib/content";
 
 /**
@@ -12,10 +13,21 @@ import { archiveProjects, flagshipProjects } from "@/lib/content";
  * that read as intentional rather than as cards with a missing image. When
  * screenshots arrive, `project.imageUrl` becomes non-null and a media slot can
  * be added without restructuring.
+ *
+ * The header uses the shared centred SectionHeader (upstream's markup) rather
+ * than page.tsx's left-aligned `h2`. Only the subtitle copy differs from
+ * upstream: "simple websites to complex web applications" is Dillion's work,
+ * not Rahul's.
  */
 export default function SelectedWorkSection() {
   return (
     <div className="flex flex-col gap-10">
+      <SectionHeader pill="My Projects" heading="Check out my latest work">
+        Production AI systems, research projects, and tools I&apos;ve built end
+        to end — from retrieval and speech to fraud detection. Here are a few of
+        my favorites.
+      </SectionHeader>
+
       <div className="flex flex-col gap-6">
         {flagshipProjects.map((project) => {
           const href = project.hasCaseStudy ? `/work/${project.slug}` : null;
