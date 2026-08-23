@@ -7,15 +7,15 @@ import { ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Thoughts on software development, life, and more.",
+  description: "Thoughts on AI engineering, machine learning, and building production systems.",
   openGraph: {
     title: "Blog",
-    description: "Thoughts on software development, life, and more.",
+    description: "Thoughts on AI engineering, machine learning, and building production systems.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Blog",
-    description: "Thoughts on software development, life, and more.",
+    description: "Thoughts on AI engineering, machine learning, and building production systems.",
   },
 };
 
@@ -64,7 +64,7 @@ export default async function BlogPage({
                   <BlurFade delay={BLUR_FADE_DELAY * 3 + id * 0.05} key={slug}>
                     <Link
                       className="flex items-start gap-x-2 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                      href={`/blog/${slug}`}
+                      href={`/blogs/${slug}`}
                     >
                       <span className="text-xs font-mono tabular-nums font-medium mt-[5px]">
                         {String(indexNumber).padStart(2, "0")}.

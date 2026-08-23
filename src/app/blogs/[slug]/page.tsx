@@ -52,7 +52,7 @@ export async function generateMetadata({
       description,
       type: "article",
       publishedTime,
-      url: `${DATA.url}/blog/${slug}`,
+      url: `${DATA.url}/blogs/${slug}`,
       ...(image && {
         images: [
           {
@@ -105,8 +105,8 @@ export default async function Blog({
     description: post.summary,
     image: post.image
       ? `${DATA.url}${post.image}`
-      : `${DATA.url}/blog/${slug}/opengraph-image`,
-    url: `${DATA.url}/blog/${slug}`,
+      : `${DATA.url}/blogs/${slug}/opengraph-image`,
+    url: `${DATA.url}/blogs/${slug}`,
     author: {
       "@type": "Person",
       name: DATA.name,
@@ -123,7 +123,7 @@ export default async function Blog({
         }}
       />
       <div className="flex justify-start gap-4 items-center">
-        <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors border border-border rounded-lg px-2 py-1 inline-flex items-center gap-1 mb-6 group" aria-label="Back to Blog">
+        <Link href="/blogs" className="text-sm text-muted-foreground hover:text-foreground transition-colors border border-border rounded-lg px-2 py-1 inline-flex items-center gap-1 mb-6 group" aria-label="Back to Blog">
           <ChevronLeft className="size-3 group-hover:-translate-x-px transition-transform" />
           Back to Blog
         </Link>
@@ -155,7 +155,7 @@ export default async function Blog({
         <div className="flex flex-col sm:flex-row justify-between gap-4">
           {previousPost ? (
             <Link
-              href={`/blog/${getSlug(previousPost)}`}
+              href={`/blogs/${getSlug(previousPost)}`}
               className="group flex-1 flex flex-col gap-1 p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors"
             >
               <span className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -172,7 +172,7 @@ export default async function Blog({
 
           {nextPost ? (
             <Link
-              href={`/blog/${getSlug(nextPost)}`}
+              href={`/blogs/${getSlug(nextPost)}`}
               className="group flex-1 flex flex-col gap-1 p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors text-right"
             >
               <span className="flex items-center justify-end gap-1 text-xs text-muted-foreground">

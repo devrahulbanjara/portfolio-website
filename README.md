@@ -1,47 +1,73 @@
-<div align="center">
-<img alt="Portfolio" src="https://github.com/dillionverma/portfolio/assets/16860528/57ffca81-3f0a-4425-b31d-094f61725455" width="90%">
-</div>
+# rahuldevbanjara.com.np
 
-# Portfolio [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fdillionverma%2Fportfolio)
+Personal portfolio and technical blog for Rahul Dev Banjara — AI/ML and software engineer.
 
-Built with next.js, [shadcn/ui](https://ui.shadcn.com/), and [magic ui](https://magicui.design/), deployed on Vercel.
+Built on Next.js 16 (App Router), React 19, Tailwind CSS v4, and TypeScript.
+Deployed on Vercel.
 
-# Features
+## Architecture
 
-- Setup only takes a few minutes by editing the [single config file](./src/data/resume.tsx)
-- Built using Next.js 14, React, Typescript, Shadcn/UI, TailwindCSS, Framer Motion, Magic UI
-- Includes a blog
-- Responsive for different devices
-- Optimized for Next.js and Vercel
+```text
+Portfolio content          Blog content
+(edited in code)           (edited in Hashnode)
+       │                          │
+       ▼                          ▼
+  src/lib/content/           Hashnode GraphQL
+  profile · projects              │
+  experience · certs              ▼
+  education · activities     src/lib/blog/
+       │                     domain types + adapter
+       │                          │
+       └────────────┬─────────────┘
+                    ▼
+              React components
+                    │
+                    ▼
+     /  ·  /work/[slug]  ·  /blogs  ·  /blogs/[slug]
+```
 
-# Getting Started Locally
+Only the blog is CMS-managed. Everything else is edited in code and deployed. There is
+no admin panel, by design.
 
-1. Clone this repository to your local machine:
+- **Blog content** comes from Hashnode Headless CMS over GraphQL, behind an adapter in
+  `src/lib/blog/`. No Hashnode type or query shape may leak above that boundary.
+- **Comments and reactions** are Giscus (GitHub Discussions). Hashnode's API cannot
+  accept either from a custom frontend.
+- **Analytics** is Vercel Analytics, not Hashnode's — Hashnode never sees traffic
+  rendered here.
 
-   ```bash
-   git clone https://github.com/dillionverma/portfolio
-   ```
+## Getting started
 
-2. Move to the cloned directory
+```bash
+pnpm install
+cp .env.example .env.local   # then fill in the values
+pnpm dev
+```
 
-   ```bash
-   cd portfolio
-   ```
+`.env.example` documents every variable and where to obtain it. `HASHNODE_ACCESS_TOKEN`
+grants full write access to the publication — server-side only, never `NEXT_PUBLIC_`.
 
-3. Install dependencies:
+## Scripts
 
-   ```bash
-   pnpm install
-   ```
+| Command | Purpose |
+|---|---|
+| `pnpm dev` | Development server |
+| `pnpm build` | Production build |
+| `pnpm start` | Serve the production build |
+| `pnpm lint` | ESLint |
 
-4. Start the local Server:
+## Notes
 
-   ```bash
-   pnpm dev
-   ```
+- **`/blogs`, not `/blog`.** The route is plural because the existing published
+  articles rank at those URLs. Do not rename it, and do not change any post slug.
+- Requires an active **Hashnode Pro** plan — the GraphQL API is paywalled, so the blog
+  cannot fetch without it. A committed content snapshot provides the build-time
+  fallback so a lapsed plan or an API outage cannot 404 the ranking URLs.
+- Tailwind v4 is CSS-first. Tokens live in `src/app/globals.css`; there is no
+  `tailwind.config.ts` and one should not be added.
 
-5. Open the [Config file](./src/data/resume.tsx) and make changes
+## Credit
 
-# License
-
-Licensed under the [MIT license](https://github.com/dillionverma/portfolio/blob/main/LICENSE.md).
+Originally scaffolded from [magicuidesign/portfolio](https://github.com/magicuidesign/portfolio)
+(MIT), then substantially rebuilt. The upstream remote is retained locally as
+`template-upstream`.

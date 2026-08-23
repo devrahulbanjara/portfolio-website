@@ -50,9 +50,8 @@ export const metadata: Metadata = {
     title: `${DATA.name}`,
     card: "summary_large_image",
   },
-  verification: {
-    google: "",
-    yandex: "",
+  alternates: {
+    canonical: "/",
   },
 };
 
