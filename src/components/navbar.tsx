@@ -11,13 +11,9 @@ import {
 } from "@/components/ui/tooltip";
 import { profile } from "@/lib/content";
 
-/**
- * Route is `/blogs` (plural) because the existing published articles rank at
- * those URLs. The visible label is "Writing".
- */
 const routes = [
   { href: "/", icon: HomeIcon, label: "Home" },
-  { href: "/blogs", icon: NotebookIcon, label: "Writing" },
+  { href: "/blogs", icon: NotebookIcon, label: "Blogs" },
 ];
 
 const TOOLTIP_CLASS =

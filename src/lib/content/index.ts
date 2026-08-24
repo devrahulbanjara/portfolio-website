@@ -4,7 +4,7 @@
  * Import from here rather than reaching into individual modules, so the surface
  * stays one import site if the shape ever changes.
  *
- * Blog content does NOT live here - it comes from Hashnode via src/lib/blog.
+ * Blog content does NOT live here - it comes from Sanity via src/lib/blog.
  */
 export { profile } from "./profile";
 export { experience } from "./experience";

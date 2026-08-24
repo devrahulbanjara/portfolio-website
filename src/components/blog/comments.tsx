@@ -7,19 +7,24 @@ const REPO = process.env.NEXT_PUBLIC_GISCUS_REPO;
 const REPO_ID = process.env.NEXT_PUBLIC_GISCUS_REPO_ID;
 const CATEGORY = process.env.NEXT_PUBLIC_GISCUS_CATEGORY;
 const CATEGORY_ID = process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID;
-const MAPPING = process.env.NEXT_PUBLIC_GISCUS_MAPPING ?? "pathname";
+/**
+ * Fixed rather than configurable, because there is no second correct answer.
+ * Pathname is the only mapping stable across the origins this site is served
+ * from - localhost in development, www in production, with the apex
+ * redirecting - and unlike title mapping it survives editing a headline.
+ *
+ * Must match the mapping selected in the giscus.app configurator; if the two
+ * disagree, comments silently attach to the wrong threads.
+ */
+const MAPPING = "pathname";
 
 /**
  * Comments and reactions via Giscus (GitHub Discussions).
  *
- * WHY NOT HASHNODE: its GraphQL API exposes exactly nine mutations, all
- * author-side publishing operations. There is no addComment and no reaction
- * mutation, so a visitor cannot comment or react from a custom frontend - only
- * on Hashnode's own hosted pages. Verified by schema introspection, 2026-08-23.
- *
- * Giscus also resolves a conflict the alternative created: sending readers to
- * the Hashnode-hosted copy to comment would require that copy to be indexable,
- * which competes with this site for ranking.
+ * The CMS deliberately does not own discussion. Sanity models authored content,
+ * not visitor submissions - accepting comments into the dataset would mean
+ * exposing a write token to the browser and building moderation. GitHub
+ * Discussions already has accounts, moderation, and spam handling.
  *
  * Renders nothing when unconfigured, so a missing env var degrades to "no
  * comments" rather than a broken iframe.

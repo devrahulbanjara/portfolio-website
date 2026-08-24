@@ -4,10 +4,7 @@ import { caseStudyProjects, profile } from "@/lib/content";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = profile.siteUrl;
-  const [{ data: posts }, { data: tags }] = await Promise.all([
-    listPosts(),
-    listTags(),
-  ]);
+  const [posts, tags] = await Promise.all([listPosts(), listTags()]);
 
   return [
     { url: base, changeFrequency: "weekly", priority: 1 },

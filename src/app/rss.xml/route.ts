@@ -12,7 +12,7 @@ function xml(value: string): string {
 }
 
 export async function GET() {
-  const { data: posts } = await listPosts();
+  const posts = await listPosts();
   const base = profile.siteUrl;
 
   const items = posts
@@ -32,7 +32,7 @@ ${post.tags.map((t) => `      <category>${xml(t.name)}</category>`).join("\n")}
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${xml(profile.name)} — Writing</title>
+    <title>${xml(profile.name)} — Blogs</title>
     <link>${xml(`${base}/blogs`)}</link>
     <description>Thoughts on AI engineering, machine learning, and building production systems.</description>
     <language>en</language>
