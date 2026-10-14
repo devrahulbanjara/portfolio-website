@@ -1,0 +1,24 @@
+// E2E: visitor asks the assistant to message Rahul, fills the card, sends it. node scripts/message-flow-test.mjs <outDir>
+import { chromium } from "@playwright/test";
+const [out] = process.argv.slice(2);
+const b = await chromium.launch({ executablePath: "/usr/bin/chromium" });
+const p = await b.newPage({ viewport: { width: 1440, height: 950 } });
+const errs = [];
+p.on("pageerror", (e) => errs.push(e.message.slice(0, 160)));
+await p.goto("http://localhost:3000/", { waitUntil: "networkidle" });
+await p.waitForTimeout(2500);
+await p.keyboard.press("Control+k");
+await p.waitForTimeout(900);
+await p.fill(".st-input textarea", "Please pass a message to Rahul: we'd like to interview him for an ML engineer role next week.");
+await p.keyboard.press("Enter");
+await p.waitForSelector(".acard-form", { timeout: 60000 });
+await p.fill('.acard-form input[aria-label="Your name"]', "Playwright Tester");
+await p.fill('.acard-form input[aria-label="Your email"]', "tester@example.com");
+await p.screenshot({ path: `${out}/msg-1.png` });
+await p.click(".acard-form .acard-btn-solid");
+await p.waitForFunction(() => !document.querySelector(".acard-form .acard-btn-solid[disabled]"), null, { timeout: 30000 });
+await p.waitForTimeout(500);
+console.log("card after send:", (await p.locator(".acard").last().textContent()).slice(0, 120));
+await p.screenshot({ path: `${out}/msg-2.png` });
+console.log(JSON.stringify(errs));
+await b.close();

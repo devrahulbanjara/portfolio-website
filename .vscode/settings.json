@@ -1,0 +1,7 @@
+{
+  // This project's types (Next 16 + Zod 4) need more than the global 256 MB cap,
+  // otherwise the TypeScript server runs out of memory and crash-loops.
+  "js/ts.tsserver.maxMemory": 3072,
+  "typescript.tsserver.maxTsServerMemory": 3072,
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

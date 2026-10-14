@@ -1,88 +1,41 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
-
-import { ThemeProvider } from "@/components/theme-provider";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { profile } from "@/lib/content";
-import { cn } from "@/lib/utils";
+import type { Metadata, Viewport } from "next";
+import { Inter_Tight, Geist_Mono } from "next/font/google";
+import { site, person } from "@/content/profile";
 import "./globals.css";
 
-/**
- * Root layout, deliberately chrome-free.
- *
- * The visible site frame — background grid, reading-width container, nav dock —
- * lives in app/(site)/layout.tsx instead, because the Sanity Studio at /studio
- * needs the full viewport and none of it. Everything here is genuinely global:
- * document shell, fonts, theme, and analytics.
- */
-
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: ["400", "500", "600", "700"],
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-mono",
-});
+const inter = Inter_Tight({ variable: "--font-inter-tight", subsets: ["latin"], display: "swap" });
+const mono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(profile.siteUrl),
-  title: {
-    default: profile.name,
-    template: `%s | ${profile.name}`,
-  },
-  description: profile.positioning,
-  openGraph: {
-    title: `${profile.name}`,
-    description: profile.positioning,
-    url: profile.siteUrl,
-    siteName: `${profile.name}`,
-    locale: "en_US",
-    type: "website",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  twitter: {
-    title: `${profile.name}`,
-    card: "summary_large_image",
-  },
+  metadataBase: new URL(site.url),
+  title: { default: site.title, template: `%s — ${site.name}` },
+  description: site.description,
+  applicationName: site.name,
+  authors: [{ name: person.name, url: site.url }],
+  creator: person.name,
+  keywords: ["AI Engineer", "LLM agents", "RAG", "Machine Learning", "AWS SageMaker", "Python", "FastAPI", "Data Science trainer", "Nepal", "Kathmandu", person.name],
   alternates: {
     canonical: "/",
+    types: { "application/rss+xml": [{ url: "/rss.xml", title: `${site.name} — Writing` }] },
   },
+  openGraph: { type: "website", siteName: site.name, locale: site.locale, url: site.url, title: site.title, description: site.description },
+  twitter: { card: "summary_large_image", title: site.title, description: site.description },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
+  formatDetection: { telephone: false, email: false, address: false },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = { themeColor: "#ffffff", colorScheme: "light" };
+
+/** Marks JS as available before first paint, so reveal animations never hide content without JS. */
+const jsFlag = `document.documentElement.classList.add('js')`;
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased relative",
-          geist.variable,
-          geistMono.variable
-        )}
-      >
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
-        </ThemeProvider>
-        <Analytics />
-      </body>
+    <html lang="en" className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: jsFlag }} />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }

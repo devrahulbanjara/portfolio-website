@@ -1,50 +1,33 @@
-import { listPosts } from "@/lib/blog";
-import { profile } from "@/lib/content";
+import { site, person } from "@/content/profile";
+import { getPublishedPosts } from "@/lib/posts";
 
-/** Escapes the five XML predefined entities. */
-function xml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}
+const esc = (s: string) => s.replace(/[<>&'"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" })[c]!);
 
+/** RSS 2.0 feed of published articles. */
 export async function GET() {
-  const posts = await listPosts();
-  const base = profile.siteUrl;
-
+  const posts = await getPublishedPosts();
   const items = posts
-    .map((post) => {
-      const url = `${base}/blogs/${post.slug}`;
-      return `    <item>
-      <title>${xml(post.title)}</title>
-      <link>${xml(url)}</link>
-      <guid isPermaLink="true">${xml(url)}</guid>
-      <description>${xml(post.brief)}</description>
-      <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
-${post.tags.map((t) => `      <category>${xml(t.name)}</category>`).join("\n")}
-    </item>`;
-    })
+    .map(
+      (p) => `    <item>
+      <title>${esc(p.title)}</title>
+      <link>${site.url}/blog/${p.slug}</link>
+      <guid isPermaLink="true">${site.url}/blog/${p.slug}</guid>
+      <pubDate>${new Date(p.publishedAt).toUTCString()}</pubDate>
+      <description>${esc(p.excerpt)}</description>
+${p.tags.map((t) => `      <category>${esc(t)}</category>`).join("\n")}
+    </item>`,
+    )
     .join("\n");
-
-  const body = `<?xml version="1.0" encoding="UTF-8"?>
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${xml(profile.name)} — Blogs</title>
-    <link>${xml(`${base}/blogs`)}</link>
-    <description>Thoughts on AI engineering, machine learning, and building production systems.</description>
+    <title>${esc(person.name)} — Writing</title>
+    <link>${site.url}/blog</link>
+    <description>${esc(`Articles by ${person.name} on AI, machine learning on AWS and teaching.`)}</description>
     <language>en</language>
-    <atom:link href="${xml(`${base}/rss.xml`)}" rel="self" type="application/rss+xml" />
+    <atom:link href="${site.url}/rss.xml" rel="self" type="application/rss+xml"/>
 ${items}
   </channel>
 </rss>`;
-
-  return new Response(body, {
-    headers: {
-      "Content-Type": "application/rss+xml; charset=utf-8",
-      "Cache-Control": "public, max-age=0, s-maxage=3600",
-    },
-  });
+  return new Response(xml, { headers: { "Content-Type": "application/rss+xml; charset=utf-8", "Cache-Control": "public, max-age=600" } });
 }
