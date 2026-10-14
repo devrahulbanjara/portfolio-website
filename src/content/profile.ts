@@ -354,16 +354,16 @@ export const projects: Project[] = [
     slug: "insurance-rag-eval",
     index: "04",
     title: "Insurance RAG Eval",
-    tagline: "An evaluation suite that catches a RAG confidently giving wrong answers that still look right.",
+    tagline: "A RAG I can measure: change anything, rerun the suite, and see which metrics move up or down.",
     category: "Retrieval",
     summary:
-      "A RAG built on insurance policy documents so it can be measured. The goal isn't a better RAG; it's catching hallucinations and missing facts that look correct in a demo, and showing exactly which part of the pipeline caused them.",
+      "A deliberately simple RAG over insurance policy documents, built to be measured rather than to be state of the art. Every metric has a baseline, so after any change — a prompt, the chunking, the model, the retriever — I rerun the suite and see exactly which dials went up, which went down, and which part of the pipeline moved them.",
     problem:
-      "Most RAG projects are judged by how a few demo questions go, with no numbers behind them. That hides the dangerous failure: an answer that is fluent, faithful to what was retrieved, and still wrong. I wanted measurements instead, and a baseline that shows when a small change to the RAG logic makes any metric drift.",
+      "Most RAG projects are judged by how a few demo questions go, with no numbers behind them. So when you change something, you can't tell whether it helped, hurt, or quietly broke something else — and the worst failure, an answer that's fluent, faithful to what was retrieved and still wrong, looks fine in a demo. I wanted every change to show up as numbers going up or down.",
     approach: [
       "Built a simple RAG over real insurance policy wordings (including NFIP flood forms and HDFC ERGO health policies) and a hand-crafted golden dataset of 20 queries with ideal answers written from the policy text.",
       "Evaluated four levels separately so every wrong answer can be traced to its cause: the retriever (contextual precision and recall), the generator in isolation fed golden context (faithfulness, answer relevance), the full pipeline (contextual relevancy, faithfulness, answer relevance), and the application (correctness and completeness, judged with G-Eval).",
-      "Used DeepEval with an LLM judge; a query passes at 0.7, and every run is appended to a results log so any change can be compared against the baseline.",
+      "Used DeepEval with an LLM judge; a query passes at 0.7. Every run is appended to a results log, so after any change to the RAG the whole suite reruns and each metric is compared against the baseline — a regression check for RAG.",
     ],
     decisions: [
       {
@@ -380,13 +380,13 @@ export const projects: Project[] = [
       },
     ],
     results: [
-      { metric: "Generator faithfulness with golden context", value: "0.97" },
-      { metric: "Faithfulness once the retriever's chunks are used", value: "0.73" },
-      { metric: "Contextual relevancy — most retrieved text is noise", value: "0.30" },
-      { metric: "Answers that left out a key point", value: "11/20" },
+      { metric: "Baseline generator faithfulness, with golden context", value: "0.97" },
+      { metric: "Baseline faithfulness with the retriever's chunks", value: "0.73" },
+      { metric: "Baseline contextual relevancy — most retrieved text is noise", value: "0.30" },
+      { metric: "Baseline answers that left out a key point", value: "11/20" },
     ],
     lessons: [
-      "The generator was nearly perfect on its own; most of the loss came from retrieval. The retriever finds most of what's needed (recall 0.80) but ranks it poorly (precision 0.56), so the next improvements belong there, not in the prompt.",
+      "The baseline already tells a story: the generator is nearly perfect on its own, and most of the loss comes from retrieval — it finds most of what's needed (recall 0.80) but ranks it poorly (precision 0.56). That's exactly the kind of answer the suite is for: when something changes, it points at the knob that moved.",
     ],
     stack: ["DeepEval", "G-Eval", "Pinecone", "RAG", "Python", "uv"],
     links: [{ label: "GitHub", url: "https://github.com/devrahulbanjara/RAG-eval" }],
