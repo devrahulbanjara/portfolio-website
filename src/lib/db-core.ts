@@ -8,7 +8,7 @@ import path from "node:path";
  *  - development: the same client on a local file (data/site.db) — no account needed
  * Every helper is async.
  */
-export const DATA_DIR = path.resolve(process.env.DATA_DIR ?? path.join(process.cwd(), "data"));
+export const DATA_DIR = path.resolve(/*turbopackIgnore: true*/ process.env.DATA_DIR ?? path.join(/*turbopackIgnore: true*/ process.cwd(), "data"));
 export const UPLOAD_DIR = path.join(DATA_DIR, "uploads");
 
 const MIGRATIONS: string[] = [
@@ -194,10 +194,23 @@ const MIGRATIONS: string[] = [
     value TEXT NOT NULL
   );
   `,
+  /* v4: database-backed admin sessions. Only a SHA-256 of each token is stored. */
+  `
+  CREATE TABLE IF NOT EXISTS admin_sessions (
+    id TEXT PRIMARY KEY,
+    created_at INTEGER NOT NULL,
+    expires_at INTEGER NOT NULL,
+    last_seen_at INTEGER NOT NULL,
+    ip TEXT,
+    user_agent TEXT
+  );
+  CREATE INDEX IF NOT EXISTS admin_sessions_exp ON admin_sessions(expires_at);
+  DELETE FROM settings WHERE key = 'admin_session_epoch';
+  `,
 ];
 
 /** Bump when MIGRATIONS changes; every statement above is idempotent. */
-const SCHEMA_VERSION = 3;
+const SCHEMA_VERSION = 4;
 
 function makeClient(): Client {
   const url = process.env.TURSO_DATABASE_URL;

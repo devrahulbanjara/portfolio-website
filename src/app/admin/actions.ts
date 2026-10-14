@@ -1,9 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { updateTag } from "next/cache";
+import { updateTag, refresh } from "next/cache";
 import { z } from "zod";
-import { login, logout, requireAdmin, setAdminPassword } from "@/lib/auth";
+import { login, logout, requireAdmin, setAdminPassword, revokeSessions } from "@/lib/auth";
 import { run } from "@/lib/db";
 import { audit } from "@/lib/audit";
 import { requestMeta } from "@/lib/request";
@@ -102,6 +102,19 @@ export async function resetModels() {
   await requireAdmin();
   await resetBreaker();
   await audit("llm.breaker.reset", null, await meta());
+}
+
+export async function revokeSession(id: string) {
+  const me = await requireAdmin();
+  if (!/^[a-f0-9]{64}$/.test(id) || id === me.id) return;
+  await revokeSessions({ id });
+  refresh();
+}
+
+export async function revokeOtherSessions() {
+  const me = await requireAdmin();
+  await revokeSessions({ allExcept: me.id });
+  refresh();
 }
 
 export async function changePassword(_: ActionState, form: FormData): Promise<ActionState> {

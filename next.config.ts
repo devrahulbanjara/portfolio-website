@@ -10,6 +10,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Keep the dev-only badge away from the admin sidebar (bottom-left).
+  devIndicators: { position: "bottom-right" },
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,

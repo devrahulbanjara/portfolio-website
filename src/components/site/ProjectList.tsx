@@ -46,7 +46,7 @@ export function ProjectList({ items }: { items: Project[] }) {
             <Link href={`/work/${p.slug}`} onPointerEnter={() => setActive(i)} onFocus={() => setActive(i)} onBlur={() => setActive(null)} data-ev="work_click" data-ev-slug={p.slug}>
               <span className="project-title">{p.title}</span>
               <span className="project-kind">
-                {kindOf(p)} · {p.year}
+                {[kindOf(p), p.status === "In progress" && "In progress", p.year].filter(Boolean).join(" · ")}
               </span>
               <span className="project-tagline">{p.tagline}</span>
             </Link>
@@ -61,19 +61,21 @@ export function ProjectList({ items }: { items: Project[] }) {
               <article key={p.slug} className="brief-slide" style={{ ["--c" as string]: p.accent }}>
                 <p className="brief-meta">
                   <span className="brief-dot" />
-                  {kindOf(p)} · {p.status} · {p.year}
+                  {[kindOf(p), p.status, p.year].filter(Boolean).join(" · ")}
                 </p>
                 <h3>{p.title}</h3>
                 <p className="brief-what">{p.tagline}</p>
                 <dl>
                   <div>
-                    <dt>The problem</dt>
-                    <dd>{p.problem.length > 150 ? p.problem.slice(0, 148).replace(/\s\S*$/, "") + "…" : p.problem}</dd>
+                    <dt>{p.problem ? "The problem" : "In short"}</dt>
+                    <dd>{clip(p.problem ?? p.summary, 150)}</dd>
                   </div>
-                  <div>
-                    <dt>My role</dt>
-                    <dd>{p.role}</dd>
-                  </div>
+                  {p.role && (
+                    <div>
+                      <dt>My role</dt>
+                      <dd>{p.role}</dd>
+                    </div>
+                  )}
                 </dl>
                 {p.results[0] && (
                   <p className="brief-result">
@@ -92,3 +94,5 @@ export function ProjectList({ items }: { items: Project[] }) {
     </div>
   );
 }
+
+const clip = (t: string, n: number) => (t.length > n ? t.slice(0, n - 2).replace(/\s\S*$/, "") + "…" : t);

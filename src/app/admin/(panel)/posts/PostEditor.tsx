@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import { savePost, deletePost, type ActionState } from "../../actions";
+import { upload as blobUpload } from "@vercel/blob/client";
 import { previewMarkdown } from "./preview";
 
 export type EditorPost = {
@@ -47,7 +48,7 @@ export function PostEditor({ post }: { post: EditorPost | null }) {
   const [status, setStatus] = useState<EditorPost["status"]>(post?.status ?? "draft");
   const [view, setView] = useState<"write" | "split" | "preview">("split");
   const [html, setHtml] = useState("");
-  const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState<string | null>(null);
   // "Unsaved" = edited since the last save result arrived (or the last save failed).
   const [editedAt, setEditedAt] = useState<ActionState | null>(null);
   const dirty = editedAt !== null && (editedAt === state || !state.ok);
@@ -116,25 +117,75 @@ export function PostEditor({ post }: { post: EditorPost | null }) {
     requestAnimationFrame(() => el.focus());
   };
 
-  const upload = async (file: File, insert: boolean) => {
-    setUploading(true);
+  const direct = useRef<boolean | null>(null);
+  /** Upload one file. On Vercel it goes straight to Blob (no 4.5 MB limit); locally it goes through the server. */
+  const sendFile = async (file: File): Promise<{ url: string; mime: string }> => {
+    direct.current ??= await fetch("/api/admin/upload/client")
+      .then((r) => r.json())
+      .then((j: { direct?: boolean }) => !!j.direct)
+      .catch(() => false);
+    if (direct.current) {
+      const safe = file.name.toLowerCase().replace(/[^\w.-]+/g, "-").replace(/^-+/, "").slice(-80) || "file";
+      const blob = await blobUpload(`uploads/${new Date().toISOString().slice(0, 7)}-${safe}`, file, {
+        access: "public",
+        handleUploadUrl: "/api/admin/upload/client",
+        multipart: file.size > 8 * 1024 * 1024,
+        onUploadProgress: (p) => setUploading(`Uploading ${Math.round(p.percentage)}%`),
+      });
+      const res = await fetch("/api/admin/upload/client", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: blob.url, name: file.name }) });
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(j.error ?? "Upload failed");
+      return j;
+    }
     const fd = new FormData();
     fd.append("file", file);
     const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
-    setUploading(false);
-    if (!res.ok) {
-      alert((await res.json().catch(() => ({})))?.error ?? "Upload failed");
-      return;
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(j.error ?? "Upload failed");
+    return j;
+  };
+
+  /** Upload one or more files; each lands in the post as its own figure (images, GIFs and videos alike). */
+  const upload = async (files: File[], insert: boolean) => {
+    const out: string[] = [];
+    for (const [i, file] of files.entries()) {
+      setUploading(files.length > 1 ? `Uploading ${i + 1}/${files.length}…` : "Uploading…");
+      try {
+        const { url } = await sendFile(file);
+        if (!insert) setCover(url);
+        else out.push(`![^${file.name.replace(/\.[^.]+$/, "").replace(/[[\]]/g, "")}](${url})`);
+      } catch (e) {
+        alert(`${file.name}: ${(e as Error).message}`);
+      }
     }
-    const { url } = (await res.json()) as { url: string };
-    if (insert) wrap(`![^${file.name.replace(/\.[^.]+$/, "")}](${url})`, "", "");
-    else setCover(url);
+    setUploading(null);
+    if (out.length) wrap(`\n\n${out.join("\n\n")}\n\n`, "", "");
     setDirty(true);
   };
 
+  const embed = () => {
+    const url = prompt("Paste a YouTube, Vimeo or Loom link — it becomes a player in the post.")?.trim();
+    if (!url) return;
+    if (!/^https:\/\/(www\.|m\.)?(youtube\.com|youtu\.be|vimeo\.com|loom\.com)\//.test(url)) return alert("That link isn't from YouTube, Vimeo or Loom. For any other site, use Link.");
+    wrap(`\n\n${url}\n\n`, "", "");
+  };
+  const MEDIA_ACCEPT = "image/png,image/jpeg,image/webp,image/gif,image/avif,video/mp4,video/webm,video/quicktime";
+  const isMedia = (f: File) => f.type.startsWith("image/") || f.type.startsWith("video/");
+
   const words = content.trim() ? content.trim().split(/\s+/).length : 0;
   const pageTitle = seoTitle || title || "Post title";
-  const pageDesc = seoDesc || excerpt || content.replace(/[#*_>`[\]()!-]/g, "").slice(0, 155);
+  const pageDesc =
+    seoDesc ||
+    excerpt ||
+    content
+      .replace(/```[\s\S]*?```/g, "")
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+      .replace(/https?:\/\/\S+/g, "")
+      .replace(/[#*_>`[\]()!|~-]/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 155);
 
   return (
     <form ref={formRef} action={action} onChange={() => setDirty(true)}>
@@ -187,10 +238,21 @@ export function PostEditor({ post }: { post: EditorPost | null }) {
               <button type="button" onClick={() => linePrefix("> ")} title="Quote">❝</button>
               <button type="button" onClick={() => wrap("\n```python\n", "\n```\n", "code")} title="Code block">Code</button>
               <button type="button" onClick={() => linePrefix("> [!NOTE]\n> ")} title="Callout">Note</button>
-              <label className="md-toolbar-upload" style={{ display: "inline-flex", alignItems: "center", padding: "0 0.5rem", fontSize: 13, cursor: "pointer", borderRadius: 8 }}>
-                {uploading ? "Uploading…" : "Image"}
-                <input type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], true)} />
+              <label className="md-toolbar-upload" style={{ display: "inline-flex", alignItems: "center", padding: "0 0.5rem", fontSize: 13, cursor: "pointer", borderRadius: 8 }} title="Upload images, GIFs or videos (you can pick several)">
+                {uploading ?? "Image / video"}
+                <input
+                  type="file"
+                  accept={MEDIA_ACCEPT}
+                  multiple
+                  hidden
+                  onChange={(e) => {
+                    const fs = [...(e.target.files ?? [])];
+                    e.target.value = "";
+                    if (fs.length) void upload(fs, true);
+                  }}
+                />
               </label>
+              <button type="button" onClick={embed} title="Embed a YouTube, Vimeo or Loom video">▶ Embed</button>
             </div>
             <nav className="seg">
               {(["write", "split", "preview"] as const).map((v) => (
@@ -210,20 +272,20 @@ export function PostEditor({ post }: { post: EditorPost | null }) {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 onPaste={(e) => {
-                  const f = [...e.clipboardData.files].find((x) => x.type.startsWith("image/"));
-                  if (f) {
+                  const fs = [...e.clipboardData.files].filter(isMedia);
+                  if (fs.length) {
                     e.preventDefault();
-                    void upload(f, true);
+                    void upload(fs, true);
                   }
                 }}
                 onDrop={(e) => {
-                  const f = [...e.dataTransfer.files].find((x) => x.type.startsWith("image/"));
-                  if (f) {
+                  const fs = [...e.dataTransfer.files].filter(isMedia);
+                  if (fs.length) {
                     e.preventDefault();
-                    void upload(f, true);
+                    void upload(fs, true);
                   }
                 }}
-                placeholder={"Write in Markdown…\n\n## A heading\n\nParagraphs, **bold**, lists, `code`, > quotes, tables and images all work.\nPaste or drop an image to upload it."}
+                placeholder={"Write in Markdown…\n\n## A heading\n\nParagraphs, **bold**, lists, `code`, > quotes and tables all work.\nPaste or drop images, GIFs or videos to upload them.\nA YouTube, Vimeo or Loom link on its own line becomes a player."}
                 aria-label="Post body (Markdown)"
               />
             )}
@@ -288,7 +350,7 @@ export function PostEditor({ post }: { post: EditorPost | null }) {
             <label className="cover-drop">
               {/* eslint-disable-next-line @next/next/no-img-element -- local upload preview */}
               {cover ? <img src={cover} alt="" /> : <span>{uploading ? "Uploading…" : "Click to upload a cover\n(1600×800 works best)"}</span>}
-              <input type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], false)} />
+              <input type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden onChange={(e) => e.target.files?.[0] && upload([e.target.files[0]], false)} />
             </label>
             <input type="hidden" name="coverUrl" value={cover} />
             {cover && (

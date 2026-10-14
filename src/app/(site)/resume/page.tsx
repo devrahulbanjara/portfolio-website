@@ -47,8 +47,8 @@ export default function ResumePage() {
               {fmtMonth(e.start)} – {fmtMonth(e.end)} · {e.type} · {e.location}
             </p>
             <ul>
-              {e.highlights.map((h) => (
-                <li key={h}>{h}</li>
+              {e.details.map((d) => (
+                <li key={d.title}>{d.text}</li>
               ))}
             </ul>
           </div>

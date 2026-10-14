@@ -70,3 +70,19 @@ export type GuestbookInput = z.infer<typeof GuestbookInput>;
 
 export const ALLOWED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif", "image/avif", "image/svg+xml"] as const;
 export const ImageMime = z.enum(ALLOWED_IMAGE_TYPES);
+
+/** What can go into a post: images (incl. GIF) and short videos. SVG is never accepted — it can carry scripts. */
+export const MEDIA_TYPES = {
+  "image/png": "png",
+  "image/jpeg": "jpg",
+  "image/webp": "webp",
+  "image/gif": "gif",
+  "image/avif": "avif",
+  "video/mp4": "mp4",
+  "video/webm": "webm",
+  "video/quicktime": "mov",
+} as const;
+export type MediaMime = keyof typeof MEDIA_TYPES;
+export const MediaMime = z.enum(Object.keys(MEDIA_TYPES) as [MediaMime, ...MediaMime[]]);
+export const MEDIA_MAX_MB = { image: 25, video: 200 } as const;
+export const mediaKind = (mime: string) => (mime.startsWith("video/") ? "video" : "image");

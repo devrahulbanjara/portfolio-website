@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useTransition } from "react";
-import { saveSettings, changePassword, resetModels, type ActionState } from "../../actions";
+import { saveSettings, changePassword, resetModels, revokeSession, revokeOtherSessions, type ActionState } from "../../actions";
 
 type Values = {
   chat_enabled: boolean;
@@ -100,6 +100,15 @@ export function ResetModelsButton() {
   return (
     <button type="button" className="abtn" disabled={pending} onClick={() => start(async () => void (await resetModels()))}>
       {pending ? "Resetting…" : "Reset cooldowns"}
+    </button>
+  );
+}
+
+export function RevokeButton({ id, label = "Sign out" }: { id?: string; label?: string }) {
+  const [pending, start] = useTransition();
+  return (
+    <button type="button" className="abtn" disabled={pending} onClick={() => start(async () => void (await (id ? revokeSession(id) : revokeOtherSessions())))}>
+      {pending ? "Signing out…" : label}
     </button>
   );
 }

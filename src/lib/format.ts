@@ -19,4 +19,4 @@ export function duration(start: string, end: string | null, ref = "2026-10") {
 
 /** Plain-language project type, e.g. "AI agent". Shared by server and client components. */
 export const kindOf = (p: Pick<Project, "category">) =>
-  ({ Agents: "AI agent", Retrieval: "Search & RAG", MLOps: "ML on AWS", Education: "Education", Tools: "Tool" })[p.category];
+  ({ Platform: "Full-stack platform", Agents: "AI agent", Retrieval: "Search & RAG", MLOps: "ML on AWS", Speech: "Speech AI", Education: "Education", Tools: "Tool" })[p.category];

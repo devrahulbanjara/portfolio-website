@@ -7,7 +7,6 @@
  *   e.g.  npx dotenv -e .env.production.local -- npm run admin:password
  */
 import bcrypt from "bcryptjs";
-import crypto from "node:crypto";
 import readline from "node:readline";
 import "./env";
 import { client } from "../src/lib/db-core";
@@ -41,7 +40,7 @@ async function main() {
   await db.batch(
     [
       { sql, args: ["admin_password_hash", JSON.stringify(await bcrypt.hash(pw, 12))] },
-      { sql, args: ["admin_session_epoch", JSON.stringify(crypto.randomUUID())] },
+      { sql: "DELETE FROM admin_sessions", args: [] },
     ],
     "write",
   );

@@ -2,10 +2,11 @@ import "server-only";
 import bcrypt from "bcryptjs";
 import crypto from "node:crypto";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { redirect } from "next/navigation";
-import { get, run } from "./db";
+import { all, get, run } from "./db";
 import { setting, setSettingTyped } from "./settings";
-import { SESSION_COOKIE, SESSION_TTL_S, signSession, verifySession } from "./session";
+import { SESSION_COOKIE, SESSION_TTL_S, newSessionToken, hashSessionToken, looksLikeSessionToken } from "./session";
 import { requestMeta } from "./request";
 import { audit } from "./audit";
 
@@ -23,8 +24,8 @@ export async function adminConfigured() {
 
 export async function setAdminPassword(plain: string) {
   await setSettingTyped("admin_password_hash", await bcrypt.hash(plain, 12));
-  // Rotating the password invalidates every existing session.
-  await setSettingTyped("admin_session_epoch", crypto.randomUUID());
+  // Changing the password ends every existing session.
+  await run("DELETE FROM admin_sessions");
 }
 
 export type LoginResult = { ok: true } | { ok: false; error: string };
@@ -56,8 +57,18 @@ export async function login(email: string, password: string): Promise<LoginResul
     return { ok: false, error: "That email or password isn't right." };
   }
 
-  const sid = `${await setting("admin_session_epoch")}.${crypto.randomUUID()}`;
-  const token = await signSession(sid);
+  const token = newSessionToken();
+  const now = Date.now();
+  await run("DELETE FROM admin_sessions WHERE expires_at <= ?", now); // housekeeping
+  await run(
+    "INSERT INTO admin_sessions (id, created_at, expires_at, last_seen_at, ip, user_agent) VALUES (?, ?, ?, ?, ?, ?)",
+    hashSessionToken(token),
+    now,
+    now + SESSION_TTL_S * 1000,
+    now,
+    ip,
+    ua?.slice(0, 300) ?? null,
+  );
   (await cookies()).set(SESSION_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -69,19 +80,46 @@ export async function login(email: string, password: string): Promise<LoginResul
   return { ok: true };
 }
 
+export type AdminSession = { id: string; createdAt: number; expiresAt: number; lastSeenAt: number; ip: string | null; userAgent: string | null };
+
+/** The signed-in admin's session, looked up in the database. Null if missing, expired or revoked. */
+export async function currentAdmin(): Promise<AdminSession | null> {
+  await connection(); // always a per-request check, never prerendered
+  const token = (await cookies()).get(SESSION_COOKIE)?.value;
+  if (!looksLikeSessionToken(token)) return null;
+  const id = hashSessionToken(token);
+  const now = Date.now();
+  const row = await get<{ created_at: number; expires_at: number; last_seen_at: number; ip: string | null; user_agent: string | null }>(
+    "SELECT created_at, expires_at, last_seen_at, ip, user_agent FROM admin_sessions WHERE id = ? AND expires_at > ?",
+    id,
+    now,
+  );
+  if (!row) return null;
+  // Keep "last active" fresh without a write on every request.
+  if (now - row.last_seen_at > 5 * 60_000) await run("UPDATE admin_sessions SET last_seen_at = ? WHERE id = ?", now, id).catch(() => {});
+  return { id, createdAt: row.created_at, expiresAt: row.expires_at, lastSeenAt: row.last_seen_at, ip: row.ip, userAgent: row.user_agent };
+}
+
 export async function logout() {
-  (await cookies()).delete(SESSION_COOKIE);
+  const jar = await cookies();
+  const token = jar.get(SESSION_COOKIE)?.value;
+  if (looksLikeSessionToken(token)) await run("DELETE FROM admin_sessions WHERE id = ?", hashSessionToken(token));
+  jar.delete(SESSION_COOKIE);
   await audit("logout", null, {});
 }
 
-/** Returns the session if valid and not revoked by a password rotation. */
-export async function currentAdmin() {
-  const token = (await cookies()).get(SESSION_COOKIE)?.value;
-  const session = await verifySession(token);
-  if (!session) return null;
-  const epoch = await setting("admin_session_epoch");
-  if (!session.sid.startsWith(`${epoch}.`)) return null;
-  return session;
+export async function listSessions() {
+  return all<{ id: string; created_at: number; expires_at: number; last_seen_at: number; ip: string | null; user_agent: string | null }>(
+    "SELECT id, created_at, expires_at, last_seen_at, ip, user_agent FROM admin_sessions WHERE expires_at > ? ORDER BY last_seen_at DESC",
+    Date.now(),
+  );
+}
+
+/** Sign out one session (by id), or every session except the current one. */
+export async function revokeSessions(target: { id: string } | { allExcept: string }) {
+  if ("id" in target) await run("DELETE FROM admin_sessions WHERE id = ?", target.id);
+  else await run("DELETE FROM admin_sessions WHERE id != ?", target.allExcept);
+  await audit("sessions.revoke", "id" in target ? target.id.slice(0, 12) : "others", {});
 }
 
 /** Defense in depth: every admin page and action calls this, not just proxy.ts. */

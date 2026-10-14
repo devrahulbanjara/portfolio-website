@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { site, projects } from "@/content/profile";
+import { site, projects, experience } from "@/content/profile";
 import { getPublishedPosts, getAllTags } from "@/lib/posts";
 
 /** Every public page, every project, every published article and tag page. */
@@ -17,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: u("/contact"), changeFrequency: "yearly", priority: 0.6 },
     { url: u("/blog"), lastModified: latest, changeFrequency: "weekly", priority: 0.8 },
     ...projects.map((p) => ({ url: u(`/work/${p.slug}`), changeFrequency: "monthly" as const, priority: 0.7 })),
+    ...experience.map((e) => ({ url: u(`/experience/${e.id}`), changeFrequency: "monthly" as const, priority: 0.6 })),
     ...posts.map((p) => ({ url: u(`/blog/${p.slug}`), lastModified: new Date(p.updatedAt), changeFrequency: "monthly" as const, priority: 0.7 })),
     ...tags.map((t) => ({ url: u(`/blog/tag/${encodeURIComponent(t.tag)}`), changeFrequency: "weekly" as const, priority: 0.4 })),
   ];

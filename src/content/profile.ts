@@ -4,8 +4,8 @@
  *  Every page, the résumé, /llms.txt, resume.json AND the AI agent's knowledge
  *  base are generated from this file. Edit facts here and everything follows.
  *
- *  Real data (from rahuldevbanjara.com.np), except `projects`, which are
- *  still placeholders until the real ones are added.
+ *  Real data, supplied by Rahul. Optional project fields stay empty until
+ *  there's something real to say — pages hide what's missing.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -64,7 +64,11 @@ export type Experience = {
   start: string; // YYYY-MM
   end: string | null;
   summary: string;
+  /** Short lines for the About page list. */
   highlights: string[];
+  /** The full story, shown on /experience/[id] and the résumé. */
+  details: { title: string; text: string; links?: { label: string; url: string }[] }[];
+  results: { metric: string; value: string; note?: string }[];
   stack: string[];
   url?: string;
 };
@@ -78,13 +82,39 @@ export const experience: Experience[] = [
     location: "Kathmandu, Nepal",
     start: "2025-06",
     end: null,
-    summary: "Building AI systems end to end for client products.",
+    summary: "Building RAG systems, ML platforms and internal tools for client products.",
     highlights: [
-      "Built a churn-prevention platform that an enterprise client uses daily.",
-      "Built a clinical retrieval system reviewed by practising physicians.",
-      "Built document-processing pipelines designed for messy, real-world input.",
+      "An explainable churn-prevention platform that saves a client over $100K a year.",
+      "Healthcare RAG for doctors and patients on Amazon Bedrock Knowledge Bases, comparing MedGemma on SageMaker with Claude Sonnet on Bedrock.",
+      "Layout-preserving OCR, website RAG chatbots and an AWS cost-tracking dashboard.",
     ],
-    stack: ["Python", "FastAPI", "LLMs", "RAG", "AWS"],
+    details: [
+      {
+        title: "Churn-prevention platform",
+        text: "Built a predictive, explainable churn-prevention platform for a managed service provider client (10K+ client companies) that saved the client over $100K/year by catching churn early. Engineered monthly trend-based features from messy real-world data via Presto/Iceberg, added per-customer SHAP explainability, and used DoWhy causal inference — served via an IBM Code Engine hosted, Auth0-secured Streamlit dashboard.",
+      },
+      {
+        title: "Healthcare RAG for doctors and patients",
+        text: "Built a healthcare RAG system serving doctors and patients. Retrieval always runs on Amazon Bedrock Knowledge Bases, with query decomposition and reranking to cut missed and hallucinated details, and metadata filtering to keep each tenant's data separate. For generation, deployed MedGemma on SageMaker endpoints and compared it against Claude Sonnet on Amazon Bedrock. Protected answers with Amazon Bedrock Guardrails, and monitored the system with Bedrock monitoring and CloudWatch metrics. Shipped dual response personas (clinical jargon for doctors, plain language for patients) — validated answer quality with practicing physicians.",
+      },
+      {
+        title: "RAG chatbots for client websites",
+        text: "Built RAG chatbots for client website landing pages, answering visitor Q&A with latency-focused prompt engineering, context budgeting, and NeMo Guardrails to block jailbreak attempts.",
+      },
+      {
+        title: "Layout-preserving OCR",
+        text: "Shipped an OCR pipeline preserving multi-column layout by combining layout analysis, OCR, and a vision-language model for post-processing — reconstructs documents with correct structure and reading order.",
+      },
+      {
+        title: "AWS cost-tracking dashboard",
+        text: "Built an internal AWS cost-tracking dashboard over Athena queries against terabytes of CloudTrail logs, grouping resources by project, department, and compliance tags — cut the company's wasted AWS spend and gave finance a clear cost-allocation view every month.",
+      },
+    ],
+    results: [
+      { metric: "Saved per year for a churn-prevention client", value: "$100K+" },
+      { metric: "Client companies covered by the churn platform", value: "10K+" },
+    ],
+    stack: ["Bedrock Knowledge Bases", "Bedrock Guardrails", "SageMaker endpoints", "MedGemma", "Claude Sonnet", "CloudWatch", "NeMo Guardrails", "SHAP", "DoWhy", "Presto / Iceberg", "Athena", "Streamlit"],
   },
   {
     id: "tekbay",
@@ -94,9 +124,42 @@ export const experience: Experience[] = [
     location: "Kathmandu, Nepal",
     start: "2025-06",
     end: null,
-    summary: "Teaching the AWS Certified Machine Learning Engineer – Associate course.",
-    highlights: ["Teach the AWS Machine Learning Engineer certification with hands-on SageMaker labs and exam practice."],
-    stack: ["AWS SageMaker", "MLOps", "Teaching"],
+    summary: "Designed and teach the AWS Certified Machine Learning Engineer – Associate course — built for MLA-C01, redesigned for MLA-C02.",
+    highlights: [
+      "Designed the 3-month MLA-C01 curriculum from scratch, then redesigned it for MLA-C02 when AWS updated the exam.",
+      "Taught three in-person batches, with a 100% pass rate in the first.",
+      "Recorded a studio lecture series now used by 100+ remote students across India and Nepal.",
+      "Mentoring MLA-C02 students to build production-grade AI agents on Amazon Bedrock AgentCore.",
+    ],
+    details: [
+      {
+        title: "A curriculum built to be reused",
+        text: "Designed a complete 3-month curriculum for AWS Certified ML Engineer (MLA-C01) from scratch — all exam domains, 8 mock exam sets, hands-on labs, and capstone projects — so the academy can reuse it for every new batch without starting over. When AWS updated the exam from MLA-C01 to MLA-C02, redesigned the course for the new version.",
+      },
+      {
+        title: "Scenario-first teaching",
+        text: "Introduced a scenario-based teaching approach — walking through a real problem first and then showing how the concept solves it, instead of reading off slides — keeping beginners engaged and more likely to finish the course and recommend it to others.",
+      },
+      {
+        title: "A recorded course for remote students",
+        text: "Recorded a full studio-quality lecture series, turning a one-time recording into a course the academy can keep selling — now guiding 100+ remote students across India and Nepal through their ML journey without teaching it live again.",
+      },
+      {
+        title: "Mentoring production AI agents",
+        text: "Mentoring students in the MLA-C02 course to build production-grade AI agents on Amazon Bedrock AgentCore as their learning project — not just the agent, but the harness it needs to run in production: memory, observability, and MCP tools through AgentCore Gateway.",
+      },
+      {
+        title: "In-person batches",
+        text: "Taught three in-person batches so far — 60+ students across the first two — turning them into certified AWS ML Engineers, including a 100% pass rate in the first batch, a result the academy can use to attract more students.",
+      },
+    ],
+    results: [
+      { metric: "Pass rate in the first batch", value: "100%" },
+      { metric: "Remote students on the recorded course", value: "100+" },
+      { metric: "In-person batches taught", value: "3" },
+      { metric: "Mock exam sets written", value: "8" },
+    ],
+    stack: ["AWS SageMaker", "Bedrock AgentCore", "MCP", "MLA-C01", "MLA-C02", "MLOps", "Curriculum design", "Teaching"],
   },
   {
     id: "fusemachines",
@@ -106,9 +169,36 @@ export const experience: Experience[] = [
     location: "Kathmandu, Nepal",
     start: "2024-03",
     end: "2024-10",
-    summary: "AI Fellowship programme, completing the Fusemachines Microdegree™ in Artificial Intelligence.",
-    highlights: ["Completed the Microdegree™ in Artificial Intelligence."],
-    stack: ["Machine learning", "Deep learning", "Python"],
+    summary: "A fully funded, industry-focused AI Fellowship, completing the Fusemachines Microdegree™ in Artificial Intelligence.",
+    highlights: [
+      "Built a document verification system for government ID fraud detection (98% classification accuracy).",
+      "Computer vision for governance, plus transformer-based NLP models.",
+      "Completed the Microdegree™ in Artificial Intelligence.",
+    ],
+    details: [
+      {
+        title: "The fellowship",
+        text: "Completed a fully-funded, industry-focused AI Fellowship building ML systems across computer vision, NLP, and LLMs, with emphasis on model evaluation, training workflows, and MLOps for real-world deployment.",
+      },
+      {
+        title: "Document Verification System",
+        text: "Built a Document Verification System for government ID fraud detection: trained on synthetic template overlays (where confidential real data is unavailable), YOLOv8 field detection, EasyOCR/PaddleOCR extraction, and fuzzy database cross-validation — 98% classification accuracy, 82.6% end-to-end verification accuracy.",
+        links: [{ label: "GitHub", url: "https://github.com/devrahulbanjara/Document-Verification-System" }],
+      },
+      {
+        title: "Computer vision for governance, and NLP",
+        text: "Engineered a Computer Vision and AI for Governance project, applying deep learning models to public-sector and compliance problems; separately built NLP models for sentiment analysis and text classification using transformer-based architectures.",
+      },
+      {
+        title: "Training",
+        text: "Completed intensive training in Supervised and Unsupervised Learning, Deep Neural Networks, and Deep Generative Models, with structured research-paper reading sessions.",
+      },
+    ],
+    results: [
+      { metric: "Document classification accuracy", value: "98%" },
+      { metric: "End-to-end verification accuracy", value: "82.6%" },
+    ],
+    stack: ["YOLOv8", "EasyOCR", "PaddleOCR", "Transformers", "Computer vision", "NLP"],
   },
 ];
 
@@ -168,17 +258,18 @@ export type Project = {
   index: string;
   title: string;
   tagline: string;
-  year: string;
-  role: string;
-  status: "Production" | "Live" | "Open source" | "Research" | "In progress";
-  category: "Agents" | "Retrieval" | "MLOps" | "Education" | "Tools";
+  year?: string;
+  role?: string;
+  status?: "Production" | "Live" | "Open source" | "Research" | "In progress";
+  category: "Platform" | "Agents" | "Retrieval" | "MLOps" | "Speech" | "Education" | "Tools";
   summary: string;
-  problem: string;
+  problem?: string;
+  /** What I built — one line per piece of work. */
   approach: string[];
-  architecture: string[];
-  decisions: { title: string; body: string }[];
+  architecture?: string[];
+  decisions?: { title: string; body: string }[];
   results: { metric: string; value: string; note?: string }[];
-  lessons: string[];
+  lessons?: string[];
   stack: string[];
   links: { label: string; url: string }[];
   accent: string; // hue used by the project's generative cover
@@ -186,203 +277,175 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "relay-omnichannel-agent",
+    slug: "convexhire",
     index: "01",
-    title: "Relay",
-    tagline: "An AI agent that sells and supports across six channels — inside strict, code-enforced rules.",
-    year: "2025",
-    role: "Lead AI engineer",
-    status: "Production",
-    category: "Agents",
+    title: "ConvexHire",
+    tagline: "A production-grade hiring platform that runs the whole recruitment funnel end to end, with AI where it helps.",
+    category: "Platform",
     summary:
-      "A multi-tenant omnichannel inbox where stores see Messenger, Instagram, WhatsApp, Telegram, email and web-widget conversations in one place, and an autonomous agent handles sales and support like a trained staff member.",
-    problem:
-      "Small retailers in Nepal answer hundreds of DMs a day across five apps, mostly in Nepali or Roman Nepali. Off-the-shelf chatbots hallucinated prices, double-created orders when customers said \"yes\" twice, and couldn't hand off to humans cleanly.",
+      "A full hiring platform for candidates, recruiters and company admins: job posting, applications, AI evaluation and shortlisting, outreach, interview booking, interview transcription and offers. AI assists at each step, and a person makes every decision.",
     approach: [
-      "\"The LLM chooses, code decides\": prices, totals, stock and IDs always come from tool results, never model text.",
-      "Every action is one application service with two thin adapters — REST for the dashboard, a typed tool for the agent.",
-      "Tool gating per sales state (browsing → cart → checkout), so the model physically cannot call create_order before confirmation.",
-      "A pre-send checker validates every outbound message against tool results and policy before it reaches the customer.",
+      "Built a full-stack HR tech platform (recruitment, onboarding, AI-assisted hiring): FastAPI backend, Next.js frontend shipped via Claude Code (AI-assisted UI development), AWS Bedrock with LangGraph multi-agent workflows (parallel CTO/HR persona nodes, critique-judge with early-exit), tool and function calling, job-draft human-in-the-loop interrupts, and a recruiter chatbot with a full custom tool suite.",
+      "The product side: three roles (candidate, recruiter, recruiter admin) with OTP email verification, Google sign-in and refresh-token sessions; a resume builder with AI PDF import and PDF export; a five-step apply flow; recruiter dashboards, outreach review, notifications and a company-wide audit log.",
+      "Cut LLM inference cost ~80% via a two-stage ML bouncer (only top-scoring applicants reach Bedrock agents); Bedrock prompt caching, Redis caching, and an intent router keep per-query cost low.",
+      "Built Qdrant hybrid search (Gemini dense + BM25, RRF fusion) for jobs and candidates, plus a job-creation multi-agent drafting complete postings from keywords and past job references.",
+      "Engineered fairness and compliance safeguards: structural PII exclusion and redaction, a custom prompt-injection classifier, human-in-the-loop confirmation on agent-proposed writes, and LangSmith tracing.",
     ],
     architecture: [
-      "Channel webhooks → ingress (verify + ack) → Postgres-backed job queue (Procrastinate)",
-      "Workers: normalise → agent run → checker → outbound send",
-      "PostgreSQL 16 + pgvector with row-level security for tenancy",
-      "Groq primary, Gemini fallback, one OpenAI-compatible adapter",
-      "Langfuse + OpenTelemetry traces for every run, tool call and token",
+      "Candidates apply with a saved resume, and can run an AI gap analysis against the job first. An optional auto-patch rewrites their summary and bullets but can't touch frozen facts (company, title, dates, institution, certifications), and they approve every change.",
+      "When a job closes, a scikit-learn RandomForest scores every application in milliseconds; only the top 20% go on to the LLM stage.",
+      "CTO and HR persona agents on AWS Bedrock review each remaining resume; a judge exits early once it's confident, and a cheaper model merges the result into strengths, concerns and evidence.",
+      "Shortlisted candidates get a drafted invite with a Cal.com booking link and rejected ones get feedback. Nothing is sent until a recruiter approves it.",
+      "A Cal.com webhook moves the application forward when an interview is booked. Interview audio is transcribed by my fine-tuned Nepali Whisper model on a Hugging Face Space and scored against a per-job rubric, next to the recruiter's own evaluation.",
     ],
     decisions: [
-      { title: "Own agent loop, no framework", body: "The loop is ~150 lines. The hard parts — tool gating, identity injection, idempotent orders — are domain rules no framework supplies." },
-      { title: "Postgres as the job queue", body: "A message insert and its agent job commit in the same transaction: both happen or neither does. No outbox, no drift." },
-      { title: "Idempotency keys on every write", body: "Webhooks retry, workers retry, customers say yes twice. Orders are keyed by conversation + cart hash." },
+      { title: "AI assists, people decide", body: "Every shortlist, every email and every job edit made through the chat is confirmed by a recruiter. Job edits show a before-and-after preview and only touch an allowlist of 14 fields." },
+      { title: "Shortlisting opens only after a job closes", body: "Evaluation waits until the application window ends, so every applicant gets the same fair chance." },
+      { title: "Cost-aware by design", body: "A rule-based intent router answers most recruiter chat messages without calling an LLM, the ML pre-filter keeps most resumes away from the expensive models, and prompt caching reuses the job description across agents." },
+      { title: "Defence in depth", body: "Prompt-injection screening on every user-controlled input, PII redaction before the shortlisting prompts, rate limits, idempotency keys and row-level locks against double submits and concurrent edits." },
     ],
     results: [
-      { metric: "Conversations resolved without a human", value: "71%", note: "across 14 pilot stores" },
-      { metric: "Median reply latency", value: "1.3s", note: "from 4.1s" },
-      { metric: "Hallucinated prices in production", value: "0", note: "since tool-only pricing" },
-      { metric: "LLM cost per resolved conversation", value: "−62%" },
+      { metric: "Lower LLM inference cost", value: "~80%", note: "vs. sending every resume to an LLM" },
+      { metric: "Of applicants reach the LLM stage — only the top scorers", value: "20%" },
+      { metric: "To first token in recruiter chat", value: "<0.7s" },
     ],
-    lessons: [
-      "Evals before features: the 420-conversation regression set caught three silent quality drops from \"harmless\" prompt edits.",
-      "Treat every inbound message as a possible prompt injection — the checker exists because one did.",
-    ],
-    stack: ["Python 3.12", "FastAPI", "Pydantic v2", "SQLAlchemy 2", "PostgreSQL 16", "pgvector", "Procrastinate", "Redis", "Groq", "Gemini", "Next.js", "Langfuse"],
-    links: [{ label: "Architecture write-up", url: "/blog" }],
-    accent: "#ff5a36",
-  },
-  {
-    slug: "sarathi-nepali-retrieval",
-    index: "02",
-    title: "Sarathi",
-    tagline: "Retrieval that understands Nepali, Devanagari and the Roman Nepali people actually type.",
-    year: "2025",
-    role: "Author",
-    status: "Open source",
-    category: "Retrieval",
-    summary:
-      "An open benchmark and retrieval toolkit for Nepali and Roman-Nepali search — 2,400 hand-labelled query/passage pairs and a hybrid retriever that beats multilingual embeddings alone.",
-    problem:
-      "Most Nepali users type in Roman script (\"kati ho price?\"), but embeddings are trained on Devanagari. Retrieval quality for local RAG apps silently collapses on real queries.",
-    approach: [
-      "Built a labelled benchmark from support tickets and forum posts across both scripts.",
-      "Compared 7 embedding models, BM25, and hybrid fusion with a transliteration-aware query expander.",
-      "Released the eval harness so anyone can score a new model in one command.",
-    ],
-    architecture: [
-      "Transliteration layer (rule-based + learned) → dual-script query expansion",
-      "BM25 + dense retrieval with reciprocal rank fusion",
-      "Cross-encoder rerank on the top 50",
-    ],
-    decisions: [
-      { title: "Hybrid over pure dense", body: "Brand names and prices are lexical; intent is semantic. Fusion wins on both." },
-      { title: "Benchmark first", body: "Without a Nepali eval set, every model claim was a vibe." },
-    ],
-    results: [
-      { metric: "Recall@10 on Roman-Nepali queries", value: "0.84", note: "vs 0.52 dense-only" },
-      { metric: "Labelled query/passage pairs", value: "2,400" },
-      { metric: "Models benchmarked", value: "7" },
-    ],
-    lessons: ["The query expander mattered more than the embedding model."],
-    stack: ["Python", "sentence-transformers", "rank-bm25", "FAISS", "pgvector", "Hugging Face"],
-    links: [{ label: "GitHub", url: "https://github.com/rahuldevbanjara" }],
-    accent: "#ffc53d",
-  },
-  {
-    slug: "certlab-aws-exam-simulator",
-    index: "03",
-    title: "CertLab",
-    tagline: "A practice-exam simulator for the AWS ML Engineer certification, with class-wide insight for instructors.",
-    year: "2025",
-    role: "Designer & engineer",
-    status: "Live",
-    category: "Education",
-    summary:
-      "A Next.js + MongoDB exam platform with timed exam mode, explained practice mode, domain-weighted full mocks, and an instructor dashboard that shows exactly where a cohort is struggling.",
-    problem:
-      "My AWS students practised on static PDFs. I couldn't see which domains, services or trap questions the class kept missing until the real exam.",
-    approach: [
-      "Questions as YAML files validated at boot — editable by any instructor, diffable in git.",
-      "Exam mode mirrors the real test: timer, flag-for-review, no answers until submit; saves as you go across devices.",
-      "Class insights: accuracy by domain/topic/service, most-missed and trap questions, and a printable revision deck.",
-    ],
-    architecture: [
-      "Next.js App Router + Server Actions for every write",
-      "MongoDB Atlas for attempts and results; iron-session cookies",
-      "Question bank loaded server-side, sent only for the active exam",
-    ],
-    decisions: [
-      { title: "YAML over a CMS", body: "Instructors review question changes as pull requests." },
-      { title: "Weighted mocks", body: "Full mocks draw 65 questions weighted 28/24/24/24% by exam domain." },
-    ],
-    results: [
-      { metric: "Students using it", value: "180+" },
-      { metric: "Cohort pass rate", value: "89%", note: "first attempt" },
-      { metric: "Questions answered", value: "41k" },
-    ],
-    lessons: ["\"Most often missed\" turned out to be less useful than \"confidently wrong\" — trap questions became the core revision tool."],
-    stack: ["Next.js 16", "Mantine", "MongoDB", "iron-session", "YAML"],
-    links: [{ label: "Case study", url: "/work/certlab-aws-exam-simulator" }],
+    stack: ["FastAPI", "Next.js", "PostgreSQL", "Redis", "Qdrant", "LangGraph", "AWS Bedrock", "Groq", "NeMo Guardrails", "S3"],
+    links: [{ label: "GitHub", url: "https://github.com/devrahulbanjara/ConvexHire" }],
     accent: "#6f9bff",
   },
   {
-    slug: "knowledge-vault",
-    index: "04",
-    title: "Knowledge Vault",
-    tagline: "A personal wiki that an LLM writes and maintains — knowledge that compounds instead of rotting.",
-    year: "2026",
-    role: "Creator",
+    slug: "omnichannel-ai-inbox",
+    index: "02",
+    title: "Omnichannel AI Inbox",
+    tagline: "Still being built — one inbox for every channel, with an AI agent that sells and supports.",
     status: "In progress",
-    category: "Tools",
+    category: "Agents",
     summary:
-      "An Obsidian vault where I curate sources and an LLM agent compiles them into linked concept pages, per-domain hubs and revision sheets — across system design, ML fundamentals, NLP/LLMs and AI agents.",
-    problem: "Notes from courses, papers and docs piled up unlinked. Re-reading was slower than re-learning.",
+      "Work in progress. A multi-tenant platform where stores see customer messages from every channel in one inbox, and an AI agent sells, supports and operates like a trained staff member — within strict, code-enforced rules.",
     approach: [
-      "Strict separation: raw/ is immutable source; wiki/ is entirely agent-maintained.",
-      "Tags emerge from content; concepts spanning domains are promoted to shared hubs.",
-      "Every operation is appended to a log, so the vault's history is auditable.",
+      "Designing one inbox for the web widget, Telegram, Messenger, Instagram, WhatsApp and email, with orders, tickets and a contact timeline across channels.",
+      "Writing my own agent loop (no framework) where the LLM chooses but code decides: prices, totals, stock and IDs always come from the database or tool results, never from model text.",
+      "Building for safety from the start: server-injected identity, idempotent writes (customers say \"yes\" twice), every inbound message treated as a possible prompt injection, and every AI run, tool call and cost recorded.",
+      "Stack: FastAPI and Pydantic, PostgreSQL with pgvector and row-level security for tenancy, a Postgres-backed job queue, Groq with Gemini as fallback, and a Next.js dashboard.",
     ],
-    architecture: ["Claude Code agent + CLAUDE.md operating manual", "Obsidian Bases for live filtered views", "Markdown + wiki-links as the only data format"],
-    decisions: [{ title: "No database", body: "Plain markdown keeps it portable, greppable and diffable forever." }],
+    results: [],
+    stack: ["FastAPI", "PostgreSQL + pgvector", "Groq / Gemini", "Next.js", "Redis"],
+    links: [],
+    accent: "#ff8a5c",
+  },
+  {
+    slug: "agentic-layout-aware-retrieval",
+    index: "03",
+    title: "Agentic Layout-Aware Retrieval",
+    tagline: "Layout-aware ingestion and agentic retrieval over complex arXiv research papers.",
+    category: "Retrieval",
+    summary: "A retrieval system for complex arXiv PDFs: layout-aware parsing and structure-aware chunking on the way in, three-lane hybrid search and an agentic reasoning layer on the way out.",
+    approach: [
+      "Built an indexing pipeline over complex arXiv PDFs: Docling layout-aware parsing, optional GROBID reference extraction, and structure-aware multi-granularity chunking (paragraphs, tables, figures, equations) with Pydantic schema enforcement.",
+      "Indexed into Qdrant with BGE-M3: three-lane hybrid search (keyword sparse, content dense, hypothetical-question dense), RRF fusion, cross-encoder reranking, and conditional MMR; metadata filtering and citation-ready payloads for grounded retrieval.",
+      "Built a ReasoningEngine on top (intent classification, query decomposition, RAG fusion, metadata-driven filters), served through FastAPI.",
+    ],
+    results: [],
+    stack: ["Docling", "GROBID", "Qdrant", "BGE-M3", "FastAPI", "Pydantic"],
+    links: [{ label: "GitHub", url: "https://github.com/devrahulbanjara/Agentic-RAG" }],
+    accent: "#c9b8ff",
+  },
+  {
+    slug: "insurance-rag-eval",
+    index: "04",
+    title: "Insurance RAG Eval",
+    tagline: "An evaluation suite that catches a RAG confidently giving wrong answers that still look right.",
+    category: "Retrieval",
+    summary:
+      "A RAG built on insurance policy documents so it can be measured. The goal isn't a better RAG; it's catching hallucinations and missing facts that look correct in a demo, and showing exactly which part of the pipeline caused them.",
+    problem:
+      "Most RAG projects are judged by how a few demo questions go, with no numbers behind them. That hides the dangerous failure: an answer that is fluent, faithful to what was retrieved, and still wrong. I wanted measurements instead, and a baseline that shows when a small change to the RAG logic makes any metric drift.",
+    approach: [
+      "Built a simple RAG over real insurance policy wordings (including NFIP flood forms and HDFC ERGO health policies) and a hand-crafted golden dataset of 20 queries with ideal answers written from the policy text.",
+      "Evaluated four levels separately so every wrong answer can be traced to its cause: the retriever (contextual precision and recall), the generator in isolation fed golden context (faithfulness, answer relevance), the full pipeline (contextual relevancy, faithfulness, answer relevance), and the application (correctness and completeness, judged with G-Eval).",
+      "Used DeepEval with an LLM judge; a query passes at 0.7, and every run is appended to a results log so any change can be compared against the baseline.",
+    ],
+    decisions: [
+      {
+        title: "Why insurance policies",
+        body: "A policy grants cover in one clause and takes it back in an exclusion written in almost the same words. To an embedding model they're nearly the same vector, so a retriever can rank the exclusion first, and the generator then writes a faithful answer that says the opposite of what the policy means. Faithfulness calls it fine; only contextual precision catches it.",
+      },
+      {
+        title: "Generator alone vs. the full pipeline",
+        body: "The same generator metrics are run twice — once with golden context, once with what the retriever pulled. If faithfulness drops only in the pipeline, the retriever caused it, not the model.",
+      },
+      {
+        title: "Completeness as its own metric",
+        body: "\"Is knee replacement covered?\" needs three facts from three sections: the grant, the 24-month waiting period and the exclusion. \"Yes, it's covered\" is faithful and relevant, and still gets a customer's claim rejected.",
+      },
+    ],
     results: [
-      { metric: "Concept pages", value: "310+" },
-      { metric: "Domains", value: "4" },
+      { metric: "Generator faithfulness with golden context", value: "0.97" },
+      { metric: "Faithfulness once the retriever's chunks are used", value: "0.73" },
+      { metric: "Contextual relevancy — most retrieved text is noise", value: "0.30" },
+      { metric: "Answers that left out a key point", value: "11/20" },
     ],
-    lessons: ["The operating manual is the product. Most quality gains came from editing CLAUDE.md, not the model."],
-    stack: ["Claude Code", "Obsidian", "Markdown"],
+    lessons: [
+      "The generator was nearly perfect on its own; most of the loss came from retrieval. The retriever finds most of what's needed (recall 0.80) but ranks it poorly (precision 0.56), so the next improvements belong there, not in the prompt.",
+    ],
+    stack: ["DeepEval", "G-Eval", "Pinecone", "RAG", "Python", "uv"],
+    links: [{ label: "GitHub", url: "https://github.com/devrahulbanjara/RAG-eval" }],
+    accent: "#5ac8fa",
+  },
+  {
+    slug: "nirantar",
+    index: "05",
+    title: "Nirantar",
+    tagline: "A health-tracking PWA that Claude can read through MCP.",
+    category: "Tools",
+    summary: "An installable health PWA with a multi-tenant MCP server, so assistants like Claude can reason over your own health history.",
+    approach: [
+      "Built a full-stack installable PWA: FastAPI backend and frontend shipped via Claude Code (AI-assisted UI development), with a multi-tenant MCP server exposing scoped tools, so MCP clients like Claude decide exactly which data they need to answer each question.",
+      "Implemented OAuth authentication (Clerk) with per-user data scoping, so every connected assistant sees only that user's own data, with zero manual credential entry during setup.",
+      "Deployed and remotely hosted both the web app and the MCP endpoint on a custom domain, integrated through Claude Desktop's connector system — turning Claude into a personalized assistant that reasons over the user's own historical data.",
+    ],
+    results: [],
+    stack: ["MCP", "PWA", "FastAPI", "OAuth", "Clerk"],
+    links: [{ label: "GitHub", url: "https://github.com/devrahulbanjara/nirantar" }],
+    accent: "#ff5a36",
+  },
+  {
+    slug: "insurance-claim-fraud-detection",
+    index: "06",
+    title: "Insurance Fraud Detection",
+    tagline: "An end-to-end AWS MLOps pipeline for insurance claim fraud detection.",
+    category: "MLOps",
+    summary: "An ingest-to-deployment AWS MLOps pipeline with a model registry, approval gates, and live drift detection.",
+    approach: [
+      "Built a full ingest-to-deployment AWS MLOps pipeline for insurance claim fraud detection — SageMaker Feature Store for engineered features, SMOTE-balanced training, and XGBoost tuned via SageMaker Automatic Model Tuning, orchestrated end-to-end as a single SageMaker Pipeline.",
+      "Registered every model in SageMaker Model Registry with attached metrics and bias reports behind a manual approval gate, deployed to a real-time endpoint, and wired a CI/CD pipeline that redeploys the latest approved model on every push.",
+      "Implemented drift detection on live traffic (SageMaker Data Capture + Evidently) against the training baseline, CloudFormation-managed infrastructure, autoscaling inference endpoints, and CloudWatch dashboards for latency, errors, and cost.",
+    ],
+    results: [],
+    stack: ["SageMaker", "XGBoost", "Evidently", "CloudFormation", "CloudWatch", "MLOps"],
     links: [],
     accent: "#3fcf9c",
   },
   {
-    slug: "tekbay-lms",
-    index: "05",
-    title: "TekBay LMS",
-    tagline: "A learning platform for cohort-based cloud and AI training.",
-    year: "2026",
-    role: "Backend architect",
-    status: "In progress",
-    category: "Education",
-    summary:
-      "A FastAPI + Next.js LMS for running cohorts: courses, batches, assignments and dashboards, designed to be read by new contributors on day one.",
-    problem: "Running AWS and data-science cohorts on a patchwork of Drive, forms and spreadsheets.",
+    slug: "nepali-asr",
+    index: "07",
+    title: "Nepali ASR",
+    tagline: "Whisper Small, fine-tuned for Devanagari Nepali speech.",
+    status: "Open source",
+    category: "Speech",
+    summary: "Fine-tuned Whisper Small for Devanagari Nepali, cutting word error rate from 130.80% to 31.64%.",
     approach: [
-      "One-direction request flow: routers → services → db, with Pydantic schemas at every boundary.",
-      "Design tokens straight from Figma into Tailwind v4's @theme.",
+      "Fine-tuned OpenAI's Whisper Small on a Nepali speech corpus, dropping WER from 130.80% to 31.64% and CER from 66.24% to 7.27% on the held-out evaluation split.",
+      "Built the full training pipeline in Hugging Face Transformers and datasets — audio resampling, log-mel feature extraction, Devanagari tokenizer setup, and mixed-precision training.",
+      "Deployed the fine-tuned model to Hugging Face Hub and Spaces for public inference, filling a gap where reliable Devanagari Nepali ASR is otherwise unavailable from off-the-shelf APIs.",
     ],
-    architecture: ["FastAPI · Pydantic · SQLAlchemy (Python 3.14)", "Next.js App Router + Tailwind v4", "PostgreSQL"],
-    decisions: [{ title: "Docs as onboarding", body: "Every folder's README explains what it holds and why — students contribute to it." }],
-    results: [{ metric: "Cohorts planned on it", value: "6" }],
-    lessons: ["Write the README before the router."],
-    stack: ["FastAPI", "Pydantic", "SQLAlchemy", "Next.js", "Tailwind CSS v4", "PostgreSQL"],
-    links: [],
-    accent: "#c9b8ff",
-  },
-  {
-    slug: "this-portfolio",
-    index: "06",
-    title: "This site",
-    tagline: "A portfolio that is also an agent — with a visible trace, guardrails and a full admin observability stack.",
-    year: "2026",
-    role: "Everything, with Claude Code",
-    status: "Live",
-    category: "Agents",
-    summary:
-      "Next.js 16, React Three Fiber and a Gemini-powered agent that reads a typed knowledge base about me, shows its tool calls live, can drive the page, and tailors my résumé to any job description. Self-hosted, zero third-party data services.",
-    problem: "Chat-with-my-résumé bots are everywhere and mostly unhelpful: an empty box, ungrounded answers, no trace.",
-    approach: [
-      "Tool-calling agent over a typed knowledge base — every answer cites the 'files' it read.",
-      "Guardrails in three layers: input screening, a scoped system contract, and output checks.",
-      "Every turn is traced to SQLite: steps, tokens, latency, verdicts — visible in /admin.",
-    ],
-    architecture: ["Next.js 16 (Cache Components) + React 19", "R3F + custom GLSL point-cloud shader", "Gemini 3.5 Flash-Lite with 3.8 Flash fallback", "node:sqlite — no ORM, no hosted DB"],
-    decisions: [{ title: "Zero hosted services", body: "Blog, media, analytics and traces all live in one SQLite file on a volume I own." }],
     results: [
-      { metric: "Third-party data services", value: "0" },
-      { metric: "Lighthouse (static path)", value: "95+" },
+      { metric: "Word error rate", value: "31.64%", note: "from 130.80%" },
+      { metric: "Character error rate", value: "7.27%", note: "from 66.24%" },
     ],
-    lessons: ["The best UI for an agent is one that shows its work."],
-    stack: ["Next.js 16", "React 19", "Three.js", "GLSL", "GSAP", "Gemini", "SQLite"],
-    links: [{ label: "Colophon", url: "/colophon" }],
-    accent: "#ff5a36",
+    stack: ["Whisper", "Hugging Face", "Transformers", "Fine-tuning"],
+    links: [{ label: "Hugging Face", url: "https://huggingface.co/devrahulbanjara/whisper-small-nepali" }],
+    accent: "#ffc53d",
   },
 ];
 
@@ -415,8 +478,8 @@ export const teaching = {
       audience: "Engineers and students preparing for the AWS ML Engineer certification",
       format: "TekBay Academy · labs + practice exams",
       learners: "",
-      description: "SageMaker end to end — data preparation, training, tuning, deployment and monitoring — with hands-on labs and full practice exams.",
-      topics: ["SageMaker", "Data preparation", "Deployment", "Model monitoring", "MLOps", "Exam strategy"],
+      description: "Updated for the MLA-C02 exam. SageMaker end to end — data preparation, training, tuning, deployment and monitoring — with hands-on labs and full practice exams, plus a mentored project building a production-grade AI agent on Amazon Bedrock AgentCore.",
+      topics: ["SageMaker", "Data preparation", "Deployment", "Model monitoring", "MLOps", "Bedrock AgentCore", "Exam strategy"],
       outcome: "Pass the AWS ML Engineer exam and deploy a monitored model.",
     },
     {
@@ -436,11 +499,27 @@ export const teaching = {
 export const testimonials: { quote: string; name: string; title: string }[] = [];
 
 export const skills = [
-  { group: "LLM systems", items: ["Agent loops & tool use", "RAG & hybrid retrieval", "Evals & guardrails", "Prompt & context engineering", "Tracing (Langfuse, OTel)"] },
-  { group: "ML", items: ["scikit-learn", "LightGBM / XGBoost", "PyTorch", "Hugging Face", "Forecasting", "Embeddings"] },
-  { group: "AWS", items: ["SageMaker", "Bedrock", "Lambda", "Step Functions", "S3 / IAM / VPC"] },
-  { group: "Backend", items: ["Python", "FastAPI", "Pydantic", "PostgreSQL + pgvector", "Redis", "Docker"] },
-  { group: "Frontend", items: ["TypeScript", "Next.js", "React", "Tailwind CSS", "Three.js"] },
+  {
+    group: "LLM & agentic AI",
+    items: ["RAG", "LangGraph", "Multi-agent workflows", "Tool & function calling", "MCP servers", "Structured output (Pydantic, JSON Schema)", "Prompt engineering & caching", "Guardrails", "Fine-tuning", "LLM evaluation (DeepEval, G-Eval)", "AWS Bedrock", "LangChain", "LangSmith", "OpenAI", "Hugging Face"],
+  },
+  {
+    group: "Retrieval & documents",
+    items: ["Hybrid search", "Reranking", "MMR", "Query decomposition", "Docling", "GROBID", "Vector stores (Qdrant, Pinecone, Bedrock KB, Algolia)", "OCR & VLM (EasyOCR, PaddleOCR, Textract)"],
+  },
+  {
+    group: "ML & deep learning",
+    items: ["PyTorch", "TensorFlow", "Computer vision", "NLP", "Transformers", "scikit-learn", "XGBoost", "SHAP", "Causal inference (DoWhy)", "Whisper", "YOLO", "ResNet"],
+  },
+  {
+    group: "MLOps & cloud",
+    items: ["AWS (SageMaker, Bedrock, Lambda, Textract, Athena, S3)", "Docker", "MLflow", "CI/CD", "Feature Store", "Model Registry", "IBM Cloud (Code Engine, COS)"],
+  },
+  {
+    group: "Backend & data",
+    items: ["Python", "FastAPI", "PostgreSQL", "SQLAlchemy", "Redis", "Apache Airflow", "Qdrant", "Neo4j", "Iceberg", "Presto", "CloudWatch"],
+  },
+  { group: "Languages", items: ["Python", "JavaScript", "SQL"] },
 ];
 
 export const now = {

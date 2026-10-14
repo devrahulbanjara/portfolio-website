@@ -64,31 +64,36 @@ export async function buildKnowledge(): Promise<KFile[]> {
       body: [
         `# ${e.role} — ${e.company}`,
         `${e.end ? "Past role (ended)" : "Current role"} · ${e.type} · ${e.location} · ${fmtDate(e.start)} – ${fmtDate(e.end)}`,
+        `Page: /experience/${e.id}`,
         e.summary,
-        ...e.highlights.map((h) => `- ${h}`),
+        ...e.details.map((d) => `- ${d.title}: ${d.text}${d.links?.length ? ` (${d.links.map((l) => `${l.label}: ${l.url}`).join(", ")})` : ""}`),
+        e.results.length ? `In numbers: ${e.results.map((r) => `${r.value} ${r.metric.toLowerCase()}${r.note ? ` (${r.note})` : ""}`).join("; ")}` : "",
         `Stack: ${e.stack.join(", ")}`,
       ].join("\n"),
     });
   }
 
   for (const p of projects) {
+    const meta = [p.year, p.status].filter(Boolean).join(", ");
+    const body: (string | false | undefined)[] = [
+      `# ${p.title}${meta ? ` — ${meta}` : ""}`,
+      `${p.role ? `Role: ${p.role}. ` : ""}Page: /work/${p.slug}`,
+      p.tagline,
+      p.summary,
+      p.problem && `Problem: ${p.problem}`,
+      `What he built:\n${p.approach.map((a) => `- ${a}`).join("\n")}`,
+      !!p.architecture?.length && `Architecture:\n${p.architecture.map((a) => `- ${a}`).join("\n")}`,
+      !!p.decisions?.length && `Key decisions:\n${p.decisions.map((d) => `- ${d.title}: ${d.body}`).join("\n")}`,
+      p.results.length > 0 && `Results:\n${p.results.map((r) => `- ${r.metric}: ${r.value}${r.note ? ` (${r.note})` : ""}`).join("\n")}`,
+      !!p.lessons?.length && `Lessons: ${p.lessons.join(" ")}`,
+      `Stack: ${p.stack.join(", ")}`,
+      p.links.length > 0 && `Links: ${p.links.map((l) => `${l.label} ${l.url}`).join(", ")}`,
+    ];
     files.push({
       path: `projects/${p.slug}.md`,
       title: `${p.title} — ${p.tagline}`,
-      description: `${p.category} project (${p.year}, ${p.status})`,
-      body: [
-        `# ${p.title} (${p.year}) — ${p.status}`,
-        `Role: ${p.role}. Page: /work/${p.slug}`,
-        p.tagline,
-        p.summary,
-        `Problem: ${p.problem}`,
-        `Approach:\n${p.approach.map((a) => `- ${a}`).join("\n")}`,
-        `Architecture:\n${p.architecture.map((a) => `- ${a}`).join("\n")}`,
-        `Key decisions:\n${p.decisions.map((d) => `- ${d.title}: ${d.body}`).join("\n")}`,
-        `Results:\n${p.results.map((r) => `- ${r.metric}: ${r.value}${r.note ? ` (${r.note})` : ""}`).join("\n")}`,
-        `Lessons: ${p.lessons.join(" ")}`,
-        `Stack: ${p.stack.join(", ")}`,
-      ].join("\n\n"),
+      description: `${p.category} project${meta ? ` (${meta})` : ""}`,
+      body: body.filter(Boolean).join("\n\n"),
     });
   }
 

@@ -1,16 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { SESSION_COOKIE, verifySession } from "@/lib/session";
+import { SESSION_COOKIE, looksLikeSessionToken } from "@/lib/session";
 
 /**
- * First gate for the admin surface. Pages and actions re-check with
- * requireAdmin() (proxy alone is never the only line of defense).
+ * First gate for the admin surface: bounce requests with no session cookie.
+ * The real check (database lookup: exists, not expired, not revoked) runs in
+ * requireAdmin() / currentAdmin() on every admin page, action and API route.
  */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (pathname === "/admin/login") return NextResponse.next();
 
-  const session = await verifySession(request.cookies.get(SESSION_COOKIE)?.value);
-  if (session) return NextResponse.next();
+  if (looksLikeSessionToken(request.cookies.get(SESSION_COOKIE)?.value)) return NextResponse.next();
 
   if (pathname.startsWith("/api/")) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });

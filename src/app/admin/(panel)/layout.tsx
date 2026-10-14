@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { connection } from "next/server";
 import { AdminNav } from "@/components/admin/AdminNav";
+import { AdminShell, SIDEBAR_BOOT } from "@/components/admin/AdminShell";
+import { Icon } from "@/components/admin/icons";
 import { AdminAssistant } from "@/components/admin/AdminAssistant";
 import "@/components/agent/studio.css";
 import { AgentMark } from "@/components/agent/AgentMark";
@@ -22,30 +24,43 @@ async function NavWithCounts() {
 }
 
 export default function PanelLayout({ children }: { children: React.ReactNode }) {
+  const brand = (
+    <Link href="/admin" className="adm-brand" data-tip="Rahul's admin">
+      <AgentMark active={false} size={22} />
+      <span className="adm-label">
+        Rahul&apos;s admin
+        <small>rahuldevbanjara.com.np</small>
+      </span>
+    </Link>
+  );
   return (
-    <div className="adm">
-      <aside className="adm-side">
-        <Link href="/admin" className="adm-brand">
-          <AgentMark active={false} size={22} />
-          <span>
-            Rahul&apos;s admin
-            <small>rahuldevbanjara.com.np</small>
-          </span>
-        </Link>
-        <AdminAssistant />
-        <Suspense fallback={<nav className="adm-nav" aria-hidden />}>
-          <NavWithCounts />
-        </Suspense>
-        <div className="adm-side-foot">
-          <Link href="/" target="_blank">
-            View site ↗
-          </Link>
-          <form action={logoutAction}>
-            <button type="submit">Sign out</button>
-          </form>
-        </div>
-      </aside>
-      <main className="adm-main">{children}</main>
-    </div>
+    <>
+      <script dangerouslySetInnerHTML={{ __html: SIDEBAR_BOOT }} />
+      <AdminShell
+        brand={brand}
+        side={
+          <>
+            <AdminAssistant />
+            <Suspense fallback={<nav className="adm-nav" aria-hidden />}>
+              <NavWithCounts />
+            </Suspense>
+            <div className="adm-side-foot">
+              <Link href="/" target="_blank" className="adm-foot-link" data-tip="View site">
+                <Icon name="external" />
+                <span className="adm-label">View site</span>
+              </Link>
+              <form action={logoutAction}>
+                <button type="submit" className="adm-foot-link" data-tip="Sign out">
+                  <Icon name="logout" />
+                  <span className="adm-label">Sign out</span>
+                </button>
+              </form>
+            </div>
+          </>
+        }
+      >
+        {children}
+      </AdminShell>
+    </>
   );
 }

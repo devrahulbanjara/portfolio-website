@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageIntro, Section } from "@/components/site/PageIntro";
 import { person, experience, certifications, skills, education, community } from "@/content/profile";
 import { fmtMonth, duration } from "@/lib/format";
@@ -38,7 +39,7 @@ export default function AboutPage() {
         <ul className="rows-list">
           {experience.map((e) => (
             <li key={e.id} data-reveal>
-              <div className="row-item">
+              <Link href={`/experience/${e.id}`} className="row-item" data-ev="xp_open" data-ev-id={e.id}>
                 <span className="row-title">{e.company}</span>
                 <span className="row-sub">{e.role}</span>
                 <span className="row-meta">
@@ -57,8 +58,9 @@ export default function AboutPage() {
                       </span>
                     ))}
                   </div>
+                  <span className="row-more">Read more →</span>
                 </div>
-              </div>
+              </Link>
             </li>
           ))}
         </ul>

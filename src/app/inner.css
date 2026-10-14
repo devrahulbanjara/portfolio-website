@@ -29,13 +29,17 @@
 .row-title { font-size: clamp(1.7rem, 3.2vw, 2.8rem); line-height: 1.05; letter-spacing: -0.04em; }
 .row-sub { font-size: 16px; color: var(--fg-soft); line-height: 1.5; }
 .row-meta { font-size: 15px; color: var(--muted); white-space: nowrap; }
-a.row-item { transition: padding 0.5s var(--ease-out), opacity 0.3s; }
-a.row-item:hover { padding-left: 1rem; }
+/* Hover slides the title and nudges the arrow — transforms only, so nothing re-wraps. */
+a.row-item .row-title, a.row-item .row-more { transition: transform 0.6s var(--ease-out), color 0.35s; }
+a.row-item:hover .row-title { transform: translateX(0.8rem); }
+a.row-item:hover .row-more { transform: translateX(0.4rem); }
 .row-detail { grid-column: 1 / -1; display: grid; gap: 1.2rem; }
 @media (min-width: 900px) { .row-detail { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 2rem; } }
 .row-detail ul { display: flex; flex-direction: column; gap: 0.6rem; }
 .row-detail li { position: relative; padding-left: 1.2rem; font-size: 15.5px; line-height: 1.55; color: var(--fg-soft); }
 .row-detail li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.row-more { grid-column: 1 / -1; justify-self: start; font-size: 15px; color: var(--accent); }
+a.row-item:hover .row-title { color: var(--accent); }
 .chip-row { display: flex; flex-wrap: wrap; gap: 0.4rem; align-content: flex-start; }
 
 /* ── filters ─────────────────────────────────────────────── */
@@ -53,7 +57,10 @@ a.row-item:hover { padding-left: 1rem; }
 
 /* ── case study ──────────────────────────────────────────── */
 .cs-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; margin-top: 3rem; }
-@media (min-width: 900px) { .cs-meta { grid-template-columns: 1fr 1fr 1fr 2fr; } }
+@media (min-width: 900px) { .cs-meta { grid-template-columns: var(--cols, 1fr 1fr 1fr 2fr); } }
+.cs-links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; }
+.cs-links a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line); }
+.cs-links a:hover { text-decoration-color: currentColor; }
 .cs-meta dt { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); padding-bottom: 0.8rem; border-bottom: 1px solid var(--line); }
 .cs-meta dd { margin-top: 0.8rem; font-size: 16px; }
 .cs-banner { margin-top: clamp(3rem, 6vw, 5rem); border-radius: 10px; padding: clamp(2rem, 5vw, 4.5rem); background: color-mix(in oklab, var(--c) 16%, #f4f4f2); }
@@ -159,3 +166,11 @@ textarea.qinput { resize: vertical; min-height: 120px; line-height: 1.5; }
 /* ── 404 / error ─────────────────────────────────────────── */
 .err-screen { min-height: 80svh; display: flex; flex-direction: column; justify-content: center; padding-block: 8rem 4rem; }
 .err-actions { margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: 0.7rem; }
+
+/* ── experience: numbered list of what I did ─────────────── */
+.xp-list { border-top: 1px solid var(--line); }
+.xp-list > li { display: grid; gap: 0.9rem 3rem; padding: clamp(1.8rem, 3vw, 2.4rem) 0; border-bottom: 1px solid var(--line); }
+@media (min-width: 900px) { .xp-list > li { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr); } }
+.xp-list h3 { display: flex; align-items: baseline; gap: 1rem; font-size: clamp(1.3rem, 2vw, 1.65rem); line-height: 1.2; letter-spacing: -0.03em; font-weight: 400; }
+.xp-num { flex: none; font-size: 13px; letter-spacing: 0.04em; color: var(--muted); font-variant-numeric: tabular-nums; }
+.xp-list p { font-size: 16px; line-height: 1.7; color: var(--fg-soft); }

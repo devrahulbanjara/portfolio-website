@@ -16,7 +16,7 @@ export function AgentCard({ card }: { card: UiCard }) {
       return (
         <Link href={`/work/${p.slug}`} className="acard" style={{ ["--c" as string]: p.accent }} data-ev="agent_card" data-ev-kind="project" data-ev-id={p.slug}>
           <span className="acard-top">
-            <span className="acard-dot" /> Project · {p.year}
+            <span className="acard-dot" /> {["Project", p.year].filter(Boolean).join(" · ")}
           </span>
           <span className="acard-title">{p.title}</span>
           <span className="acard-text">{p.tagline}</span>
@@ -28,7 +28,7 @@ export function AgentCard({ card }: { card: UiCard }) {
               </span>
             ))}
           </span>
-          <span className="acard-cta">Read the case study →</span>
+          <span className="acard-cta">See the project →</span>
         </Link>
       );
     }
@@ -36,7 +36,7 @@ export function AgentCard({ card }: { card: UiCard }) {
       const e = experience.find((x) => x.id === card.id);
       if (!e) return null;
       return (
-        <Link href="/about#experience" className="acard">
+        <Link href={`/experience/${e.id}`} className="acard">
           <span className="acard-top">
             {fmt(e.start)} — {fmt(e.end)}
           </span>

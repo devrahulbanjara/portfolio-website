@@ -70,15 +70,15 @@ export const TOOLS = {
   /* ── read ─────────────────────────────────────────── */
   get_profile: def({
     kind: "read",
-    spec: { description: "Rahul's real background from the site: bio, current and past roles with highlights, education, certifications, teaching, projects (projects are placeholders until he replaces them). Use before writing anything about him.", parameters: { type: "object", properties: {} } },
+    spec: { description: "Rahul's real background from the site: bio, current and past roles with highlights, education, certifications, teaching and projects. Use before writing anything about him.", parameters: { type: "object", properties: {} } },
     args: z.object({}),
     run: async () => ({
       person: { name: person.name, role: person.role, secondaryRole: person.secondaryRole, location: person.location, intro: person.intro, about: person.about },
-      experience: experience.map((e) => ({ company: e.company, role: e.role, start: e.start, end: e.end, summary: e.summary, highlights: e.highlights, stack: e.stack })),
+      experience: experience.map((e) => ({ company: e.company, role: e.role, start: e.start, end: e.end, summary: e.summary, details: e.details.map((d) => d.text), results: e.results, stack: e.stack })),
       education,
       certifications: certifications.map((c) => ({ name: c.name, issuer: c.issuer, issued: c.issued })),
       teaching: teaching.courses.map((c) => ({ title: c.title, description: c.description })),
-      projects: { note: "PLACEHOLDER data — do not cite these as real work", items: projects.map((p) => ({ title: p.title, tagline: p.tagline })) },
+      projects: projects.map((p) => ({ title: p.title, summary: p.summary, built: p.approach, results: p.results, stack: p.stack, links: p.links })),
       services: services.map((s) => s.title),
     }),
   }),

@@ -16,7 +16,6 @@ export const SettingsSchema = {
   agent_extra_instructions: z.string().max(4000).default(""),
   availability_open: z.boolean().default(true),
   admin_password_hash: z.string().nullable().default(null),
-  admin_session_epoch: z.string().default("0"),
   llm_breaker: z
     .record(
       z.string(),

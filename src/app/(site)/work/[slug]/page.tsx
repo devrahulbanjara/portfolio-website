@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
     title: `${p.title} — ${p.tagline}`,
     description: p.summary,
     alternates: { canonical: `/work/${p.slug}` },
-    openGraph: { type: "article", title: `${p.title} — case study`, description: p.tagline },
+    openGraph: { type: "article", title: p.title, description: p.tagline },
   };
 }
 
@@ -38,6 +38,25 @@ async function CaseStudyBody({ params }: Pick<PageProps<"/work/[slug]">, "params
   if (i < 0) notFound();
   const p = projects[i];
   const next = projects[(i + 1) % projects.length];
+  type Meta = { label: string; value: React.ReactNode };
+  const meta = ([
+    { label: "Type", value: kindOf(p) },
+    p.role && { label: "My role", value: p.role },
+    p.status && { label: "Status", value: [p.status, p.year].filter(Boolean).join(" · ") },
+    p.links.length > 0 && {
+      label: "Links",
+      value: (
+        <span className="cs-links">
+          {p.links.map((l) => (
+            <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer" data-ev="cs_link" data-ev-slug={p.slug}>
+              {l.label} ↗
+            </a>
+          ))}
+        </span>
+      ),
+    },
+    { label: "Built with", value: p.stack.slice(0, 6).join(", ") },
+  ] as (Meta | false | "" | undefined)[]).filter((m): m is Meta => !!m);
 
   return (
     <article style={{ ["--c" as string]: p.accent }}>
@@ -64,42 +83,32 @@ async function CaseStudyBody({ params }: Pick<PageProps<"/work/[slug]">, "params
         <p className="page-lede" data-reveal style={{ ["--d" as string]: 1 }}>
           {p.tagline}
         </p>
-        <dl className="cs-meta" data-reveal style={{ ["--d" as string]: 2 }}>
-          <div>
-            <dt>Type</dt>
-            <dd>{kindOf(p)}</dd>
-          </div>
-          <div>
-            <dt>My role</dt>
-            <dd>{p.role}</dd>
-          </div>
-          <div>
-            <dt>Status</dt>
-            <dd>
-              {p.status} · {p.year}
-            </dd>
-          </div>
-          <div>
-            <dt>Built with</dt>
-            <dd>{p.stack.slice(0, 6).join(", ")}</dd>
-          </div>
+        <dl className="cs-meta" data-reveal style={{ ["--d" as string]: 2, ["--cols" as string]: `repeat(${meta.length - 1}, minmax(0, 1fr)) minmax(0, 2fr)` }}>
+          {meta.map((m) => (
+            <div key={m.label}>
+              <dt>{m.label}</dt>
+              <dd>{m.value}</dd>
+            </div>
+          ))}
         </dl>
-        <div className="cs-banner" data-reveal>
-          <p className="label" style={{ color: "#3a3b40", marginBottom: "2rem" }}>
-            Results
-          </p>
-          <div className="stats">
-            {p.results.map((r) => (
-              <div key={r.metric} className="stat">
-                <strong>{r.value}</strong>
-                <span>
-                  {r.metric}
-                  {r.note ? ` (${r.note})` : ""}
-                </span>
-              </div>
-            ))}
+        {p.results.length > 0 && (
+          <div className="cs-banner" data-reveal>
+            <p className="label" style={{ color: "#3a3b40", marginBottom: "2rem" }}>
+              Results
+            </p>
+            <div className="stats">
+              {p.results.map((r) => (
+                <div key={r.metric} className="stat">
+                  <strong>{r.value}</strong>
+                  <span>
+                    {r.metric}
+                    {r.note ? ` (${r.note})` : ""}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </header>
 
       <Section label="Overview">
@@ -107,11 +116,13 @@ async function CaseStudyBody({ params }: Pick<PageProps<"/work/[slug]">, "params
           <p className="big">{p.summary}</p>
         </div>
       </Section>
-      <Section label="The problem">
-        <div className="prose-text" data-reveal>
-          <p>{p.problem}</p>
-        </div>
-      </Section>
+      {p.problem && (
+        <Section label="The problem">
+          <div className="prose-text" data-reveal>
+            <p>{p.problem}</p>
+          </div>
+        </Section>
+      )}
       <Section label="What I built">
         <ol className="cs-steps" data-reveal>
           {p.approach.map((a) => (
@@ -119,30 +130,36 @@ async function CaseStudyBody({ params }: Pick<PageProps<"/work/[slug]">, "params
           ))}
         </ol>
       </Section>
-      <Section label="How it works">
-        <ol className="cs-arch" data-reveal>
-          {p.architecture.map((a) => (
-            <li key={a}>{a}</li>
-          ))}
-        </ol>
-      </Section>
-      <Section label="Key decisions">
-        <div className="cs-decisions" data-reveal>
-          {p.decisions.map((d) => (
-            <div key={d.title}>
-              <h3>{d.title}</h3>
-              <p>{d.body}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-      <Section label="What I learned">
-        <div className="prose-text" data-reveal>
-          {p.lessons.map((l) => (
-            <p key={l}>{l}</p>
-          ))}
-        </div>
-      </Section>
+      {!!p.architecture?.length && (
+        <Section label="How it works">
+          <ol className="cs-arch" data-reveal>
+            {p.architecture.map((a) => (
+              <li key={a}>{a}</li>
+            ))}
+          </ol>
+        </Section>
+      )}
+      {!!p.decisions?.length && (
+        <Section label="Key decisions">
+          <div className="cs-decisions" data-reveal>
+            {p.decisions.map((d) => (
+              <div key={d.title}>
+                <h3>{d.title}</h3>
+                <p>{d.body}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
+      {!!p.lessons?.length && (
+        <Section label="What I learned">
+          <div className="prose-text" data-reveal>
+            {p.lessons.map((l) => (
+              <p key={l}>{l}</p>
+            ))}
+          </div>
+        </Section>
+      )}
 
       <Link href={`/work/${next.slug}`} className="cs-next wrap" data-ev="cs_next">
         <span className="label">Next project</span>
