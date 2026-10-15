@@ -7,7 +7,7 @@ status: published
 date: 2026-09-15
 ---
 
-I teach the AWS Certified Machine Learning Engineer – Associate course at TekBay Academy. I wrote the original MLA-C01 curriculum from scratch, and when AWS announced MLA-C02, I had to redesign it. That meant reading the new exam guide line by line and comparing it with the old one.
+I [teach](/teaching) the AWS Certified Machine Learning Engineer – Associate course at TekBay Academy. I wrote the original MLA-C01 curriculum from scratch, and when AWS announced MLA-C02, I had to redesign it. That meant reading the new exam guide line by line and comparing it with the old one.
 
 This post is the short version of that work. It covers what changed, what was removed, the platform shift that explains a lot of it, and how I'd study for the new exam today.
 
