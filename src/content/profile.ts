@@ -261,18 +261,25 @@ export type Project = {
   year?: string;
   role?: string;
   status?: "Production" | "Live" | "Open source" | "Research" | "In progress";
-  category: "Platform" | "Agents" | "Retrieval" | "MLOps" | "Speech" | "Education" | "Tools";
+  category: "Platform" | "Agents" | "Retrieval" | "MLOps" | "Speech" | "Education" | "Tools" | "OpenSource";
   summary: string;
   problem?: string;
   /** What I built — one line per piece of work. */
   approach: string[];
   architecture?: string[];
   decisions?: { title: string; body: string }[];
+  /** How the work was measured — one line per part of the method. */
+  evaluation?: string[];
+  /** A head-to-head results table; the first column labels each row. */
+  comparison?: { columns: string[]; rows: string[][]; note?: string; /** row labels where the baseline column is better */ defaultWins?: string[] };
+  limitations?: string[];
   results: { metric: string; value: string; note?: string }[];
   lessons?: string[];
   stack: string[];
   links: { label: string; url: string }[];
   accent: string; // hue used by the project's generative cover
+  /** Has its own hand-built page at /work/<slug> instead of the shared case-study template. */
+  customPage?: boolean;
 };
 
 export const projects: Project[] = [
@@ -446,6 +453,98 @@ export const projects: Project[] = [
     stack: ["Whisper", "Hugging Face", "Transformers", "Fine-tuning"],
     links: [{ label: "Hugging Face", url: "https://huggingface.co/devrahulbanjara/whisper-small-nepali" }],
     accent: "#ffc53d",
+  },
+  {
+    slug: "omarchy-ocr",
+    index: "08",
+    title: "Omarchy OCR",
+    tagline: "Screen OCR for Omarchy Linux that actually reads the screen: 7× fewer character errors than the built-in one, on a laptop CPU, fully offline.",
+    year: "2026",
+    role: "Author and maintainer",
+    status: "Open source",
+    category: "OpenSource",
+    summary:
+      "Omarchy is an Arch Linux + Hyprland desktop. Its Super + Ctrl + Print shortcut lets you drag a box over anything on screen and get the text on your clipboard. I replaced the engine behind it, Tesseract, with PaddleOCR's PP-OCRv6 running on ONNX Runtime, and shipped it as an Omarchy shell plugin. Same keypress and the same flow, far fewer wrong characters. No GPU, no cloud, and nothing leaves the machine.",
+    problem:
+      "Tesseract was built for scanned paper, not screens. On a laptop it misreads small UI text, drops whole labels, mangles accents and turns code symbols into curly quotes. The worst part is that it fails silently: you paste a URL, a hash or a command and only find out later that one character was wrong. The fix had to stay offline, run on an ordinary laptop with no GPU, and feel like the original shortcut.",
+    approach: [
+      "Swapped the OCR engine for PP-OCRv6 (text detection + multilingual recognition, ~31 MB of ONNX models) on CPU through RapidOCR, keeping Omarchy's exact freeze → select → capture → clipboard flow.",
+      "Wrote the step that turns detected text boxes back into readable text: lines grouped by vertical overlap, read left to right, with indentation, column gaps and paragraph breaks restored, so pasted code and tables keep their shape.",
+      "Found and fixed a 2× slowdown in the default configuration: it upscaled wide screenshot strips about 3× before detection. Tuning the resize and thread count took a capture from 2.7 s to 1.4 s with no loss in accuracy.",
+      "Added a small warm server over a Unix socket that keeps the model loaded, so a capture takes ≈0.7 s. It frees its memory after 10 idle minutes, and the first run falls back to a normal cold start.",
+      "Packaged it as an Omarchy shell plugin (a Quickshell service). It installs with one command, asks before changing your keybinding, backs up your config, pre-warms the model at login, and uninstalls cleanly.",
+    ],
+    architecture: [
+      "Super + Ctrl + Print freezes the screen, slurp lets you select a region, and grim captures it at native resolution.",
+      "The image goes to the warm OCR server if it's running; otherwise it runs once in-process and starts the server for next time.",
+      "PP-OCRv6 detects text regions, then recognises each one (one multilingual model: English, accented Latin, Chinese, Japanese).",
+      "Boxes are rebuilt into lines and paragraphs with indentation preserved, and stray full-width CJK punctuation in Latin text is folded to ASCII.",
+      "The text goes to the clipboard with a notification. If the engine is ever missing, it falls back to Omarchy's original Tesseract command, so the shortcut never breaks.",
+    ],
+    evaluation: [
+      "Built a golden dataset of 100 screenshots where the right answer is known exactly: each one is an HTML page rendered by headless Chromium with real system fonts, Omarchy's own theme colours and HiDPI scales from 1× to 2×, then cropped like a real selection. Because I rendered the text, the ground truth has no transcription mistakes.",
+      "Covered what people actually capture: terminal output, code, UI labels, tables, URLs and hashes, invoices and numbers, small 9–11 px text, low-contrast text, accented text and mixed headings.",
+      "Never tuned on the test set. Every setting was chosen on a separate 39-image dev set made with a different random seed; the 100 golden images were scored once at the end.",
+      "Measured what matters when you paste: character and word error rates, exact match on \"critical\" tokens (URLs, hashes, prices, paths), lines and whole images reproduced perfectly, plus latency and memory per capture, end to end.",
+      "Checked the difference is real with a paired bootstrap (10,000 resamples). Then had an LLM judge all 200 outputs blind: randomised A/B order with a hidden key, scoring each output 1–5 for how usable it is when pasted.",
+    ],
+    comparison: {
+      columns: ["Measure", "Omarchy default (Tesseract)", "Omarchy OCR"],
+      rows: [
+        ["Character error rate", "2.8%", "0.4%"],
+        ["Word error rate", "10.4%", "2.0%"],
+        ["URLs, hashes and numbers exactly right", "85%", "95%"],
+        ["Lines reproduced exactly", "67%", "91%"],
+        ["Images transcribed perfectly", "39%", "70%"],
+        ["Empty output", "2", "0"],
+        ["Blind LLM judge: mean usability (1–5)", "3.48", "4.55"],
+        ["Blind LLM judge: head-to-head wins", "8", "61 (31 ties)"],
+        ["Time per capture", "≈0.4 s", "≈0.7 s warm, 1.4 s cold"],
+        ["Memory", "≈80 MB", "≈270 MB while warm"],
+      ],
+      defaultWins: ["Time per capture", "Memory"],
+      note: "Green marks the better value in each row. 100 golden images on an Intel i5-1335U laptop CPU, no GPU. Per image, the new engine was better on 54, worse on 11 and tied on 35. The 95% confidence interval for the error-rate reduction is 1.4–3.5 points.",
+    },
+    decisions: [
+      {
+        title: "A model that fits a laptop, not the biggest one",
+        body: "PP-OCRv6 \"medium\" scored slightly higher on the dev set but took ≈12 s per capture on a laptop CPU. The small model gives most of the accuracy at 0.7 s. A shortcut you wait 12 seconds for isn't one people use.",
+      },
+      {
+        title: "Generate the test data instead of collecting it",
+        body: "Hand-transcribed screenshots carry the transcriber's own typos. Rendering known text with a real browser and real fonts gives exact ground truth, covers every theme and display scale on purpose, and lets anyone regenerate the dataset from a seed.",
+      },
+      {
+        title: "Report the inconvenient numbers too",
+        body: "It is slower and heavier than Tesseract, and it loses on terminal output. Those go in the README's results table next to the wins. A fix I found by looking at test-set errors is reported separately so it can't inflate the headline.",
+      },
+      {
+        title: "Ship it the way the platform expects",
+        body: "Omarchy plugins can't run installers or add keybindings themselves. So the plugin opens the installer in a terminal, explains every change, asks first, backs up the config, and documents how to undo all of it.",
+      },
+    ],
+    limitations: [
+      "Slower than Tesseract: ≈0.7 s per capture with the model warm (1.4 s cold) versus ≈0.4 s. Most of that is the neural network itself, not start-up.",
+      "Uses more memory: the warm model holds ≈270 MB until it has been idle for 10 minutes. That can be turned off to pay the cold start every time instead.",
+      "Short, isolated symbols such as a lone }, a | gutter or a --- separator are sometimes missed. That's why terminal output is a tie with Tesseract, not a win.",
+      "Occasionally drops a space after a colon inside one text box (\"UUID:1768…\"), and can read an icon as a CJK character.",
+      "The benchmark is synthetic: real fonts and real rendering, but not busy backgrounds, photos or video frames.",
+    ],
+    results: [
+      { metric: "Fewer character errors than Omarchy's default", value: "7×", note: "2.8% → 0.4%" },
+      { metric: "Of screenshots transcribed perfectly", value: "70%", note: "vs 39%" },
+      { metric: "Blind LLM-judge wins", value: "61–8", note: "31 ties" },
+      { metric: "Per capture on a laptop CPU, no GPU", value: "0.7s" },
+    ],
+    lessons: [
+      "The biggest speed win wasn't a smaller model; it was a default setting that silently made the input 3× larger. Profiling one stage at a time found it in minutes.",
+      "The numbers and the blind judge agreed on 93 of 100 images. The 7 disagreements were the interesting ones: the judge weighed a wrong value in a table or lost indentation more heavily than its character count suggests.",
+      "An honest benchmark makes a better README. Showing where the new engine loses is what makes the wins believable.",
+    ],
+    stack: ["PP-OCRv6", "ONNX Runtime", "RapidOCR", "Python", "Quickshell / QML", "Hyprland", "Bash"],
+    links: [{ label: "GitHub", url: "https://github.com/devrahulbanjara/omarchy-ppocr" }],
+    accent: "#7aa2f7",
+    customPage: true,
   },
 ];
 

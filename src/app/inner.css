@@ -48,6 +48,10 @@ a.row-item:hover .row-title { color: var(--accent); }
 .filters button:hover, .filters a:hover { border-color: var(--fg); }
 .filters .is-on { background: var(--dark); color: #fff; border-color: var(--dark); }
 .filters sup { font-size: 10px; margin-left: 3px; }
+.work-group { margin-top: clamp(5rem, 10vw, 8rem); }
+.work-group-title { font-size: clamp(2rem, 4.2vw, 3.4rem); line-height: 1.05; letter-spacing: -0.04em; font-weight: 400; }
+.work-group-title sup { font-size: 0.32em; letter-spacing: 0; margin-left: 0.4rem; color: var(--muted); vertical-align: super; }
+.work-group-lede { margin-top: 1.2rem; max-width: 52ch; font-size: clamp(1.05rem, 1.4vw, 1.2rem); line-height: 1.5; color: var(--fg-soft); }
 
 /* ── stat band ───────────────────────────────────────────── */
 .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 2rem; }

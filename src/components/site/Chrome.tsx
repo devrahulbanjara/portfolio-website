@@ -52,7 +52,7 @@ export function Preloader() {
 /* ───────────────────────── top bar + floating agent orb ───────────────────────── */
 export function TopBar() {
   const pathname = usePathname();
-  const onPhoto = pathname === "/";
+  const onPhoto = pathname === "/" || pathname === "/work/omarchy-ocr";
   const { setOpen, busy } = useAgent();
   const [scrolled, setScrolled] = useState(false);
   const [menuPath, setMenuPath] = useState<string | null>(null);

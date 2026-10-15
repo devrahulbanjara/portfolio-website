@@ -8,7 +8,7 @@ import { kindOf } from "@/lib/format";
 import { JsonLd } from "@/components/site/JsonLd";
 
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return projects.filter((p) => !p.customPage).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/work/[slug]">): Promise<Metadata> {
