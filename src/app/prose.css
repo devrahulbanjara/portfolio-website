@@ -62,3 +62,44 @@
 .prose .callout-warning .callout-label, .prose .callout-caution .callout-label { color: #b42318; }
 .prose .callout-tip .callout-label { color: var(--ok); }
 .prose .footnotes { font-size: 0.85em; border-top: 1px solid var(--line); padding-top: 1.5em; margin-top: 3em; }
+
+/* ── Key highlights: author-written summary box with a slowly rotating gradient border.
+   A conic gradient spins (transform only, so it works without @property) behind an
+   opaque inner panel; the 2px of padding around the panel is the visible border. ── */
+.article-main { min-width: 0; }
+.key-highlights {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  max-width: min(100%, 46rem);
+  margin-bottom: clamp(2.25rem, 4vw, 3rem);
+  padding: 2px;
+  border-radius: 20px;
+  box-shadow:
+    0 22px 44px -26px rgb(99 102 241 / 0.45),
+    -18px 20px 44px -28px rgb(236 72 153 / 0.4),
+    18px 20px 44px -28px rgb(34 197 94 / 0.35);
+}
+.key-highlights::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  aspect-ratio: 1;
+  background: conic-gradient(#ec4899, #f97316, #eab308, #22c55e, #06b6d4, #6366f1, #a855f7, #ec4899);
+  transform: translate(-50%, -50%) rotate(0turn);
+  animation: hl-spin 8s linear infinite;
+  pointer-events: none;
+}
+.kh-body { border-radius: 18px; background: var(--bg); padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1.25rem, 3.2vw, 2rem); }
+.key-highlights h2 { display: flex; align-items: center; gap: 0.6rem; font-size: 1.15rem; font-weight: 600; letter-spacing: -0.02em; color: var(--fg); }
+.key-highlights h2 svg { flex: none; color: var(--accent); }
+.key-highlights ul { margin-top: 1rem; display: grid; gap: 0.75rem; padding-left: 1.25rem; }
+.key-highlights li { position: relative; font-size: clamp(1rem, 0.2vw + 0.95rem, 1.08rem); line-height: 1.65; color: var(--fg-soft); text-wrap: pretty; }
+.key-highlights li::before { content: ""; position: absolute; left: -1.05rem; top: 0.68em; width: 6px; height: 6px; border-radius: 50%; background: var(--fg); }
+@keyframes hl-spin { to { transform: translate(-50%, -50%) rotate(1turn); } }
+@media (prefers-reduced-motion: reduce) {
+  .key-highlights::before { animation: none; }
+}

@@ -26,6 +26,7 @@ async function Edit({ params }: Pick<PageProps<"/admin/posts/[id]">, "params">) 
     title: p.title,
     excerpt: p.excerpt,
     content: p.content,
+    highlights: p.highlights ?? "",
     coverUrl: p.cover_url ?? "",
     coverAlt: p.cover_alt ?? "",
     tags: safeTags(p.tags).join(", "),

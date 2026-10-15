@@ -13,6 +13,7 @@ export type EditorPost = {
   title: string;
   excerpt: string;
   content: string;
+  highlights: string;
   coverUrl: string;
   coverAlt: string;
   tags: string;
@@ -42,6 +43,8 @@ export function PostEditor({ post }: { post: EditorPost | null }) {
   const [slugTouched, setSlugTouched] = useState(!!post);
   const [content, setContent] = useState(post?.content ?? "");
   const [excerpt, setExcerpt] = useState(post?.excerpt ?? "");
+  const [highlights, setHighlights] = useState(post?.highlights ?? "");
+  const highlightCount = highlights.split("\n").filter((l) => l.trim()).length;
   const [seoTitle, setSeoTitle] = useState(post?.seoTitle ?? "");
   const [seoDesc, setSeoDesc] = useState(post?.seoDescription ?? "");
   const [cover, setCover] = useState(post?.coverUrl ?? "");
@@ -361,6 +364,26 @@ export function PostEditor({ post }: { post: EditorPost | null }) {
                 </button>
               </>
             )}
+          </section>
+
+          <section className="adm-card" style={{ display: "grid", gap: "0.9rem" }}>
+            <h2 style={{ marginBottom: 0 }}>Key highlights</h2>
+            <div className="afield">
+              <label htmlFor="highlights">One point per line (optional)</label>
+              <textarea
+                id="highlights"
+                className="atextarea"
+                name="highlights"
+                rows={6}
+                maxLength={3000}
+                value={highlights}
+                onChange={(e) => setHighlights(e.target.value)}
+                placeholder={"The exam keeps its four domains but adds RAG and agents.\nAgentCore is now in scope.\n…"}
+              />
+              <small>
+                {highlightCount || "No"} highlight{highlightCount === 1 ? "" : "s"} · shown in a box at the top of the post; leave empty to hide it
+              </small>
+            </div>
           </section>
 
           <section className="adm-card" style={{ display: "grid", gap: "0.9rem" }}>

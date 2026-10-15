@@ -117,7 +117,26 @@ async function PostBody({ params }: Pick<PageProps<"/blog/[slug]">, "params">) {
 
       <div className="wrap article-layout">
         <Toc items={post.toc} />
-        <div className="prose" dangerouslySetInnerHTML={{ __html: post.html }} />
+        <div className="article-main">
+          {post.highlights.length > 0 && (
+            <aside className="key-highlights" aria-labelledby="key-highlights-title">
+              <div className="kh-body">
+                <h2 id="key-highlights-title">
+                  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                    <path d="M13 2 4.5 13.5H12L11 22l8.5-11.5H12L13 2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+                  </svg>
+                  Key highlights
+                </h2>
+                <ul>
+                  {post.highlights.map((h, i) => (
+                    <li key={i}>{h}</li>
+                  ))}
+                </ul>
+              </div>
+            </aside>
+          )}
+          <div className="prose" dangerouslySetInnerHTML={{ __html: post.html }} />
+        </div>
       </div>
 
       <footer className="wrap" style={{ paddingBottom: "4rem" }}>

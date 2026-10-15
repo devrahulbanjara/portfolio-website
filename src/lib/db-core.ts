@@ -210,7 +210,7 @@ const MIGRATIONS: string[] = [
 ];
 
 /** Bump when MIGRATIONS changes; every statement above is idempotent. */
-const SCHEMA_VERSION = 4;
+const SCHEMA_VERSION = 5;
 
 function makeClient(): Client {
   const url = process.env.TURSO_DATABASE_URL;
@@ -228,6 +228,9 @@ async function migrate(client: Client) {
   const current = row ? Number(row[0]) : 0;
   if (current >= SCHEMA_VERSION) return;
   for (const script of MIGRATIONS) await client.executeMultiple(script);
+  // v5: per-post "Key highlights" (one per line). ADD COLUMN isn't idempotent, so check first.
+  const cols = (await client.execute("PRAGMA table_info(posts)")).rows.map((r) => String(r.name));
+  if (!cols.includes("highlights")) await client.execute("ALTER TABLE posts ADD COLUMN highlights TEXT NOT NULL DEFAULT ''");
   await client.batch([{ sql: "DELETE FROM _schema", args: [] }, { sql: "INSERT INTO _schema (version) VALUES (?)", args: [SCHEMA_VERSION] }], "write");
 }
 

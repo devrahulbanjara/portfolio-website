@@ -30,13 +30,14 @@ export async function upsertPost(raw: unknown, invalidate: Invalidate): Promise<
   const now = Date.now();
   const excerpt = p.excerpt || plainExcerpt(p.content);
   const publishedAt = p.status === "draft" ? (p.publishedAt ?? null) : (p.publishedAt ?? now);
-  const existing = p.id ? await get<{ slug: string; title: string; content: string }>("SELECT slug, title, content FROM posts WHERE id = ?", p.id) : undefined;
+  const existing = p.id ? await get<{ slug: string; title: string; content: string; highlights: string }>("SELECT slug, title, content, highlights FROM posts WHERE id = ?", p.id) : undefined;
   if (p.id && !existing) return { ok: false, message: "That post no longer exists.", errors: {} };
   const id = p.id ?? nanoid(12);
+  const highlights = (p.highlights ?? existing?.highlights ?? "").trim();
 
   const fields: Value[] = [
     slug, p.title, excerpt, p.content, p.coverUrl ?? null, p.coverAlt ?? null, JSON.stringify(p.tags), p.status, p.featured ? 1 : 0,
-    p.seoTitle ?? null, p.seoDescription ?? null, p.canonicalUrl ?? null, minutes, words, publishedAt,
+    p.seoTitle ?? null, p.seoDescription ?? null, p.canonicalUrl ?? null, minutes, words, publishedAt, highlights,
   ];
   if (existing) {
     // Keep a revision whenever the body or title changes; both writes commit together.
@@ -45,14 +46,14 @@ export async function upsertPost(raw: unknown, invalidate: Invalidate): Promise<
       statements.push({ sql: "INSERT INTO post_revisions (post_id, title, content, created_at) VALUES (?, ?, ?, ?)", args: [id, existing.title, existing.content, now] });
     statements.push({
       sql: `UPDATE posts SET slug=?, title=?, excerpt=?, content=?, cover_url=?, cover_alt=?, tags=?, status=?, featured=?, seo_title=?, seo_description=?, canonical_url=?,
-            reading_minutes=?, word_count=?, published_at=?, updated_at=? WHERE id=?`,
+            reading_minutes=?, word_count=?, published_at=?, highlights=?, updated_at=? WHERE id=?`,
       args: [...fields, now, id],
     });
     await batch(statements);
   } else {
     await run(
       `INSERT INTO posts (slug, title, excerpt, content, cover_url, cover_alt, tags, status, featured, seo_title, seo_description, canonical_url,
-        reading_minutes, word_count, published_at, id, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+        reading_minutes, word_count, published_at, highlights, id, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       ...fields,
       id,
       now,

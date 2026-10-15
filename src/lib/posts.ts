@@ -11,6 +11,7 @@ export type PostRow = {
   title: string;
   excerpt: string;
   content: string;
+  highlights: string;
   cover_url: string | null;
   cover_alt: string | null;
   tags: string;
@@ -42,6 +43,7 @@ export type PostSummary = {
 
 export type Post = PostSummary & {
   html: string;
+  highlights: string[];
   toc: TocItem[];
   wordCount: number;
   seoTitle: string | null;
@@ -69,6 +71,14 @@ function toSummary(r: PostRow): PostSummary {
     publishedAt: r.published_at ?? r.created_at,
     updatedAt: r.updated_at,
   };
+}
+
+/** One highlight per line; leading list markers ("- ", "* ", "• ", "1. ") are optional. */
+export function parseHighlights(s: string | null | undefined): string[] {
+  return (s ?? "")
+    .split("\n")
+    .map((l) => l.replace(/^\s*(?:[-*•]|\d+[.)])\s+/, "").trim())
+    .filter(Boolean);
 }
 
 export function safeTags(s: string): string[] {
@@ -99,6 +109,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     ...toSummary(r),
     html,
     toc,
+    highlights: parseHighlights(r.highlights),
     wordCount: r.word_count,
     seoTitle: r.seo_title,
     seoDescription: r.seo_description,

@@ -25,6 +25,8 @@ export const PostInput = z
       .default(""),
     excerpt: z.string().trim().max(400).default(""),
     content: z.string().max(400_000).default(""),
+    /** Left undefined by callers that don't edit it, so existing highlights are kept. */
+    highlights: z.string().max(3000).optional(),
     coverUrl: optionalText(500),
     coverAlt: optionalText(200),
     tags: z
