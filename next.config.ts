@@ -25,6 +25,10 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async redirects() {
+    // The project's old URL; keep existing links working.
+    return [{ source: "/work/convexhire", destination: "/work/rojgar-ai", permanent: true }];
+  },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
