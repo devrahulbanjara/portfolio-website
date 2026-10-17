@@ -221,17 +221,30 @@ export type Certification = {
   expires?: string;
   credentialUrl: string;
   skills: string[];
+  /**
+   * The issuer's digital badge (or the certificate itself, `certificate: true`), shown large on /about.
+   * `source` is the line above the name, `brand` its filter tab, `glow` tints the card it sits on.
+   */
+  badge?: { image: string; url: string; source: string; brand: string; glow: string; certificate?: boolean };
 };
 
 export const certifications: Certification[] = [
   {
     id: "aws-mla",
-    name: "AWS Certified Machine Learning – Associate",
+    name: "AWS Certified Machine Learning Engineer – Associate",
     issuer: "Amazon Web Services",
     code: "AWS MLA",
     issued: "2025-01",
+    expires: "2028-09",
     credentialUrl: "https://cp.certmetrics.com/amazon/en/public/verify/credential/035ddb7ca35541e0a815a122d7afcb84",
     skills: ["SageMaker", "MLOps", "Model deployment", "Monitoring"],
+    badge: {
+      image: "/badges/aws-mla.png",
+      brand: "AWS",
+      url: "https://www.credly.com/badges/9b1a46fa-42c1-4dad-a9d5-1decafa5fdc2",
+      source: "Verified on Credly",
+      glow: "#3d4bff",
+    },
   },
   {
     id: "nvidia-genai",
@@ -239,8 +252,33 @@ export const certifications: Certification[] = [
     issuer: "NVIDIA",
     code: "NCA-GENL",
     issued: "2026-01",
-    credentialUrl: "https://www.credly.com/badges/e8836994-77e6-4762-835b-17ae8a79adda/linked_in_profile",
+    expires: "2028-07",
+    credentialUrl: "https://credential.nvidia.com/2cfef9f5-3db1-45c6-8fc4-ee930ff64eab",
     skills: ["LLMs", "Generative AI", "Prompting", "Fine-tuning"],
+    badge: {
+      image: "/badges/nvidia-genai.png",
+      brand: "NVIDIA",
+      url: "https://credential.nvidia.com/2cfef9f5-3db1-45c6-8fc4-ee930ff64eab",
+      source: "Verified on NVIDIA",
+      glow: "#76b900",
+    },
+  },
+  {
+    id: "aws-agentic-ai",
+    name: "AWS Agentic AI Demonstrated",
+    issuer: "Amazon Web Services",
+    code: "Microcredential",
+    issued: "2026-10",
+    expires: "2027-10",
+    credentialUrl: "https://www.credly.com/badges/530c292a-1f43-403c-84f7-135438174672",
+    skills: ["Agentic AI", "Bedrock Agents", "Bedrock Guardrails"],
+    badge: {
+      image: "/badges/aws-agentic-ai.png",
+      brand: "AWS",
+      url: "https://www.credly.com/badges/530c292a-1f43-403c-84f7-135438174672",
+      source: "Verified on Credly",
+      glow: "#b026ff",
+    },
   },
   {
     id: "fuse-microdegree",
@@ -250,6 +288,14 @@ export const certifications: Certification[] = [
     issued: "2024-10",
     credentialUrl: "https://s3.amazonaws.com/fuseclassroom-resources-prod/student-certificates/Microdegree%E2%84%A2+in+Artificial+Intelligence-RAHUL+DEV+BANJARA.pdf",
     skills: ["Machine learning", "Deep learning"],
+    badge: {
+      image: "/badges/fuse-microdegree.jpg",
+      brand: "Fusemachines",
+      url: "https://s3.amazonaws.com/fuseclassroom-resources-prod/student-certificates/Microdegree%E2%84%A2+in+Artificial+Intelligence-RAHUL+DEV+BANJARA.pdf",
+      source: "Fusemachines AI Fellowship",
+      glow: "#1ba9f5",
+      certificate: true,
+    },
   },
 ];
 
@@ -616,7 +662,7 @@ export const skills = [
   },
   {
     group: "Backend & data",
-    items: ["Python", "FastAPI", "PostgreSQL", "SQLAlchemy", "Redis", "Apache Airflow", "Qdrant", "Neo4j", "Iceberg", "Presto", "CloudWatch"],
+    items: ["Python", "FastAPI", "PostgreSQL", "SQLAlchemy", "Redis", "Qdrant", "Neo4j", "Iceberg", "Presto", "CloudWatch"],
   },
   { group: "Languages", items: ["Python", "JavaScript", "SQL"] },
 ];

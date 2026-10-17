@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageIntro, Section } from "@/components/site/PageIntro";
+import { BadgeShowcase } from "@/components/site/BadgeShowcase";
 import { person, experience, certifications, skills, education, community } from "@/content/profile";
 import { fmtMonth, duration } from "@/lib/format";
 
@@ -45,19 +46,12 @@ export default function AboutPage() {
                 <span className="row-meta">
                   {fmtMonth(e.start)} — {fmtMonth(e.end)} · {duration(e.start, e.end)}
                 </span>
-                <div className="row-detail">
+                <div className="row-detail row-detail-solo">
                   <ul>
                     {e.highlights.map((h) => (
                       <li key={h}>{h}</li>
                     ))}
                   </ul>
-                  <div className="chip-row">
-                    {e.stack.map((s) => (
-                      <span key={s} className="chip">
-                        {s}
-                      </span>
-                    ))}
-                  </div>
                   <span className="row-more">Read more →</span>
                 </div>
               </Link>
@@ -94,20 +88,8 @@ export default function AboutPage() {
       </Section>
 
       <Section label="My certifications" id="certifications">
-        <ul className="rows-list">
-          {certifications.map((c) => (
-            <li key={c.id} data-reveal>
-              <a href={c.credentialUrl} target="_blank" rel="noopener noreferrer" className="row-item" data-ev="cert_click" data-ev-cert={c.id}>
-                <span className="row-title">{c.name}</span>
-                <span className="row-sub">
-                  {c.issuer} · {c.code}
-                </span>
-                <span className="row-meta">Earned {fmtMonth(c.issued)} ↗</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-        <p className="label" style={{ marginTop: "1.2rem", textTransform: "none", letterSpacing: 0, fontSize: 14 }}>
+        <BadgeShowcase certs={certifications} />
+        <p className="label" style={{ marginTop: "1.6rem", textTransform: "none", letterSpacing: 0, fontSize: 14 }}>
           Each one links to the issuer&apos;s page where you can verify it.
         </p>
       </Section>

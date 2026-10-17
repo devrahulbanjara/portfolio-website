@@ -38,6 +38,8 @@ a.row-item:hover .row-more { transform: translateX(0.4rem); }
 .row-detail ul { display: flex; flex-direction: column; gap: 0.6rem; }
 .row-detail li { position: relative; padding-left: 1.2rem; font-size: 15.5px; line-height: 1.55; color: var(--fg-soft); }
 .row-detail li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+/* highlights only (no chip column): one readable column under title + role */
+@media (min-width: 900px) { .row-detail-solo { grid-template-columns: minmax(0, 68ch); } }
 .row-more { grid-column: 1 / -1; justify-self: start; font-size: 15px; color: var(--accent); }
 a.row-item:hover .row-title { color: var(--accent); }
 .chip-row { display: flex; flex-wrap: wrap; gap: 0.4rem; align-content: flex-start; }
@@ -178,3 +180,68 @@ textarea.qinput { resize: vertical; min-height: 120px; line-height: 1.5; }
 .xp-list h3 { display: flex; align-items: baseline; gap: 1rem; font-size: clamp(1.3rem, 2vw, 1.65rem); line-height: 1.2; letter-spacing: -0.03em; font-weight: 400; }
 .xp-num { flex: none; font-size: 13px; letter-spacing: 0.04em; color: var(--muted); font-variant-numeric: tabular-nums; }
 .xp-list p { font-size: 16px; line-height: 1.7; color: var(--fg-soft); }
+
+/* ── digital badges (about → certifications) ─────────────── */
+.badge-filters { margin-bottom: 1.4rem; }
+.badges { display: grid; gap: 1rem; margin-bottom: clamp(2.4rem, 5vw, 3.6rem); }
+@media (min-width: 700px) { .badges { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.badge-card {
+  --rx: 0deg; --ry: 0deg; --mx: 50%;
+  position: relative; display: flex; flex-direction: column; height: 100%;
+  border-radius: 8px; overflow: hidden; isolation: isolate;
+  background: #121316; color: #f4f4f2;
+  box-shadow: inset 0 0 0 1px #ffffff14;
+  transition: box-shadow 0.5s var(--ease-out), transform 0.6s var(--ease-out);
+}
+/* brand-tinted light pooling behind the badge */
+.badge-card::before {
+  content: ""; position: absolute; inset: -20% -10% 30%; z-index: -1;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--glow) 42%, transparent), transparent);
+  opacity: 0.55; transition: opacity 0.6s var(--ease-out);
+}
+/* fine top highlight, like a lit edge */
+.badge-card::after {
+  content: ""; position: absolute; inset: 0 0 auto; height: 1px; z-index: 1;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--glow) 70%, #fff), transparent);
+  opacity: 0.5;
+}
+.badge-card:hover { transform: translateY(-4px); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--glow) 45%, transparent), 0 30px 60px -30px color-mix(in srgb, var(--glow) 60%, transparent); }
+.badge-card:hover::before { opacity: 1; }
+.badge-card:focus-visible { outline: 2px solid var(--glow); outline-offset: 3px; }
+
+.badge-stage { display: grid; place-items: center; padding: clamp(2.2rem, 5vw, 3.2rem) 1.5rem 1.2rem; perspective: 900px; }
+.badge-art {
+  position: relative; width: min(62%, 240px); aspect-ratio: 1;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.7s var(--ease-out);
+  animation: badge-float 6s ease-in-out infinite;
+}
+.badges li:nth-child(2n) .badge-art { animation-delay: -3s; }
+.badge-card:hover .badge-art { transition-duration: 0.15s; animation-play-state: paused; }
+/* a full certificate rather than a badge: wider, sat like a framed print */
+.badge-art.is-cert { width: min(86%, 330px); aspect-ratio: 900 / 638; }
+.badge-art.is-cert img { border-radius: 3px; filter: drop-shadow(0 20px 26px #000a); }
+.badge-art img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 22px 28px #0009); }
+/* sheen: masked to the badge's own silhouette, so it never spills past the hexagon */
+.badge-sheen {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 30%, #ffffff73 48%, #ffffff1f 54%, transparent 66%) no-repeat;
+  background-size: 250% 100%; background-position: calc(100% - var(--mx)) 0;
+  -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat;
+  mix-blend-mode: overlay; opacity: 0; transition: opacity 0.5s, background-position 0.15s;
+}
+.badge-card:hover .badge-sheen { opacity: 1; }
+@keyframes badge-float { 50% { translate: 0 -8px; } }
+
+.badge-info { display: flex; flex-direction: column; gap: 0.45rem; padding: 1.2rem clamp(1.4rem, 2.2vw, 1.8rem) clamp(1.5rem, 2.2vw, 1.8rem); flex: 1; }
+.badge-verified { display: inline-flex; align-items: center; gap: 0.4rem; align-self: flex-start; font-size: 12.5px; letter-spacing: 0.02em; color: color-mix(in srgb, var(--glow) 55%, #fff); }
+.badge-name { font-size: clamp(1.3rem, 1.7vw, 1.5rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 500; }
+.badge-meta { font-size: 15px; color: #c9c9cf; }
+.badge-dates { font-size: 14px; color: #8d8e95; }
+.badge-meta span, .badge-dates span { white-space: nowrap; }
+.badge-cta { margin-top: auto; padding-top: 0.8rem; font-size: 14.5px; color: #f4f4f2; transition: transform 0.5s var(--ease-out); }
+.badge-card:hover .badge-cta { transform: translateX(0.3rem); }
+
+@media (prefers-reduced-motion: reduce) {
+  .badge-art { animation: none; transform: none; }
+}
