@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 /** Name shown on the curtain while the next page loads. */
 function labelFor(path: string) {
   const first = path.split("/")[1] ?? "";
-  const names: Record<string, string> = { "": "Home", work: "Work", about: "About", teaching: "Teaching", blog: "Writing", contact: "Contact", services: "Services", resume: "Résumé" };
+  const names: Record<string, string> = { "": "Home", work: "Projects", about: "About & experience", teaching: "Teaching", blog: "Writing", contact: "Contact", services: "Services", resume: "Résumé" };
   return names[first] ?? first.charAt(0).toUpperCase() + first.slice(1);
 }
 

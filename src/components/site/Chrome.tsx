@@ -11,8 +11,8 @@ import { Magnetic } from "./Magnetic";
 import { track } from "./Analytics";
 
 export const NAV = [
-  { href: "/work", label: "Work" },
-  { href: "/about", label: "About" },
+  { href: "/work", label: "Projects" },
+  { href: "/about", label: "About & experience" },
   { href: "/teaching", label: "Teaching" },
   { href: "/blog", label: "Writing" },
   { href: "/contact", label: "Contact" },
