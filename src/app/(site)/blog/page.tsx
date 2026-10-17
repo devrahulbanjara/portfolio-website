@@ -5,7 +5,7 @@ import { PostList } from "@/components/blog/PostList";
 import { getAllTags, getPublishedPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
-  title: "Writing — AI agents, RAG, evals and teaching",
+  title: "Blog — AI agents, RAG, evals and teaching",
   description: "Articles by Rahul Dev Banjara on building LLM agents, search, evals, ML on AWS, and teaching engineers.",
   alternates: { canonical: "/blog", types: { "application/rss+xml": "/rss.xml" } },
 };

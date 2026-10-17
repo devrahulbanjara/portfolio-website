@@ -21,7 +21,7 @@ ${p.tags.map((t) => `      <category>${esc(t)}</category>`).join("\n")}
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${esc(person.name)} — Writing</title>
+    <title>${esc(person.name)} — Blog</title>
     <link>${site.url}/blog</link>
     <description>${esc(`Articles by ${person.name} on AI, machine learning on AWS and teaching.`)}</description>
     <language>en</language>

@@ -21,7 +21,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   }
   const post = await getPostBySlug(slug);
   return new ImageResponse(
-    <OgFrame eyebrow={`${person.name} · Writing`} title={post?.title ?? "Writing"} footer={post ? `${post.readingMinutes} min read` : person.role} />,
+    <OgFrame eyebrow={`${person.name} · Blog`} title={post?.title ?? "Blog"} footer={post ? `${post.readingMinutes} min read` : person.role} />,
     size,
   );
 }

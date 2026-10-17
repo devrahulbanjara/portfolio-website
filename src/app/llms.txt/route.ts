@@ -41,7 +41,7 @@ ${services.map((s) => `- ${s.title}: ${s.pitch}`).join("\n")}
 ${projects.map((p) => `- [${p.title}](${u(`/work/${p.slug}`)}): ${p.tagline}`).join("\n")}
 - [Teaching](${u("/teaching")})
 - [Résumé](${u("/resume")})
-- [Writing](${u("/blog")})
+- [Blog](${u("/blog")})
 ${posts.map((p) => `- [${p.title}](${u(`/blog/${p.slug}`)}): ${p.excerpt}`).join("\n")}
 `;
   return new Response(body, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" } });

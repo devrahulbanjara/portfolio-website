@@ -85,7 +85,7 @@ async function PostBody({ params }: Pick<PageProps<"/blog/[slug]">, "params">) {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Home", item: site.url },
-              { "@type": "ListItem", position: 2, name: "Writing", item: `${site.url}/blog` },
+              { "@type": "ListItem", position: 2, name: "Blog", item: `${site.url}/blog` },
               { "@type": "ListItem", position: 3, name: post.title, item: url },
             ],
           },
