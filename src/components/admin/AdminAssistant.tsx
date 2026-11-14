@@ -260,25 +260,25 @@ export function AdminAssistant() {
         createPortal(
           <>
             <div
-              className={`aa-scrim ${open ? "is-open" : ""}`}
+              className={`aa-scrim st-scrim ${open ? "is-open" : ""}`}
               onClick={() => setOpen(false)}
               aria-hidden
             />
             <aside
-              className={`aa-panel ${open ? "is-open" : ""} ${busy ? "is-busy" : ""}`}
+              className={`aa-panel st-panel ${open ? "is-open" : ""} ${busy ? "is-busy" : ""}`}
               aria-label="Admin assistant"
               aria-hidden={!open}
               inert={!open}
             >
-              <header className="aa-head">
-                <span className="aa-title">
-                  <AgentMark active={busy} size={20} /> Admin assistant
+              <header className="aa-head st-head">
+                <span className="aa-title st-head-left">
+                  <AgentMark active={busy} size={20} /> <span className="st-status-label">Ask my assistant</span>
                 </span>
-                <span style={{ display: "flex", gap: 8 }}>
+                <span className="st-head-right">
                   {turns.length > 0 && (
                     <button
                       type="button"
-                      className="aa-ghost"
+                      className="aa-ghost st-text-btn"
                       onClick={() => (abort.current?.abort(), setTurns([]))}
                     >
                       New chat
@@ -286,37 +286,35 @@ export function AdminAssistant() {
                   )}
                   <button
                     type="button"
-                    className="aa-close"
+                    className="aa-close st-close"
                     onClick={() => setOpen(false)}
                     aria-label="Close"
-                  >
-                    ×
-                  </button>
+                  ><span /><span /></button>
                 </span>
               </header>
-              <div ref={scroll} className="aa-body">
+              <div ref={scroll} className="aa-body st-body" data-lenis-prevent>
                 {turns.length === 0 ? (
-                  <div className="aa-empty">
-                    <p className="aa-hello">Hi Rahul — what do you need?</p>
-                    <p className="aa-sub">
-                      I can read your analytics, messages, visitor chats and
-                      logs, run custom queries, and write or manage blog posts.
-                      Big changes always wait for your confirmation.
-                    </p>
-                    <ul>
-                      {SUGGESTIONS.map((s) => (
-                        <li key={s}>
-                          <button type="button" onClick={() => ask(s)}>
-                            <AgentMark active={false} size={14} />
-                            {s}
+                  <div className="aa-empty st-empty">
+                    <p className="st-kicker">Try asking</p>
+                    <ul className="st-suggest">
+                      {SUGGESTIONS.map((s, i) => (
+                        <li key={s} style={{ ["--i" as string]: i }}>
+                          <button type="button" className="st-suggestion-row" onClick={() => ask(s)}>
+                            <AgentMark active={false} size={16} />
+                            <span className="st-suggest-text">{s}</span>
+                            <svg className="st-suggest-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+                              <path d="M4 12L12 4M6 4h6v6" />
+                            </svg>
                           </button>
                         </li>
                       ))}
                     </ul>
+                    <p className="st-note">I can read your analytics, messages, visitor chats and logs — and make changes only after you confirm them.</p>
                   </div>
                 ) : (
-                  turns.map((t) => (
-                    <article key={t.key} className="aa-turn">
+                  <div className="aa-turns st-turns">
+                  {turns.map((t) => (
+                    <article key={t.key} className="aa-turn st-turn">
                       <p className="aa-q">{t.user}</p>
                       {t.steps.length > 0 && (
                         <ul className="aa-steps">
@@ -400,7 +398,8 @@ export function AdminAssistant() {
                       {t.error && <p className="aa-err">{t.error}</p>}
                       {t.meta && <p className="aa-meta">{t.meta}</p>}
                     </article>
-                  ))
+                  ))}
+                  </div>
                 )}
               </div>
               <form

@@ -3,14 +3,22 @@
    portfolio's warm white / charcoal / soft indigo visual language.
    ───────────────────────────────────────────────────────────── */
 .st-panel {
+  --glass-bg: rgb(255 255 255 / 0.64);
+  --glass-raised: rgb(255 255 255 / 0.78);
+  --glass-soft: rgb(246 246 243 / 0.68);
+  --glass-border: rgb(28 29 32 / 0.11);
+  --glass-highlight: rgb(255 255 255 / 0.84);
+  --glass-shadow: 0 24px 70px -42px rgb(28 29 32 / 0.42);
+  --glass-blur: blur(24px) saturate(1.12);
+  --glass-gold: #d5ad55;
   --bg: #f7f7f4;
-  --bg-raised: rgb(255 255 255 / 0.72);
+  --bg-raised: var(--glass-raised);
   --surface: #ededeb;
   --fg: #1c1d20;
   --fg-soft: #3a3b40;
   --muted: #6b6c72;
   --dim: #86878d;
-  --line: rgb(28 29 32 / 0.12);
+  --line: var(--glass-border);
   --accent: #476e70;
   --accent-soft: rgb(71 110 112 / 0.14);
   --ease: cubic-bezier(0.76, 0, 0.24, 1);
@@ -18,8 +26,8 @@
   width: min(580px, 100vw); display: flex; flex-direction: column; overflow: hidden;
   background: rgb(247 247 244 / 0.84); color: var(--fg);
   font-family: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: -0.01em; box-shadow: -28px 0 80px -48px rgb(28 29 32 / 0.36);
-  backdrop-filter: blur(28px) saturate(1.1);
+  letter-spacing: -0.01em; box-shadow: -28px 0 80px -48px rgb(28 29 32 / 0.36), inset 1px 0 0 var(--glass-highlight);
+  backdrop-filter: var(--glass-blur);
   transform: translateX(calc(100% + 110px)); transition: transform 0.85s var(--ease);
 }
 .st-panel.is-open { transform: none; }
@@ -64,7 +72,7 @@
 @keyframes st-in { from { opacity: 0; transform: translateY(12px); } }
 .st-question { font-size: clamp(1.4rem, 2.6vw, 1.8rem); line-height: 1.2; letter-spacing: -0.03em; color: var(--fg); }
 .st-steps { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.st-steps li { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.35rem 0.7rem; border-radius: 99px; background: rgb(255 255 255 / 0.6); border: 1px solid var(--line); font-size: 12.5px; color: var(--fg-soft); animation: st-in 0.4s var(--ease) both; }
+.st-steps li { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.35rem 0.7rem; border-radius: 99px; background: var(--glass-raised); border: 1px solid var(--line); box-shadow: inset 0 1px 0 var(--glass-highlight); font-size: 12.5px; color: var(--fg-soft); animation: st-in 0.4s var(--ease) both; }
 .st-step-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 .st-steps li.is-running .st-step-dot { animation: st-dot-breathe 1.2s ease-in-out infinite; }
 .st-steps li.is-error .st-step-dot { background: #dc2626; }
@@ -103,7 +111,7 @@
 @keyframes st-sparkle-core { 50% { transform: scale(0.66); opacity: 0.64; } }
 
 /* ── inline cards ─────────────────────────────────────────── */
-.acard { display: flex; flex-direction: column; gap: 0.55rem; padding: 1.2rem 1.3rem; border-radius: 16px; background: rgb(255 255 255 / 0.66); border: 1px solid var(--line); color: var(--fg); transition: border-color 0.3s, transform 0.5s var(--ease); }
+.acard { display: flex; flex-direction: column; gap: 0.55rem; padding: 1.2rem 1.3rem; border-radius: 20px; background: var(--glass-bg); border: 1px solid var(--line); box-shadow: inset 0 1px 0 var(--glass-highlight), var(--glass-shadow); color: var(--fg); transition: border-color 0.3s, transform 0.5s var(--ease); backdrop-filter: blur(18px) saturate(1.06); }
 a.acard:hover { border-color: rgb(71 110 112 / 0.5); transform: translateY(-2px); }
 .acard-top { display: flex; align-items: center; gap: 0.5rem; font-size: 12px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted); }
 .acard-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c, var(--accent)); }
@@ -139,3 +147,5 @@ a.acard:hover { border-color: rgb(71 110 112 / 0.5); transform: translateY(-2px)
 @media (max-width: 640px) { .st-head { padding: 1.1rem 1.1rem 0.8rem 1.4rem; } .st-body { padding-inline: 1.4rem; } .st-input { margin: 0 1rem 1rem; } .st-curve { display: none; } }
 @media (max-width: 480px) { .acard-fields { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .st-panel, .st-curve path, .st-suggest li, .st-turn, .st-assistant-mark *, .st-panel::before { animation: none !important; transition: none !important; } }
+
+.st-panel :is(button, a, textarea, input):focus-visible { outline: 2px solid var(--glass-gold); outline-offset: 3px; }
