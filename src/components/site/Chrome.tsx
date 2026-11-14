@@ -94,7 +94,7 @@ export function TopBar() {
       <div className={`orbs ${scrolled ? "is-on" : ""}`}>
         <Magnetic strength={0.4}>
           <button type="button" className={`orb orb-ask ${busy ? "is-busy" : ""}`} onClick={() => setOpen(true)} aria-label="Ask my AI assistant" data-ev="agent_orb">
-            <AgentMark active={busy} size={22} />
+            <AgentMark active={busy} size={28} />
           </button>
         </Magnetic>
         <Magnetic strength={0.4}>

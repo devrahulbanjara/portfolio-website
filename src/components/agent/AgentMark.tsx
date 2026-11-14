@@ -2,38 +2,20 @@
 
 import { useId } from "react";
 
-/** Four-point sparkle with concave sides, centred on (cx, cy) with radius r. */
-const star = (cx: number, cy: number, r: number) => {
-  const k = r * 0.18; // how far the curves bow inward
-  return `M${cx} ${cy - r} C${cx + k} ${cy - k} ${cx + k} ${cy - k} ${cx + r} ${cy} C${cx + k} ${cy + k} ${cx + k} ${cy + k} ${cx} ${cy + r} C${cx - k} ${cy + k} ${cx - k} ${cy + k} ${cx - r} ${cy} C${cx - k} ${cy - k} ${cx - k} ${cy - k} ${cx} ${cy - r}Z`;
-};
-
-/**
- * The assistant's mark: a cluster of gradient sparkles. While the assistant is
- * working, the stars twinkle and the gradient drifts.
- */
+/** A clean four-point sparkle that identifies the assistant across the site. */
 export function AgentMark({ active, size = 18, mono = false }: { active: boolean; size?: number; mono?: boolean }) {
   const id = useId().replace(/:/g, "");
   return (
-    <svg className={`spark ${active ? "is-active" : ""}`} width={size} height={size} viewBox="0 0 48 48" aria-hidden>
+    <svg className={`st-assistant-mark st-sparkle-icon ${active ? "is-active" : ""} ${mono ? "is-mono" : ""}`} width={size} height={size} viewBox="0 0 48 48" aria-hidden>
       <defs>
-        <linearGradient id={`g${id}`} x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#2563eb">
-            {active && <animate attributeName="stop-color" values="#2563eb;#7c3aed;#06b6d4;#2563eb" dur="3s" repeatCount="indefinite" />}
-          </stop>
-          <stop offset="0.55" stopColor="#7c3aed">
-            {active && <animate attributeName="stop-color" values="#7c3aed;#06b6d4;#2563eb;#7c3aed" dur="3s" repeatCount="indefinite" />}
-          </stop>
-          <stop offset="1" stopColor="#22d3ee">
-            {active && <animate attributeName="stop-color" values="#22d3ee;#2563eb;#7c3aed;#22d3ee" dur="3s" repeatCount="indefinite" />}
-          </stop>
+        <linearGradient id={`assistantGold${id}`} x1="8" y1="40" x2="40" y2="8" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#b68a2d" />
+          <stop offset="0.48" stopColor="#d5ad55" />
+          <stop offset="1" stopColor="#f3d891" />
         </linearGradient>
       </defs>
-      <g fill={mono ? "currentColor" : `url(#g${id})`}>
-        <path className="spark-big" d={star(19, 29, 17)} />
-        <path className="spark-small" d={star(38, 11, 8)} />
-        <path className="spark-tiny" d={star(40, 33, 4.5)} />
-      </g>
+      <path className="st-sparkle-main" d="M24 3.5C25.7 13.7 29.8 20.1 44.5 24C29.8 27.9 25.7 34.3 24 44.5C22.3 34.3 18.2 27.9 3.5 24C18.2 20.1 22.3 13.7 24 3.5Z" fill={mono ? "currentColor" : `url(#assistantGold${id})`} />
+      <circle className="st-sparkle-core" cx="24" cy="24" r="2.2" fill={mono ? "currentColor" : "#fff8dc"} fillOpacity="0.9" />
     </svg>
   );
 }

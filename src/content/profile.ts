@@ -687,7 +687,6 @@ export const skills = [
 export const now = {
   updated: "2026-10-13",
   items: [
-    { label: "Building", text: "A tool-gated checkout agent for Relay that speaks Roman Nepali." },
     { label: "Teaching", text: "Week 6 of Data Science with Python — Pandas, and the joy of groupby." },
     { label: "Reading", text: "Designing Machine Learning Systems (again) and every eval paper I can find." },
     { label: "Learning", text: "GPU-side particle simulation in GLSL — partly for this website." },
@@ -785,6 +784,5 @@ export const agentSuggestions = [
   "Is he available, and how do I contact him?",
   "Which AWS certifications does he hold?",
   "What does he teach?",
-  "Walk me through Relay's architecture",
   "Show me his writing",
 ];

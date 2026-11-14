@@ -63,9 +63,10 @@
 .orbs.is-on .magnetic:nth-child(2) { transition-delay: 0.06s; }
 .orb { display: grid; place-items: center; width: 68px; height: 68px; border-radius: 50%; background: var(--dark); color: #fff; cursor: pointer; box-shadow: 0 14px 40px -12px rgb(0 0 0 / 0.45); transition: background 0.4s; }
 .orb:hover { background: #26272c; }
-.orb-ask { position: relative; }
-.orb-ask::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; padding: 3px; background: conic-gradient(from var(--ga-angle, 0deg), #2563eb, #7c3aed, #db2777, #06b6d4, #2563eb); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0.55; animation: ga-spin 3.2s linear infinite; }
-.orb-ask.is-busy::after { opacity: 1; }
+.orb-ask { position: relative; background: rgb(255 255 255 / 0.86); color: var(--dark); border: 1px solid rgb(28 29 32 / 0.12); box-shadow: 0 14px 40px -18px rgb(28 29 32 / 0.35); backdrop-filter: blur(16px); }
+.orb-ask:hover { background: #fff; }
+.orb-ask::after { content: ""; position: absolute; inset: -3px; border: 1px solid rgb(114 197 202 / 0.72); border-radius: 50%; opacity: 0.48; transition: opacity 0.5s, transform 0.7s var(--ease-out); }
+.orb-ask.is-busy::after { opacity: 0.9; transform: scale(1.08); }
 .orb-burger { display: grid; gap: 7px; width: 22px; }
 .orb-burger span { height: 1.5px; background: currentColor; }
 @media (max-width: 860px) { .orbs .magnetic { transform: scale(1); pointer-events: auto; } .orb { width: 56px; height: 56px; } .orbs { top: 1.1rem; } .topbar { padding-right: 9.5rem; } }

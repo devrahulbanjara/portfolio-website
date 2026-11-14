@@ -92,7 +92,7 @@ export function StudioConsole() {
         <header className="st-head">
           <div className="st-head-left">
             <AgentMark active={busy} size={20} />
-            <span>Ask my assistant</span>
+            <span className="st-status-label">Ask my assistant</span>
           </div>
           <div className="st-head-right">
             {turns.length > 0 && (
@@ -114,7 +114,7 @@ export function StudioConsole() {
               <ul className="st-suggest">
                 {suggestions.map((s, i) => (
                   <li key={s} style={{ ["--i" as string]: i }}>
-                    <button type="button" onClick={() => ask(s)} data-ev="agent_suggestion">
+                    <button type="button" className="st-suggestion-row" onClick={() => ask(s)} data-ev="agent_suggestion">
                       <AgentMark active={false} size={16} />
                       <span className="st-suggest-text">{s}</span>
                       <svg className="st-suggest-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
@@ -197,7 +197,7 @@ function StudioTurn({ t, onRate, onRetry }: { t: UiTurn; onRate: (v: 1 | -1) => 
       {thinking && (
         <p className="st-thinking">
           <AgentMark active size={18} />
-          <span className="ga-text">Thinking…</span>
+          <span className="st-status-label">Thinking…</span>
         </p>
       )}
 
